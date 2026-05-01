@@ -19,7 +19,7 @@ real-estate/
 │   ├── publish.py             # agrega listing (foto + título + descripción + precio)
 │   ├── unpublish.py           # quita listing por título (con --confirm)
 │   └── inspect.py             # lista catálogo actual
-├── site/                      # raíz del sitio (lo que GitHub Pages sirve)
+├── docs/                      # raíz del sitio (GitHub Pages sirve desde /docs)
 │   ├── index.html             # SPA estática, filtros client-side por hash
 │   ├── css/styles.css         # paleta blanco + azules (#1e40af / #3b82f6)
 │   ├── js/app.js              # carga listings.json, render, filtros, modal

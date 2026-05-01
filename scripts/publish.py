@@ -30,7 +30,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path("/Users/openclaw/Desktop/real-estate")
-SITE = ROOT / "site"
+SITE = ROOT / "docs"
 DATA = SITE / "data" / "listings.json"
 IMAGES = SITE / "images"
 LOG = ROOT / "logs" / "publish.log"
@@ -98,7 +98,7 @@ def git(*args: str) -> int:
 
 def git_publish(commit_msg: str) -> bool:
     if (ROOT / ".git").is_dir():
-        if git("add", "site/data/listings.json", "site/images/") != 0:
+        if git("add", "docs/data/listings.json", "docs/images/") != 0:
             log("git add failed")
             return False
         if git("commit", "-m", commit_msg) != 0:
