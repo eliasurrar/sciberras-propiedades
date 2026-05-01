@@ -2,7 +2,7 @@
 """inspect.py — imprime un listado humano del catálogo actual."""
 import json, os, sys
 
-DATA = "/Users/openclaw/Desktop/real-estate/site/data/listings.json"
+DATA = "/Users/openclaw/Desktop/real-estate/docs/data/listings.json"
 
 with open(DATA) as f:
     data = json.load(f)

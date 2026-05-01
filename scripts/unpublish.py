@@ -21,7 +21,7 @@ import sys
 import unicodedata
 
 ROOT = "/Users/openclaw/Desktop/real-estate"
-SITE = os.path.join(ROOT, "site")
+SITE = os.path.join(ROOT, "docs")
 DATA_FILE = os.path.join(SITE, "data", "listings.json")
 LOG = os.path.join(ROOT, "logs", "unpublish.log")
 
@@ -52,7 +52,7 @@ def git(*args, check=True):
 
 
 def commit_and_push(commit_msg):
-    git("add", "site/data/listings.json", "site/images/")
+    git("add", "docs/data/listings.json", "docs/images/")
     if not git("status", "--porcelain").stdout.strip():
         return False
     git("commit", "-m", commit_msg)
