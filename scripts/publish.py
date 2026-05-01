@@ -1,28 +1,31 @@
 #!/usr/bin/env python3
 """
-publish.py — add a property listing to the inmobiliaria site.
+publish.py — add a property listing (with one or more photos) to the site.
 
 Workflow:
-  1. Validate inputs and copy the image into site/images/ (resized via `sips`).
-  2. Append a new entry to site/data/listings.json.
+  1. Validate inputs and copy each photo into docs/images/ (resized via `sips`).
+  2. Append a new entry to docs/data/listings.json. The listing stores an
+     `images` array; the first image is the cover.
   3. git add + commit + push (deploy via GitHub Pages).
   4. Print the listing JSON to stdout for the caller (the Telegram-driven
      Claude session) to relay back to Elias.
 
 Usage:
   publish.py \\
-      --image /path/to/photo.jpg \\
+      --image /path/photo1.jpg /path/photo2.jpg /path/photo3.jpg \\
       --title "Casa en Las Condes" \\
       --description "3 dorms, jardín, 180 m²" \\
       --price 8500 \\
       --currency UF \\
       --type casa
+
+  Single-photo publication still works:
+  publish.py --image /path/photo.jpg --title "..." --description "..." ...
 """
 import argparse
 import datetime as dt
 import hashlib
 import json
-import os
 import re
 import shutil
 import subprocess
@@ -114,7 +117,8 @@ def git_publish(commit_msg: str) -> bool:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--image",        required=True, help="Path to the photo file")
+    ap.add_argument("--image",        required=True, nargs="+",
+                    help="One or more paths to photo files. First is the cover.")
     ap.add_argument("--title",        required=True)
     ap.add_argument("--description",  required=True)
     ap.add_argument("--price",        required=True, type=float)
@@ -124,15 +128,21 @@ def main() -> None:
                     help="Skip git commit/push (use for dry-runs)")
     args = ap.parse_args()
 
-    src = Path(args.image).expanduser()
-    if not src.is_file():
-        print(f"ERROR: image not found: {src}", file=sys.stderr)
-        sys.exit(2)
+    sources = [Path(p).expanduser() for p in args.image]
+    for src in sources:
+        if not src.is_file():
+            print(f"ERROR: image not found: {src}", file=sys.stderr)
+            sys.exit(2)
 
     listing_id = make_id(args.title)
-    image_name = f"{listing_id}.jpg"
-    dst = IMAGES / image_name
-    process_image(src, dst)
+
+    image_rel_paths = []
+    for idx, src in enumerate(sources, start=1):
+        suffix = "" if (len(sources) == 1 and idx == 1) else f"-{idx}"
+        image_name = f"{listing_id}{suffix}.jpg"
+        dst = IMAGES / image_name
+        process_image(src, dst)
+        image_rel_paths.append(f"images/{image_name}")
 
     payload = load_listings()
     listing = {
@@ -142,16 +152,17 @@ def main() -> None:
         "price":       args.price,
         "currency":    args.currency,
         "type":        args.ptype,
-        "image":       f"images/{image_name}",
+        "images":      image_rel_paths,
         "created_at":  dt.datetime.now().astimezone().isoformat(timespec="seconds"),
     }
     payload.setdefault("listings", []).insert(0, listing)
     save_listings(payload)
-    log(f"added {listing_id}: {args.title}")
+    log(f"added {listing_id}: {args.title} ({len(image_rel_paths)} foto/s)")
 
     pushed = False
     if not args.no_push:
-        pushed = git_publish(f"publish: {args.title} ({listing_id})")
+        commit_msg = f"publish: {args.title} ({listing_id}, {len(image_rel_paths)} foto/s)"
+        pushed = git_publish(commit_msg)
 
     print(json.dumps({"ok": True, "listing": listing, "pushed": pushed}, ensure_ascii=False))
 

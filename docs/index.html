@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Sciberras Propiedades — Casas, Departamentos y Terrenos</title>
-<meta name="description" content="Sciberras Propiedades — catálogo de casas, departamentos y terrenos en venta.">
+<meta name="description" content="Sciberras Propiedades — catálogo curado de casas, departamentos y terrenos en venta.">
 
 <!-- iOS / Safari -->
-<meta name="theme-color" content="#1e40af">
+<meta name="theme-color" content="#0f1115">
 <meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -18,7 +18,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -44,11 +44,48 @@
 
 <main>
   <section class="hero" id="inicio-hero">
-    <div class="container">
-      <h1 class="hero-title">Encuentra tu próxima propiedad.</h1>
-      <p class="hero-sub">Catálogo curado de casas, departamentos y terrenos.</p>
+    <div class="container hero-inner">
+      <span class="eyebrow fade-in">Catálogo curado · Chile</span>
+      <h1 class="hero-title fade-in">
+        Propiedades <em>seleccionadas</em>,<br>
+        contacto directo.
+      </h1>
+      <p class="hero-sub fade-in">Casas, departamentos y terrenos en venta. Fotografía honesta, descripciones claras y trato directo con quien las representa.</p>
+      <div class="hero-actions fade-in">
+        <a href="#destacadas" class="btn btn-primary">Ver destacadas</a>
+        <a href="#contacto" class="btn btn-ghost">Hablemos</a>
+      </div>
+      <div class="hero-meta fade-in">
+        <span class="hero-meta-item"><strong id="heroCount">—</strong> publicaciones activas</span>
+        <span class="hero-meta-dot" aria-hidden="true">·</span>
+        <span class="hero-meta-item">Actualizado <time id="heroUpdated">—</time></span>
+      </div>
+    </div>
+  </section>
 
-      <form class="search-bar" id="searchForm" role="search" autocomplete="off">
+  <section class="featured" id="destacadas">
+    <div class="container">
+      <header class="section-head fade-in">
+        <span class="eyebrow">Destacadas</span>
+        <h2 class="section-title">Últimas publicaciones</h2>
+        <a href="#casas" class="section-link" data-route="casas">Ver todo el catálogo →</a>
+      </header>
+      <div class="bento" id="featuredGrid" aria-busy="true"></div>
+      <div class="empty empty-featured" id="featuredEmpty" hidden>
+        <p>Pronto verás aquí las últimas propiedades publicadas.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="catalog" id="catalog">
+    <div class="container">
+      <header class="section-head section-head-catalog fade-in">
+        <span class="eyebrow">Catálogo</span>
+        <h2 class="section-title" id="catalogTitle">Todas las propiedades</h2>
+        <span class="catalog-count" id="catalogCount" aria-live="polite"></span>
+      </header>
+
+      <form class="search-bar fade-in" id="searchForm" role="search" autocomplete="off" aria-label="Buscar y filtrar propiedades">
         <div class="search-field">
           <label for="q">Buscar</label>
           <input type="search" id="q" placeholder="Comuna, barrio, palabra clave…">
@@ -66,17 +103,8 @@
           <label for="filterPriceMax">Precio máx.</label>
           <input type="number" id="filterPriceMax" min="0" step="100" placeholder="Sin límite">
         </div>
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <button type="submit" class="btn btn-dark">Filtrar</button>
       </form>
-    </div>
-  </section>
-
-  <section class="catalog" id="catalog">
-    <div class="container">
-      <div class="catalog-head">
-        <h2 id="catalogTitle">Últimas publicaciones</h2>
-        <span class="catalog-count" id="catalogCount" aria-live="polite"></span>
-      </div>
 
       <div class="grid" id="grid" aria-busy="true"></div>
 
@@ -88,10 +116,11 @@
 
   <section class="contact" id="contacto-section" hidden>
     <div class="container">
-      <h2>Contacto</h2>
-      <p>¿Te interesa una propiedad o quieres publicar la tuya? Escríbenos.</p>
+      <span class="eyebrow">Contacto</span>
+      <h2 class="section-title">Hablemos sobre la propiedad ideal.</h2>
+      <p class="section-lead">¿Te interesa una propiedad o quieres publicar la tuya? Escríbenos.</p>
       <ul class="contact-list">
-        <li><span class="contact-label">Nombre</span><span>Grace Sciberras</span></li>
+        <li><span class="contact-label">Nombre</span><span class="contact-value">Grace Sciberras</span></li>
         <li><span class="contact-label">Email</span><a href="mailto:gsciberras28@gmail.com">gsciberras28@gmail.com</a></li>
         <li><span class="contact-label">WhatsApp</span><a href="https://wa.me/56954901879" target="_blank" rel="noopener">+56 9 5490 1879</a></li>
       </ul>
@@ -102,7 +131,13 @@
 <dialog id="detail" class="detail">
   <button class="detail-close" aria-label="Cerrar" data-close>×</button>
   <article class="detail-inner">
-    <img id="detailImage" src="" alt="">
+    <div class="detail-gallery">
+      <img id="detailImage" src="" alt="">
+      <button type="button" class="gallery-nav gallery-prev" aria-label="Imagen anterior" hidden>‹</button>
+      <button type="button" class="gallery-nav gallery-next" aria-label="Imagen siguiente" hidden>›</button>
+      <span class="gallery-counter" aria-live="polite" hidden></span>
+      <div class="gallery-thumbs" hidden></div>
+    </div>
     <div class="detail-body">
       <span class="badge" id="detailBadge"></span>
       <h2 id="detailTitle"></h2>
@@ -115,7 +150,7 @@
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <div>
+    <div class="footer-brand-block">
       <span class="brand-mark small"></span>
       <span class="footer-brand">Sciberras Propiedades</span>
     </div>

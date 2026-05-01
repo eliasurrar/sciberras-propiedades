@@ -3,7 +3,7 @@
 
   const TYPE_LABEL = { casa: 'Casa', departamento: 'Departamento', terreno: 'Terreno' };
   const TITLES = {
-    inicio:         'Últimas publicaciones',
+    inicio:         'Todas las propiedades',
     casas:          'Casas en venta',
     departamentos:  'Departamentos en venta',
     terrenos:       'Terrenos en venta',
@@ -13,39 +13,59 @@
     departamentos: 'departamento',
     terrenos:      'terreno',
   };
+  const FEATURED_COUNT = 5;
 
   const state = {
-    listings: [],
-    route: 'inicio',
-    query: '',
-    typeFilter: '',
-    priceMax: null,
+    listings:       [],
+    route:          'inicio',
+    query:          '',
+    typeFilter:     '',
+    priceMax:       null,
+    galleryImages:  [],
+    galleryIndex:   0,
   };
 
   const els = {
-    grid:         document.getElementById('grid'),
-    empty:        document.getElementById('empty'),
-    catalogTitle: document.getElementById('catalogTitle'),
-    catalogCount: document.getElementById('catalogCount'),
-    catalog:      document.getElementById('catalog'),
-    contact:      document.getElementById('contacto-section'),
-    hero:         document.getElementById('inicio-hero'),
-    nav:          document.querySelector('.main-nav'),
-    navToggle:    document.querySelector('.nav-toggle'),
-    searchForm:   document.getElementById('searchForm'),
-    qInput:       document.getElementById('q'),
-    typeSelect:   document.getElementById('filterType'),
-    priceInput:   document.getElementById('filterPriceMax'),
-    detail:       document.getElementById('detail'),
-    detailImage:  document.getElementById('detailImage'),
-    detailBadge:  document.getElementById('detailBadge'),
-    detailTitle:  document.getElementById('detailTitle'),
-    detailPrice:  document.getElementById('detailPrice'),
-    detailDesc:   document.getElementById('detailDescription'),
-    detailMeta:   document.getElementById('detailMeta'),
-    footerYear:   document.getElementById('footerYear'),
-    footerUpdated:document.getElementById('footerUpdated'),
+    grid:           document.getElementById('grid'),
+    empty:          document.getElementById('empty'),
+    catalogTitle:   document.getElementById('catalogTitle'),
+    catalogCount:   document.getElementById('catalogCount'),
+    catalog:        document.getElementById('catalog'),
+    contact:        document.getElementById('contacto-section'),
+    hero:           document.getElementById('inicio-hero'),
+    featured:       document.getElementById('destacadas'),
+    featuredGrid:   document.getElementById('featuredGrid'),
+    featuredEmpty:  document.getElementById('featuredEmpty'),
+    nav:            document.querySelector('.main-nav'),
+    navToggle:      document.querySelector('.nav-toggle'),
+    searchForm:     document.getElementById('searchForm'),
+    qInput:         document.getElementById('q'),
+    typeSelect:     document.getElementById('filterType'),
+    priceInput:     document.getElementById('filterPriceMax'),
+    detail:         document.getElementById('detail'),
+    detailGallery:  null,
+    detailImage:    document.getElementById('detailImage'),
+    detailBadge:    document.getElementById('detailBadge'),
+    detailTitle:    document.getElementById('detailTitle'),
+    detailPrice:    document.getElementById('detailPrice'),
+    detailDesc:     document.getElementById('detailDescription'),
+    detailMeta:     document.getElementById('detailMeta'),
+    footerYear:     document.getElementById('footerYear'),
+    footerUpdated:  document.getElementById('footerUpdated'),
+    heroCount:      document.getElementById('heroCount'),
+    heroUpdated:    document.getElementById('heroUpdated'),
   };
+
+  /* ── Data helpers ────────────────────────────────────────────── */
+
+  function listingImages(l) {
+    if (Array.isArray(l.images) && l.images.length) return l.images;
+    if (l.image) return [l.image];
+    return [];
+  }
+  function listingCover(l) {
+    return listingImages(l)[0] || '';
+  }
 
   function fmtPrice(price, currency) {
     if (price == null) return '';
@@ -63,9 +83,17 @@
     return d.toLocaleDateString('es-CL', { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function escapeAttr(s) { return escapeHtml(s); }
+
+  /* ── Filtering ──────────────────────────────────────────────── */
+
   function applyFilters() {
     let items = state.listings.slice();
-
     if (state.route !== 'inicio' && state.route !== 'contacto') {
       const t = ROUTE_TYPE[state.route];
       if (t) items = items.filter(l => l.type === t);
@@ -87,23 +115,86 @@
     return items;
   }
 
+  /* ── Render ─────────────────────────────────────────────────── */
+
   function render() {
     document.querySelectorAll('.nav-link').forEach(a => {
       a.classList.toggle('active', a.dataset.route === state.route);
     });
 
-    if (state.route === 'contacto') {
-      els.hero.hidden = true;
-      els.catalog.hidden = true;
-      els.contact.hidden = false;
-      return;
-    }
-    els.hero.hidden = false;
-    els.catalog.hidden = false;
-    els.contact.hidden = true;
+    const isInicio = state.route === 'inicio';
+    const isContacto = state.route === 'contacto';
+
+    els.hero.hidden     = !isInicio;
+    els.featured.hidden = !isInicio;
+    els.catalog.hidden  = isContacto;
+    els.contact.hidden  = !isContacto;
+
+    if (isContacto) return;
 
     els.catalogTitle.textContent = TITLES[state.route] || TITLES.inicio;
 
+    if (isInicio) renderFeatured();
+    renderCatalog();
+    updateHeroMeta();
+  }
+
+  function updateHeroMeta() {
+    if (!els.heroCount) return;
+    els.heroCount.textContent = state.listings.length || '0';
+  }
+
+  function renderFeatured() {
+    const sorted = state.listings
+      .slice()
+      .sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+    const items = sorted.slice(0, FEATURED_COUNT);
+
+    if (items.length === 0) {
+      els.featuredGrid.innerHTML = '';
+      els.featuredGrid.hidden = true;
+      els.featuredEmpty.hidden = false;
+      els.featuredGrid.setAttribute('aria-busy', 'false');
+      return;
+    }
+
+    els.featuredEmpty.hidden = true;
+    els.featuredGrid.hidden = false;
+    els.featuredGrid.innerHTML = items.map((l, i) => bentoHtml(l, i, items.length)).join('');
+    els.featuredGrid.querySelectorAll('.bento-card').forEach(card => {
+      card.addEventListener('click', () => openDetail(card.dataset.id));
+    });
+    observeFadeIns(els.featuredGrid.querySelectorAll('.fade-in'));
+    els.featuredGrid.setAttribute('aria-busy', 'false');
+  }
+
+  function bentoHtml(l, idx, total) {
+    let modifier = '';
+    if (idx === 0)                       modifier = 'bento-card--feature';
+    else if (total === 2)                modifier = 'bento-card--wide';
+    else if (total === 3 && idx === 2)   modifier = 'bento-card--wide';
+
+    const cover = listingCover(l);
+    const imgs  = listingImages(l);
+    const img = cover
+      ? `<img class="bento-img" src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" loading="lazy">`
+      : `<div class="bento-img-fallback" aria-hidden="true"></div>`;
+    const badge = `<span class="bento-badge">${TYPE_LABEL[l.type] || l.type}</span>`;
+    const photoHint = imgs.length > 1
+      ? `<span class="bento-photos" aria-label="${imgs.length} fotos">◫ ${imgs.length}</span>`
+      : '';
+    const price = fmtPrice(l.price, l.currency);
+    return `
+      <button class="bento-card ${modifier} fade-in" data-id="${escapeAttr(l.id)}" type="button">
+        ${img}${badge}${photoHint}
+        <div class="bento-body">
+          <span class="bento-title">${escapeHtml(l.title || 'Sin título')}</span>
+          <span class="bento-price">${price}</span>
+        </div>
+      </button>`;
+  }
+
+  function renderCatalog() {
     const items = applyFilters();
     els.catalogCount.textContent =
       items.length === 0 ? 'Sin resultados' :
@@ -118,6 +209,7 @@
       els.grid.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', () => openDetail(card.dataset.id));
       });
+      observeFadeIns(els.grid.querySelectorAll('.fade-in'));
     }
     els.grid.setAttribute('aria-busy', 'false');
   }
@@ -125,29 +217,38 @@
   function cardHtml(l) {
     const badge = `<span class="badge badge-${l.type}">${TYPE_LABEL[l.type] || l.type}</span>`;
     const price = fmtPrice(l.price, l.currency);
-    const img = l.image
-      ? `<img src="${l.image}" alt="${escapeAttr(l.title || '')}" loading="lazy">`
+    const cover = listingCover(l);
+    const imgs = listingImages(l);
+    const photoHint = imgs.length > 1
+      ? `<span class="card-photo-count" aria-label="${imgs.length} fotos">◫ ${imgs.length}</span>`
+      : '';
+    const img = cover
+      ? `<img src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" loading="lazy">`
       : '';
     return `
-      <button class="card" data-id="${l.id}" type="button">
-        <div class="card-image">${img}${badge}</div>
+      <button class="card fade-in" data-id="${escapeAttr(l.id)}" type="button">
+        <div class="card-image">${img}${badge}${photoHint}</div>
         <div class="card-body">
           <span class="card-price">${price}</span>
           <span class="card-title">${escapeHtml(l.title || 'Sin título')}</span>
           <span class="card-desc">${escapeHtml(l.description || '')}</span>
           <div class="card-foot">
             <span>${fmtDate(l.created_at)}</span>
-            <span>Ver detalle →</span>
+            <span class="card-foot-link">Ver detalle →</span>
           </div>
         </div>
       </button>`;
   }
 
+  /* ── Detail dialog with gallery ─────────────────────────────── */
+
   function openDetail(id) {
     const l = state.listings.find(x => x.id === id);
     if (!l) return;
-    els.detailImage.src = l.image || '';
-    els.detailImage.alt = l.title || '';
+    state.galleryImages = listingImages(l);
+    state.galleryIndex  = 0;
+
+    setGalleryImage();
     els.detailBadge.className = `badge badge-${l.type}`;
     els.detailBadge.textContent = TYPE_LABEL[l.type] || l.type;
     els.detailTitle.textContent = l.title || '';
@@ -158,17 +259,55 @@
     else els.detail.setAttribute('open', 'open');
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  function setGalleryImage() {
+    const imgs = state.galleryImages;
+    const idx  = state.galleryIndex;
+    const wrap = els.detailGallery;
+    const counter = wrap.querySelector('.gallery-counter');
+    const prevBtn = wrap.querySelector('.gallery-prev');
+    const nextBtn = wrap.querySelector('.gallery-next');
+    const thumbs  = wrap.querySelector('.gallery-thumbs');
+
+    if (imgs.length === 0) {
+      els.detailImage.removeAttribute('src');
+      els.detailImage.alt = '';
+    } else {
+      els.detailImage.src = imgs[idx];
+      els.detailImage.alt = `Imagen ${idx + 1} de ${imgs.length}`;
+    }
+
+    const multi = imgs.length > 1;
+    counter.textContent = multi ? `${idx + 1} / ${imgs.length}` : '';
+    counter.hidden = !multi;
+    prevBtn.hidden = !multi;
+    nextBtn.hidden = !multi;
+    thumbs.hidden  = !multi;
+
+    if (multi) {
+      thumbs.innerHTML = imgs.map((src, i) =>
+        `<button type="button" class="gallery-thumb${i === idx ? ' is-active' : ''}" data-idx="${i}" aria-label="Imagen ${i + 1}">
+           <img src="${escapeAttr(src)}" alt="" loading="lazy">
+         </button>`
+      ).join('');
+    } else {
+      thumbs.innerHTML = '';
+    }
   }
-  function escapeAttr(s) { return escapeHtml(s); }
+
+  function galleryStep(delta) {
+    const n = state.galleryImages.length;
+    if (n <= 1) return;
+    state.galleryIndex = (state.galleryIndex + delta + n) % n;
+    setGalleryImage();
+  }
+
+  /* ── Routing & events ───────────────────────────────────────── */
 
   function parseHash() {
     const h = (location.hash || '').replace('#', '').trim();
-    if (h && (h in TITLES || h === 'contacto')) return h;
-    return 'inicio';
+    if (!h) return 'inicio';
+    if (h in TITLES || h === 'contacto') return h;
+    return 'inicio'; // unknown anchor (e.g. #destacadas) keeps inicio
   }
 
   function bindEvents() {
@@ -179,17 +318,32 @@
 
     els.searchForm.addEventListener('submit', e => {
       e.preventDefault();
-      state.query     = els.qInput.value.trim();
-      state.typeFilter= els.typeSelect.value;
+      state.query      = els.qInput.value.trim();
+      state.typeFilter = els.typeSelect.value;
       const pm = parseFloat(els.priceInput.value);
-      state.priceMax  = Number.isFinite(pm) ? pm : null;
-      render();
+      state.priceMax   = Number.isFinite(pm) ? pm : null;
+      renderCatalog();
     });
 
     els.detail.addEventListener('click', e => {
       if (e.target.matches('[data-close]') || e.target === els.detail) {
-        els.detail.close ? els.detail.close() : els.detail.removeAttribute('open');
+        if (els.detail.close) els.detail.close();
+        else els.detail.removeAttribute('open');
+        return;
       }
+      if (e.target.closest('.gallery-prev')) { galleryStep(-1); return; }
+      if (e.target.closest('.gallery-next')) { galleryStep(1);  return; }
+      const thumb = e.target.closest('.gallery-thumb');
+      if (thumb) {
+        state.galleryIndex = Number(thumb.dataset.idx) || 0;
+        setGalleryImage();
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (!els.detail.open) return;
+      if (e.key === 'ArrowLeft')  galleryStep(-1);
+      if (e.key === 'ArrowRight') galleryStep(1);
     });
 
     els.navToggle.addEventListener('click', () => {
@@ -204,13 +358,45 @@
     });
   }
 
+  /* ── Fade-in observer ───────────────────────────────────────── */
+
+  let fadeObserver = null;
+  function getFadeObserver() {
+    if (fadeObserver) return fadeObserver;
+    if (typeof IntersectionObserver === 'undefined') return null;
+    fadeObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
+    return fadeObserver;
+  }
+  function observeFadeIns(nodes) {
+    const obs = getFadeObserver();
+    if (!obs) {
+      nodes.forEach(n => n.classList.add('in-view'));
+      return;
+    }
+    nodes.forEach(n => obs.observe(n));
+  }
+
+  /* ── Boot ───────────────────────────────────────────────────── */
+
   async function loadListings() {
     try {
       const res = await fetch(`data/listings.json?t=${Date.now()}`, { cache: 'no-store' });
       const json = await res.json();
       state.listings = Array.isArray(json.listings) ? json.listings : [];
-      els.footerUpdated.textContent = fmtDate(json.updated_at) || '—';
-      els.footerUpdated.dateTime    = json.updated_at || '';
+      const updated = fmtDate(json.updated_at) || '—';
+      els.footerUpdated.textContent = updated;
+      els.footerUpdated.dateTime = json.updated_at || '';
+      if (els.heroUpdated) {
+        els.heroUpdated.textContent = updated;
+        els.heroUpdated.dateTime = json.updated_at || '';
+      }
     } catch (e) {
       console.error('No pude cargar listings.json', e);
       state.listings = [];
@@ -218,9 +404,11 @@
   }
 
   async function init() {
+    els.detailGallery = els.detailImage.closest('.detail-gallery');
     els.footerYear.textContent = new Date().getFullYear();
     state.route = parseHash();
     bindEvents();
+    observeFadeIns(document.querySelectorAll('.hero .fade-in, .section-head.fade-in, .search-bar.fade-in'));
     await loadListings();
     render();
   }
