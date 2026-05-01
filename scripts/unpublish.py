@@ -81,9 +81,17 @@ def main():
     else:
         matches = find_matches(listings, args.title)
 
+    def listing_images(l):
+        if isinstance(l.get("images"), list) and l["images"]:
+            return list(l["images"])
+        if l.get("image"):
+            return [l["image"]]
+        return []
+
     summary = {
         "action":  "preview" if not args.confirm else "remove",
-        "matches": [{"id": l["id"], "title": l["title"], "type": l["type"], "image": l["image"]}
+        "matches": [{"id": l["id"], "title": l["title"], "type": l["type"],
+                     "images": listing_images(l)}
                     for l in matches],
     }
 
@@ -108,11 +116,11 @@ def main():
     data["listings"] = [l for l in listings if l["id"] != target["id"]]
     data["updated_at"] = dt.datetime.now().astimezone().isoformat(timespec="seconds")
 
-    img_rel = target.get("image", "")
-    img_path = os.path.join(SITE, img_rel) if img_rel else None
-    if img_path and os.path.exists(img_path):
-        os.remove(img_path)
-        log(f"removed image {img_path}")
+    for img_rel in listing_images(target):
+        img_path = os.path.join(SITE, img_rel) if img_rel else None
+        if img_path and os.path.exists(img_path):
+            os.remove(img_path)
+            log(f"removed image {img_path}")
 
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
