@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sciberras Propiedades — Casas, Departamentos y Terrenos</title>
+<meta name="description" content="Sciberras Propiedades — catálogo de casas, departamentos y terrenos en venta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="#inicio" class="brand" data-route="inicio">
+      <span class="brand-mark"></span>
+      <span class="brand-name">Sciberras Propiedades</span>
+    </a>
+    <nav class="main-nav" aria-label="Principal">
+      <a href="#inicio" data-route="inicio" class="nav-link active">Inicio</a>
+      <a href="#casas" data-route="casas" class="nav-link">Casas</a>
+      <a href="#departamentos" data-route="departamentos" class="nav-link">Departamentos</a>
+      <a href="#terrenos" data-route="terrenos" class="nav-link">Terrenos</a>
+      <a href="#contacto" data-route="contacto" class="nav-link">Contacto</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio-hero">
+    <div class="container">
+      <h1 class="hero-title">Encontrá tu próxima propiedad.</h1>
+      <p class="hero-sub">Catálogo curado de casas, departamentos y terrenos.</p>
+
+      <form class="search-bar" id="searchForm" role="search" autocomplete="off">
+        <div class="search-field">
+          <label for="q">Buscar</label>
+          <input type="search" id="q" placeholder="Comuna, barrio, palabra clave…">
+        </div>
+        <div class="search-field search-field-min">
+          <label for="filterType">Tipo</label>
+          <select id="filterType">
+            <option value="">Todos</option>
+            <option value="casa">Casas</option>
+            <option value="departamento">Departamentos</option>
+            <option value="terreno">Terrenos</option>
+          </select>
+        </div>
+        <div class="search-field search-field-min">
+          <label for="filterPriceMax">Precio máx.</label>
+          <input type="number" id="filterPriceMax" min="0" step="100" placeholder="Sin límite">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="catalog" id="catalog">
+    <div class="container">
+      <div class="catalog-head">
+        <h2 id="catalogTitle">Últimas publicaciones</h2>
+        <span class="catalog-count" id="catalogCount" aria-live="polite"></span>
+      </div>
+
+      <div class="grid" id="grid" aria-busy="true"></div>
+
+      <div class="empty" id="empty" hidden>
+        <p>No hay publicaciones que coincidan con tu búsqueda.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contacto-section" hidden>
+    <div class="container">
+      <h2>Contacto</h2>
+      <p>¿Te interesa una propiedad o querés publicar la tuya? Escribinos.</p>
+      <ul class="contact-list">
+        <li><span class="contact-label">Email</span><a href="mailto:eliasurrar@gmail.com">eliasurrar@gmail.com</a></li>
+        <li><span class="contact-label">WhatsApp</span><a href="#" id="contactWhatsapp">Coordinemos por mensaje</a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<dialog id="detail" class="detail">
+  <button class="detail-close" aria-label="Cerrar" data-close>×</button>
+  <article class="detail-inner">
+    <img id="detailImage" src="" alt="">
+    <div class="detail-body">
+      <span class="badge" id="detailBadge"></span>
+      <h2 id="detailTitle"></h2>
+      <p class="detail-price" id="detailPrice"></p>
+      <p class="detail-description" id="detailDescription"></p>
+      <p class="detail-meta" id="detailMeta"></p>
+    </div>
+  </article>
+</dialog>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <span class="brand-mark small"></span>
+      <span class="footer-brand">Sciberras Propiedades</span>
+    </div>
+    <p class="footer-meta">© <span id="footerYear"></span> · Catálogo actualizado <time id="footerUpdated"></time></p>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
