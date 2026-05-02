@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=11">
+<link rel="stylesheet" href="css/styles.css?v=12">
 
 <!-- JSON-LD: RealEstateAgent (per-listing schema injected by app.js) -->
 <script type="application/ld+json">
@@ -261,9 +261,9 @@
   <button class="detail-close" aria-label="Cerrar" data-close>×</button>
   <article class="detail-inner">
     <div class="detail-gallery">
-      <img id="detailImage" src="" alt="">
-      <button type="button" class="gallery-nav gallery-prev" aria-label="Imagen anterior" hidden>‹</button>
-      <button type="button" class="gallery-nav gallery-next" aria-label="Imagen siguiente" hidden>›</button>
+      <div class="gallery-stage" id="detailStage"></div>
+      <button type="button" class="gallery-nav gallery-prev" aria-label="Anterior" hidden>‹</button>
+      <button type="button" class="gallery-nav gallery-next" aria-label="Siguiente" hidden>›</button>
       <span class="gallery-counter" aria-live="polite" hidden></span>
       <div class="gallery-thumbs" hidden></div>
     </div>
@@ -305,6 +305,6 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=7"></script>
+<script src="js/app.js?v=8"></script>
 </body>
 </html>

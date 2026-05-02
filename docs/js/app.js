@@ -34,7 +34,7 @@
     poolOnly:        false,
     parkingOnly:     false,
     furnishedOnly:   false,
-    galleryImages:   [],
+    galleryItems:    [],
     galleryIndex:    0,
     displayCurrency: 'UF',
     ufRate:          null,
@@ -72,7 +72,7 @@
     filterReset:     document.getElementById('filterReset'),
     detail:          document.getElementById('detail'),
     detailGallery:   null,
-    detailImage:     document.getElementById('detailImage'),
+    detailStage:     document.getElementById('detailStage'),
     detailBadge:     document.getElementById('detailBadge'),
     detailTitle:     document.getElementById('detailTitle'),
     detailPrice:     document.getElementById('detailPrice'),
@@ -98,6 +98,14 @@
     if (Array.isArray(l.images) && l.images.length) return l.images;
     if (l.image) return [l.image];
     return [];
+  }
+  function listingVideos(l) {
+    return Array.isArray(l.videos) ? l.videos : [];
+  }
+  function listingMedia(l) {
+    const imgs = listingImages(l).map(src => ({ kind: 'image', src }));
+    const vids = listingVideos(l).map(src => ({ kind: 'video', src }));
+    return imgs.concat(vids);
   }
   function listingCover(l) {
     return listingImages(l)[0] || '';
@@ -464,12 +472,16 @@
       ? `<img class="bento-img" src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" ${imgAttrs}>`
       : `<div class="bento-img-fallback" aria-hidden="true"></div>`;
     const badge = `<span class="bento-badge">${TYPE_LABEL[l.type] || l.type}</span>`;
+    const vidCount = listingVideos(l).length;
+    const videoBadge = vidCount > 0
+      ? `<span class="media-video-badge" aria-label="${vidCount} video${vidCount > 1 ? 's' : ''}">▶ ${vidCount > 1 ? vidCount + ' videos' : 'Video'}</span>`
+      : '';
     const photoHint = imgs.length > 1
       ? `<span class="bento-photos" aria-label="${imgs.length} fotos">◫ ${imgs.length}</span>`
       : '';
     return `
       <div class="bento-card ${modifier} fade-in" data-id="${escapeAttr(l.id)}">
-        ${img}${badge}${photoHint}
+        ${img}${badge}${videoBadge}${photoHint}
         <div class="bento-body">
           ${communeBadgeHtml(l)}
           <span class="bento-title">${escapeHtml(l.title || 'Sin título')}</span>
@@ -501,6 +513,10 @@
     const badge = `<span class="badge badge-${l.type}">${TYPE_LABEL[l.type] || l.type}</span>`;
     const cover = listingCover(l);
     const imgs = listingImages(l);
+    const vidCount = listingVideos(l).length;
+    const videoBadge = vidCount > 0
+      ? `<span class="media-video-badge" aria-label="${vidCount} video${vidCount > 1 ? 's' : ''}">▶ ${vidCount > 1 ? vidCount + ' videos' : 'Video'}</span>`
+      : '';
     const photoHint = imgs.length > 1
       ? `<span class="card-photo-count" aria-label="${imgs.length} fotos">◫ ${imgs.length}</span>`
       : '';
@@ -510,7 +526,7 @@
     const orientCls = coverOrientation(l) === 'v' ? ' card-image--vertical' : '';
     return `
       <div class="card fade-in" data-id="${escapeAttr(l.id)}">
-        <div class="card-image${orientCls}">${img}${badge}${photoHint}</div>
+        <div class="card-image${orientCls}">${img}${badge}${videoBadge}${photoHint}</div>
         <div class="card-body">
           ${priceBlockHtml(l, 'card')}
           ${communeBadgeHtml(l)}
@@ -562,10 +578,9 @@
     const l = state.listings.find(x => x.id === id);
     if (!l) return;
     currentListing = l;
-    state.galleryImages = listingImages(l);
-    state.galleryIndex  = 0;
-
-    setGalleryImage();
+    state.galleryItems = listingMedia(l);
+    state.galleryIndex = 0;
+    setGalleryItem();
     els.detailBadge.className = `badge badge-${l.type}`;
     els.detailBadge.textContent = TYPE_LABEL[l.type] || l.type;
     els.detailTitle.textContent = l.title || '';
@@ -655,46 +670,72 @@
     }
   }
 
-  function setGalleryImage() {
-    const imgs = state.galleryImages;
+  function pauseStageVideo() {
+    const v = els.detailStage && els.detailStage.querySelector('video');
+    if (v) { try { v.pause(); } catch (_) {} }
+  }
+
+  function setGalleryItem() {
+    const items = state.galleryItems;
     const idx  = state.galleryIndex;
     const wrap = els.detailGallery;
+    const stage = els.detailStage;
     const counter = wrap.querySelector('.gallery-counter');
     const prevBtn = wrap.querySelector('.gallery-prev');
     const nextBtn = wrap.querySelector('.gallery-next');
     const thumbs  = wrap.querySelector('.gallery-thumbs');
 
-    if (imgs.length === 0) {
-      els.detailImage.removeAttribute('src');
-      els.detailImage.alt = '';
+    pauseStageVideo();
+    stage.innerHTML = '';
+
+    if (items.length === 0) {
+      // empty stage
     } else {
-      els.detailImage.src = imgs[idx];
-      els.detailImage.alt = `Imagen ${idx + 1} de ${imgs.length}`;
+      const it = items[idx];
+      if (it.kind === 'video') {
+        const v = document.createElement('video');
+        v.src = it.src;
+        v.controls = true;
+        v.playsInline = true;
+        v.preload = 'metadata';
+        v.setAttribute('controlslist', 'nodownload');
+        v.setAttribute('aria-label', `Video ${idx + 1} de ${items.length}`);
+        stage.appendChild(v);
+      } else {
+        const im = document.createElement('img');
+        im.src = it.src;
+        im.alt = `Imagen ${idx + 1} de ${items.length}`;
+        im.decoding = 'async';
+        stage.appendChild(im);
+      }
     }
 
-    const multi = imgs.length > 1;
-    counter.textContent = multi ? `${idx + 1} / ${imgs.length}` : '';
+    const multi = items.length > 1;
+    counter.textContent = multi ? `${idx + 1} / ${items.length}` : '';
     counter.hidden = !multi;
     prevBtn.hidden = !multi;
     nextBtn.hidden = !multi;
     thumbs.hidden  = !multi;
 
     if (multi) {
-      thumbs.innerHTML = imgs.map((src, i) =>
-        `<button type="button" class="gallery-thumb${i === idx ? ' is-active' : ''}" data-idx="${i}" aria-label="Imagen ${i + 1}">
-           <img src="${escapeAttr(src)}" alt="" loading="lazy">
-         </button>`
-      ).join('');
+      thumbs.innerHTML = items.map((it, i) => {
+        const cls = `gallery-thumb${i === idx ? ' is-active' : ''}${it.kind === 'video' ? ' is-video' : ''}`;
+        const inner = it.kind === 'video'
+          ? `<video src="${escapeAttr(it.src)}#t=0.1" muted preload="metadata" playsinline></video><span class="thumb-play" aria-hidden="true">▶</span>`
+          : `<img src="${escapeAttr(it.src)}" alt="" loading="lazy">`;
+        const label = it.kind === 'video' ? `Video ${i + 1}` : `Imagen ${i + 1}`;
+        return `<button type="button" class="${cls}" data-idx="${i}" aria-label="${label}">${inner}</button>`;
+      }).join('');
     } else {
       thumbs.innerHTML = '';
     }
   }
 
   function galleryStep(delta) {
-    const n = state.galleryImages.length;
+    const n = state.galleryItems.length;
     if (n <= 1) return;
     state.galleryIndex = (state.galleryIndex + delta + n) % n;
-    setGalleryImage();
+    setGalleryItem();
   }
 
   /* ── Currency toggle ────────────────────────────────────────── */
@@ -805,6 +846,7 @@
         return;
       }
       if (e.target.matches('[data-close]') || e.target === els.detail) {
+        pauseStageVideo();
         if (els.detail.close) els.detail.close();
         else els.detail.removeAttribute('open');
         if (parsePropFromHash()) {
@@ -820,11 +862,12 @@
       const thumb = e.target.closest('.gallery-thumb');
       if (thumb) {
         state.galleryIndex = Number(thumb.dataset.idx) || 0;
-        setGalleryImage();
+        setGalleryItem();
       }
     });
 
     els.detail.addEventListener('close', () => {
+      pauseStageVideo();
       currentListing = null;
       removeListingSchema();
     });
@@ -898,7 +941,7 @@
   }
 
   async function init() {
-    els.detailGallery = els.detailImage.closest('.detail-gallery');
+    els.detailGallery = els.detailStage ? els.detailStage.closest('.detail-gallery') : null;
     els.footerYear.textContent = new Date().getFullYear();
     state.route = parseHash();
     loadStoredCurrency();
