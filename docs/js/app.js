@@ -24,12 +24,21 @@
     route:           'inicio',
     query:           '',
     typeFilter:      '',
+    operationFilter: '',
+    regionFilter:    '',
+    communeFilter:   '',
+    bedroomsMin:     null,
+    bathroomsMin:    null,
+    priceMin:        null,
     priceMax:        null,
+    poolOnly:        false,
+    parkingOnly:     false,
+    furnishedOnly:   false,
     galleryImages:   [],
     galleryIndex:    0,
-    displayCurrency: 'UF',           // global toggle: 'UF' or 'CLP'
-    ufRate:          null,            // CLP per 1 UF
-    ufRateDate:      null,            // ISO date string of the rate
+    displayCurrency: 'UF',
+    ufRate:          null,
+    ufRateDate:      null,
   };
 
   const els = {
@@ -50,7 +59,17 @@
     searchForm:      document.getElementById('searchForm'),
     qInput:          document.getElementById('q'),
     typeSelect:      document.getElementById('filterType'),
+    operationSelect: document.getElementById('filterOperation'),
+    regionSelect:    document.getElementById('filterRegion'),
+    communeSelect:   document.getElementById('filterCommune'),
+    bedroomsSelect:  document.getElementById('filterBedrooms'),
+    bathroomsSelect: document.getElementById('filterBathrooms'),
+    priceMinInput:   document.getElementById('filterPriceMin'),
     priceInput:      document.getElementById('filterPriceMax'),
+    poolCheck:       document.getElementById('filterPool'),
+    parkingCheck:    document.getElementById('filterParking'),
+    furnishedCheck:  document.getElementById('filterFurnished'),
+    filterReset:     document.getElementById('filterReset'),
     detail:          document.getElementById('detail'),
     detailGallery:   null,
     detailImage:     document.getElementById('detailImage'),
@@ -255,6 +274,40 @@
   }
   function escapeAttr(s) { return escapeHtml(s); }
 
+  /* ── Amenity icons (inline SVG) ─────────────────────────────── */
+
+  const ICONS = {
+    bed:   '<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17v-7a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v7M2 17h20M2 21v-4M22 21v-4M7 11h4a2 2 0 0 1 2 2v0H5v0a2 2 0 0 1 2-2z"/></svg>',
+    bath:  '<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM7 12V6a3 3 0 0 1 6 0M5 19l-1 2M19 19l1 2"/></svg>',
+    area:  '<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>',
+    lot:   '<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l9-2 9 2v14l-9 2-9-2V5zM12 3v18"/></svg>',
+    car:   '<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-4l2-5h10l2 5v4M5 17v2M19 17v2M8 13h8"/><circle cx="8" cy="17" r="1.4"/><circle cx="16" cy="17" r="1.4"/></svg>',
+    pool:  '<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18c1.5-1 3 1 4.5 0S9 17 10.5 18 13.5 17 15 18s3-1 4.5 0 3 0 2.5 0M2 14c1.5-1 3 1 4.5 0S9 13 10.5 14 13.5 13 15 14s3-1 4.5 0 3 0 2.5 0M7 10V4M17 10V4"/></svg>',
+    pin:   '<svg viewBox="0 0 24 24" aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+  };
+
+  function fmtArea(n) {
+    if (n == null) return '';
+    return Number(n).toLocaleString('es-CL');
+  }
+
+  function amenityHtml(l) {
+    const items = [];
+    if (l.bedrooms != null)      items.push(`<span class="amenity">${ICONS.bed}<span>${l.bedrooms}</span></span>`);
+    if (l.bathrooms != null)     items.push(`<span class="amenity">${ICONS.bath}<span>${l.bathrooms}</span></span>`);
+    if (l.area_built_m2 != null) items.push(`<span class="amenity" title="Superficie construida">${ICONS.area}<span>${fmtArea(l.area_built_m2)} m²</span></span>`);
+    if (l.area_lot_m2 != null)   items.push(`<span class="amenity" title="Terreno">${ICONS.lot}<span>${fmtArea(l.area_lot_m2)} m²</span></span>`);
+    if (l.parking != null && l.parking > 0) items.push(`<span class="amenity" title="Estacionamientos">${ICONS.car}<span>${l.parking}</span></span>`);
+    if (l.pool)                  items.push(`<span class="amenity" title="Piscina">${ICONS.pool}</span>`);
+    if (!items.length) return '';
+    return `<div class="amenities">${items.join('')}</div>`;
+  }
+
+  function communeBadgeHtml(l) {
+    if (!l.commune) return '';
+    return `<span class="commune-badge">${ICONS.pin}<span>${escapeHtml(l.commune)}</span></span>`;
+  }
+
   /* ── Filtering ──────────────────────────────────────────────── */
 
   /**
@@ -277,21 +330,39 @@
       const t = ROUTE_TYPE[state.route];
       if (t) items = items.filter(l => l.type === t);
     }
-    if (state.typeFilter) {
-      items = items.filter(l => l.type === state.typeFilter);
-    }
-    if (state.priceMax != null) {
-      items = items.filter(l => effectivePrice(l) <= state.priceMax);
-    }
+    if (state.typeFilter)      items = items.filter(l => l.type === state.typeFilter);
+    if (state.operationFilter) items = items.filter(l => (l.operation || 'venta') === state.operationFilter);
+    if (state.regionFilter)    items = items.filter(l => l.region === state.regionFilter);
+    if (state.communeFilter)   items = items.filter(l => (l.commune || '').toLowerCase() === state.communeFilter.toLowerCase());
+    if (state.bedroomsMin != null)  items = items.filter(l => l.bedrooms != null && Number(l.bedrooms) >= state.bedroomsMin);
+    if (state.bathroomsMin != null) items = items.filter(l => l.bathrooms != null && Number(l.bathrooms) >= state.bathroomsMin);
+    if (state.priceMin != null)     items = items.filter(l => effectivePrice(l) >= state.priceMin);
+    if (state.priceMax != null)     items = items.filter(l => effectivePrice(l) <= state.priceMax);
+    if (state.poolOnly)             items = items.filter(l => !!l.pool);
+    if (state.parkingOnly)          items = items.filter(l => l.parking != null && Number(l.parking) > 0);
+    if (state.furnishedOnly)        items = items.filter(l => !!l.furnished);
     if (state.query) {
       const q = state.query.toLowerCase();
       items = items.filter(l =>
         (l.title || '').toLowerCase().includes(q) ||
-        (l.description || '').toLowerCase().includes(q)
+        (l.description || '').toLowerCase().includes(q) ||
+        (l.commune || '').toLowerCase().includes(q) ||
+        (l.id || '').toLowerCase().includes(q)
       );
     }
     items.sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
     return items;
+  }
+
+  function populateCommuneOptions() {
+    if (!els.communeSelect) return;
+    const set = new Set();
+    state.listings.forEach(l => { if (l.commune) set.add(l.commune); });
+    const current = state.communeFilter;
+    const opts = ['<option value="">Todas</option>']
+      .concat([...set].sort((a, b) => a.localeCompare(b, 'es'))
+        .map(c => `<option value="${escapeAttr(c)}"${c === current ? ' selected' : ''}>${escapeHtml(c)}</option>`));
+    els.communeSelect.innerHTML = opts.join('');
   }
 
   /* ── Render ─────────────────────────────────────────────────── */
@@ -400,7 +471,9 @@
       <div class="bento-card ${modifier} fade-in" data-id="${escapeAttr(l.id)}">
         ${img}${badge}${photoHint}
         <div class="bento-body">
+          ${communeBadgeHtml(l)}
           <span class="bento-title">${escapeHtml(l.title || 'Sin título')}</span>
+          ${amenityHtml(l)}
           ${priceBlockHtml(l, 'bento')}
         </div>
       </div>`;
@@ -440,7 +513,9 @@
         <div class="card-image${orientCls}">${img}${badge}${photoHint}</div>
         <div class="card-body">
           ${priceBlockHtml(l, 'card')}
+          ${communeBadgeHtml(l)}
           <span class="card-title">${escapeHtml(l.title || 'Sin título')}</span>
+          ${amenityHtml(l)}
           <span class="card-desc">${escapeHtml(l.description || '')}</span>
           <div class="card-foot">
             <span>${fmtDate(l.created_at)}</span>
@@ -494,7 +569,7 @@
     els.detailBadge.className = `badge badge-${l.type}`;
     els.detailBadge.textContent = TYPE_LABEL[l.type] || l.type;
     els.detailTitle.textContent = l.title || '';
-    els.detailPrice.innerHTML = priceBlockHtml(l, 'detail');
+    els.detailPrice.innerHTML = priceBlockHtml(l, 'detail') + communeBadgeHtml(l) + amenityHtml(l);
     els.detailDesc.textContent  = l.description || '';
     els.detailMeta.textContent  = `Publicada el ${fmtDate(l.created_at)} · ID ${l.id}`;
     if (els.detailWhatsapp) els.detailWhatsapp.href = buildWhatsappLink(l);
@@ -680,14 +755,38 @@
       if (propId) openDetail(propId);
     });
 
+    function readFiltersFromForm() {
+      state.query           = (els.qInput?.value || '').trim();
+      state.typeFilter      = els.typeSelect?.value || '';
+      state.operationFilter = els.operationSelect?.value || '';
+      state.regionFilter    = els.regionSelect?.value || '';
+      state.communeFilter   = els.communeSelect?.value || '';
+      const bMin = parseInt(els.bedroomsSelect?.value || '', 10);
+      state.bedroomsMin     = Number.isFinite(bMin) ? bMin : null;
+      const baMin = parseInt(els.bathroomsSelect?.value || '', 10);
+      state.bathroomsMin    = Number.isFinite(baMin) ? baMin : null;
+      const pmin = parseFloat(els.priceMinInput?.value);
+      state.priceMin        = Number.isFinite(pmin) ? pmin : null;
+      const pmax = parseFloat(els.priceInput?.value);
+      state.priceMax        = Number.isFinite(pmax) ? pmax : null;
+      state.poolOnly        = !!els.poolCheck?.checked;
+      state.parkingOnly     = !!els.parkingCheck?.checked;
+      state.furnishedOnly   = !!els.furnishedCheck?.checked;
+    }
+
     els.searchForm.addEventListener('submit', e => {
       e.preventDefault();
-      state.query      = els.qInput.value.trim();
-      state.typeFilter = els.typeSelect.value;
-      const pm = parseFloat(els.priceInput.value);
-      state.priceMax   = Number.isFinite(pm) ? pm : null;
+      readFiltersFromForm();
       renderCatalog();
     });
+
+    if (els.filterReset) {
+      els.filterReset.addEventListener('click', () => {
+        els.searchForm.reset();
+        readFiltersFromForm();
+        renderCatalog();
+      });
+    }
 
     if (els.currencyToggle) {
       els.currencyToggle.addEventListener('click', e => {
@@ -809,6 +908,7 @@
 
     // First render with the cached/stored data — guarantees something paints fast.
     if (!state.ufRate && state.displayCurrency === 'CLP') state.displayCurrency = 'UF';
+    populateCommuneOptions();
     syncCurrencyToggleUi();
     updateFooterUf();
     render();
