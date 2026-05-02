@@ -52,7 +52,10 @@ def git(*args, check=True):
 
 
 def commit_and_push(commit_msg):
-    git("add", "docs/data/listings.json", "docs/images/")
+    targets = ["docs/data/listings.json", "docs/images/"]
+    if os.path.isdir(os.path.join(ROOT, "docs", "videos")):
+        targets.append("docs/videos/")
+    git("add", *targets)
     if not git("status", "--porcelain").stdout.strip():
         return False
     git("commit", "-m", commit_msg)
@@ -88,10 +91,16 @@ def main():
             return [l["image"]]
         return []
 
+    def listing_videos(l):
+        if isinstance(l.get("videos"), list) and l["videos"]:
+            return list(l["videos"])
+        return []
+
     summary = {
         "action":  "preview" if not args.confirm else "remove",
         "matches": [{"id": l["id"], "title": l["title"], "type": l["type"],
-                     "images": listing_images(l)}
+                     "images": listing_images(l),
+                     "videos": listing_videos(l)}
                     for l in matches],
     }
 
@@ -121,6 +130,12 @@ def main():
         if img_path and os.path.exists(img_path):
             os.remove(img_path)
             log(f"removed image {img_path}")
+
+    for vid_rel in listing_videos(target):
+        vid_path = os.path.join(SITE, vid_rel) if vid_rel else None
+        if vid_path and os.path.exists(vid_path):
+            os.remove(vid_path)
+            log(f"removed video {vid_path}")
 
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)

@@ -37,7 +37,9 @@ ROOT = Path("/Users/openclaw/Desktop/real-estate")
 SITE = ROOT / "docs"
 DATA = SITE / "data" / "listings.json"
 IMAGES = SITE / "images"
+VIDEOS = SITE / "videos"
 LOG = ROOT / "logs" / "publish.log"
+VIDEO_EXTS = {".mp4", ".mov", ".m4v", ".webm"}
 
 VALID_TYPES = {"casa", "departamento", "terreno"}
 VALID_CURRENCIES = {"UF", "CLP", "USD"}
@@ -121,6 +123,44 @@ def orientation_for(w: int, h: int) -> str:
     return "v" if h > w else "h"
 
 
+def copy_video(src: Path, dst: Path) -> None:
+    """Copy video as-is. We don't transcode — Telegram delivers H.264 mp4 by default,
+    which plays in every browser via the native HTML5 video element."""
+    VIDEOS.mkdir(parents=True, exist_ok=True)
+    shutil.copy(src, dst)
+
+
+def get_video_meta(path: Path) -> dict:
+    """Best-effort video metadata via ffprobe if available; returns {} on failure."""
+    meta: dict = {"size_bytes": path.stat().st_size}
+    if not shutil.which("ffprobe"):
+        return meta
+    try:
+        out = subprocess.check_output(
+            [
+                "ffprobe", "-v", "error",
+                "-select_streams", "v:0",
+                "-show_entries", "stream=width,height,duration",
+                "-of", "csv=p=0",
+                str(path),
+            ],
+            text=True,
+        ).strip()
+        parts = out.split(",")
+        if len(parts) >= 2:
+            try:
+                meta["w"] = int(parts[0]); meta["h"] = int(parts[1])
+                meta["orientation"] = orientation_for(meta["w"], meta["h"])
+            except ValueError:
+                pass
+        if len(parts) >= 3 and parts[2]:
+            try: meta["duration_s"] = round(float(parts[2]), 1)
+            except ValueError: pass
+    except Exception as e:
+        log(f"ffprobe failed for {path}: {e!r}")
+    return meta
+
+
 def load_listings() -> dict:
     with open(DATA) as f:
         return json.load(f)
@@ -159,7 +199,10 @@ def git(*args: str) -> int:
 
 def git_publish(commit_msg: str) -> bool:
     if (ROOT / ".git").is_dir():
-        if git("add", "docs/data/listings.json", "docs/images/") != 0:
+        targets = ["docs/data/listings.json", "docs/images/"]
+        if VIDEOS.is_dir():
+            targets.append("docs/videos/")
+        if git("add", *targets) != 0:
             log("git add failed")
             return False
         if git("commit", "-m", commit_msg) != 0:
@@ -177,6 +220,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--image",        required=True, nargs="+",
                     help="One or more paths to photo files. First is the cover.")
+    ap.add_argument("--video",        nargs="+", default=[],
+                    help="Optional path(s) to video files (.mp4/.mov/.webm).")
     ap.add_argument("--title",        required=True)
     ap.add_argument("--description",  required=True)
     ap.add_argument("--price",        required=True, type=float)
@@ -206,6 +251,15 @@ def main() -> None:
             print(f"ERROR: image not found: {src}", file=sys.stderr)
             sys.exit(2)
 
+    video_sources = [Path(p).expanduser() for p in (args.video or [])]
+    for src in video_sources:
+        if not src.is_file():
+            print(f"ERROR: video not found: {src}", file=sys.stderr)
+            sys.exit(2)
+        if src.suffix.lower() not in VIDEO_EXTS:
+            print(f"ERROR: unsupported video format: {src.suffix}", file=sys.stderr)
+            sys.exit(2)
+
     listing_id = make_id(args.title)
 
     image_rel_paths = []
@@ -223,6 +277,17 @@ def main() -> None:
         else:
             image_meta.append({"orientation": "h"})
 
+    video_rel_paths: list[str] = []
+    video_meta: list[dict] = []
+    for idx, src in enumerate(video_sources, start=1):
+        ext = src.suffix.lower()
+        suffix = "" if (len(video_sources) == 1 and idx == 1) else f"-{idx}"
+        video_name = f"{listing_id}{suffix}{ext}"
+        dst = VIDEOS / video_name
+        copy_video(src, dst)
+        video_rel_paths.append(f"videos/{video_name}")
+        video_meta.append(get_video_meta(dst))
+
     payload = load_listings()
     listing = {
         "id":          listing_id,
@@ -236,6 +301,9 @@ def main() -> None:
         "image_meta":  image_meta,
         "created_at":  dt.datetime.now().astimezone().isoformat(timespec="seconds"),
     }
+    if video_rel_paths:
+        listing["videos"] = video_rel_paths
+        listing["video_meta"] = video_meta
     if args.bedrooms is not None:    listing["bedrooms"]      = args.bedrooms
     if args.bathrooms is not None:   listing["bathrooms"]     = args.bathrooms
     if args.area_built is not None:  listing["area_built_m2"] = args.area_built
@@ -248,11 +316,12 @@ def main() -> None:
     payload.setdefault("listings", []).insert(0, listing)
     refresh_uf_rate(payload)
     save_listings(payload)
-    log(f"added {listing_id}: {args.title} ({len(image_rel_paths)} foto/s)")
+    n_video_msg = f", {len(video_rel_paths)} video/s" if video_rel_paths else ""
+    log(f"added {listing_id}: {args.title} ({len(image_rel_paths)} foto/s{n_video_msg})")
 
     pushed = False
     if not args.no_push:
-        commit_msg = f"publish: {args.title} ({listing_id}, {len(image_rel_paths)} foto/s)"
+        commit_msg = f"publish: {args.title} ({listing_id}, {len(image_rel_paths)} foto/s{n_video_msg})"
         pushed = git_publish(commit_msg)
 
     print(json.dumps({"ok": True, "listing": listing, "pushed": pushed}, ensure_ascii=False))
