@@ -25,7 +25,7 @@ real-estate/
 │   ├── css/styles.css         # diseño editorial (Fraunces + Inter, paleta cálida)
 │   ├── js/app.js              # carga listings.json, render, filtros, galería, conversor UF↔CLP
 │   ├── data/listings.json     # fuente de verdad del catálogo + cache de tasa UF
-│   └── images/                # JPEGs de propiedades (resized a max 1600px)
+│   └── images/                # JPEGs de propiedades (max 2400px, q90)
 └── logs/                      # publish.log, unpublish.log, offer.log
 ```
 
@@ -73,6 +73,18 @@ Una propiedad puede tener **una o varias fotos**. Reglas:
    > dorm, 180 m². 8500 UF*)"
 5. **Varias fotos sin caption en ninguna:** mismo trato que (4): pedile el
    caption con los datos. No publiques con datos inventados.
+
+#### Calidad de fotos
+
+`publish.py` reescala a max **2400px** (lado mayor) y re-encodea a
+**JPEG q90**. Esto da fotos nítidas para retina/4K, ~500–700 KB cada
+una. La calidad final está limitada por el origen: si Elias mandó la
+foto como **"foto"** en Telegram (galería), Telegram ya la comprimió
+antes — no hay forma de recuperar esa calidad. Para máxima fidelidad
+Elias tiene que mandar como **documento/archivo** (📎 → Archivo). Si
+notás que las fotos vienen claramente comprimidas (por ejemplo
+≤1280px de ancho original) y la calidad importa para esa publicación,
+sugerí gentilmente reenviar como documento antes de publicar.
 
 #### Pasos de publicación
 

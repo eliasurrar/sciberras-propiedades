@@ -41,7 +41,8 @@ LOG = ROOT / "logs" / "publish.log"
 
 VALID_TYPES = {"casa", "departamento", "terreno"}
 VALID_CURRENCIES = {"UF", "CLP", "USD"}
-MAX_IMAGE_DIM = 1600  # max width/height in px
+MAX_IMAGE_DIM = 2400      # max width/height in px (retina-friendly, web-optimized)
+JPEG_QUALITY  = 90        # 0-100 (sips formatOptions)
 UF_API = "https://mindicador.cl/api/uf"
 UF_FETCH_TIMEOUT = 5  # seconds
 
@@ -72,14 +73,20 @@ def make_id(title: str) -> str:
 
 
 def process_image(src: Path, dst: Path) -> None:
-    """Resize the image to MAX_IMAGE_DIM and save as JPEG via sips."""
+    """Resize the image to MAX_IMAGE_DIM and save as JPEG via sips.
+
+    sips --resampleHeightWidthMax only downscales; smaller sources keep
+    their native dimensions. Quality is JPEG q90 — the source should be
+    a Telegram *document* (not "photo") so the input isn't already
+    Telegram-compressed.
+    """
     IMAGES.mkdir(parents=True, exist_ok=True)
     shutil.copy(src, dst)
     rc = subprocess.call([
         "/usr/bin/sips",
         "--resampleHeightWidthMax", str(MAX_IMAGE_DIM),
         "--setProperty", "format", "jpeg",
-        "--setProperty", "formatOptions", "80",
+        "--setProperty", "formatOptions", str(JPEG_QUALITY),
         str(dst),
     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     if rc != 0:
