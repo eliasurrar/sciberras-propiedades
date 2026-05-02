@@ -1,8 +1,87 @@
 {
-  "updated_at": "2026-05-01T22:40:12-04:00",
+  "updated_at": "2026-05-02T17:21:34-04:00",
   "uf_clp_rate": 40146.82,
-  "uf_rate_updated_at": "2026-05-02T00:00:00-04:00",
+  "uf_rate_updated_at": "2026-05-02T04:00:00.000Z",
   "listings": [
+    {
+      "id": "casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58",
+      "title": "Casa en Nogales 6D 5B - 540 m² / Terreno 10.600 m²",
+      "description": "Amplia propiedad disponible en Casa Patronales s/n, Nogales. Construida sobre un terreno de 10.600 m² con 540 m² edificados, cuenta con 6 habitaciones y 5 baños, siendo una opción perfecta para familias grandes que necesitan espacio de sobra. Su gran superficie permite proyectar futuras ampliaciones o aprovechar los exteriores para el descanso y la vida al aire libre. Los ambientes interiores son amplios y luminosos, pensados para compartir en familia o con amigos, mientras que su entorno ofrece la calma y privacidad del campo sin alejarse de los servicios de la comuna de Nogales. Si buscas una casa con carácter, espacio y potencial, contáctanos para agendar una visita.",
+      "price": 11000.0,
+      "currency": "UF",
+      "type": "casa",
+      "images": [
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-1.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-2.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-3.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-4.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-5.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-6.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-7.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-8.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-9.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-10.jpg",
+        "images/casa-en-nogales-6d-5b-540-m-terreno-10-600-m-b0bb58-11.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        }
+      ],
+      "created_at": "2026-05-02T17:21:33-04:00"
+    },
     {
       "id": "departamento-vitacura-2d-2b-b487fd",
       "title": "Departamento Vitacura 2D 2B",
@@ -16,9 +95,21 @@
         "images/departamento-vitacura-2d-2b-b487fd-3.jpg"
       ],
       "image_meta": [
-        {"w": 1600, "h": 1200, "orientation": "h"},
-        {"w": 1600, "h": 1600, "orientation": "h"},
-        {"w": 1200, "h": 1600, "orientation": "v"}
+        {
+          "w": 1600,
+          "h": 1200,
+          "orientation": "h"
+        },
+        {
+          "w": 1600,
+          "h": 1600,
+          "orientation": "h"
+        },
+        {
+          "w": 1200,
+          "h": 1600,
+          "orientation": "v"
+        }
       ],
       "created_at": "2026-05-01T22:40:12-04:00"
     }
