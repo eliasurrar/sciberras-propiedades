@@ -83,6 +83,14 @@
   function listingCover(l) {
     return listingImages(l)[0] || '';
   }
+  function listingImageMeta(l, idx) {
+    if (Array.isArray(l.image_meta) && l.image_meta[idx]) return l.image_meta[idx];
+    return null;
+  }
+  function coverOrientation(l) {
+    const meta = listingImageMeta(l, 0);
+    return (meta && meta.orientation === 'v') ? 'v' : 'h';
+  }
 
   function fmtAmount(n, currency) {
     if (n == null || !Number.isFinite(Number(n))) return '';
@@ -426,9 +434,10 @@
     const img = cover
       ? `<img src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" loading="lazy" decoding="async">`
       : '';
+    const orientCls = coverOrientation(l) === 'v' ? ' card-image--vertical' : '';
     return `
       <div class="card fade-in" data-id="${escapeAttr(l.id)}">
-        <div class="card-image">${img}${badge}${photoHint}</div>
+        <div class="card-image${orientCls}">${img}${badge}${photoHint}</div>
         <div class="card-body">
           ${priceBlockHtml(l, 'card')}
           <span class="card-title">${escapeHtml(l.title || 'Sin título')}</span>
