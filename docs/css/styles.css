@@ -328,12 +328,13 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   .hero {
     padding: 80px 0 40px;
   }
-  /* Hero text uses the full container width so the title can spread
-     into 2 logical lines instead of 3. hero-sub keeps its 60ch cap via
-     the rule above so paragraphs stay readable. */
-  .hero-inner        { max-width: none; }
+  /* Hero text shares the catalog/featured container width (1280px cap +
+     32px padding) so the left/right margins line up exactly with the
+     publication grid below. hero-sub keeps its 60ch cap via the rule
+     above so paragraphs stay readable. */
+  .hero-inner        { max-width: var(--container); }
   .hero .eyebrow     { margin-bottom: 18px; }
-  .hero-title        { margin-bottom: 20px; font-size: clamp(56px, 7.4vw, 96px); }
+  .hero-title        { margin-bottom: 20px; font-size: clamp(52px, 6.6vw, 88px); }
   .hero-sub          { margin-bottom: 24px; }
   .hero-actions      { margin-bottom: 22px; }
   .featured          { padding: 36px 0 36px; }
