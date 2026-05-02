@@ -282,7 +282,11 @@ serif display + bento layouts dominantes en 2025-2026).
   pill-style, mini stats con cantidad de publicaciones y fecha de update.
 - **Sección "Destacadas"** con bento grid: el listing más nuevo ocupa una
   card grande (2x2), el resto cards pequeñas (hasta 5 destacadas).
-- **Buscador** vive sobre el catálogo, NO en el hero. Es secundario.
+- **Buscador** vive en una banda dedicada (`.search-band`) entre el hero y
+  las destacadas. En desktop (≥1024px) la banda se "tucks" levemente bajo
+  el hero (`margin-top: -28px`) para anclar la composición editorial. Es
+  visible en `#inicio` y categorías; oculto sólo en `#contacto`. Mismo
+  form sirve para buscar y filtrar el catálogo entero.
 - **Cards** con cover + badge de tipo + chip de cantidad de fotos cuando hay
   más de una.
 - **Detail dialog** con galería: imagen principal + flechas prev/next +
