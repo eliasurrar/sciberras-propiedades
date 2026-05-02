@@ -286,7 +286,9 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   pointer-events: none;
 }
 .hero-inner { max-width: 920px; }
-.hero-inner > .hero-sub { max-width: 60ch; }
+.hero-text { display: flex; flex-direction: column; min-width: 0; }
+.hero-aside { width: 100%; margin-top: 28px; }
+.hero-text > .hero-sub { max-width: 60ch; }
 .hero .eyebrow { margin-bottom: 24px; }
 .hero-title {
   font-family: var(--font-display);
@@ -322,19 +324,25 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 .hero-meta-dot { opacity: 0.5; }
 
 /* Wide-screen rhythm: let the hero use the full container width and
-   collapse the dead air between hero, search band and featured. Mobile
-   and tablet (<1024px) keep the editorial clamps above. */
+   give the right-hand vertical filter its own column. Mobile/tablet
+   (<1024px) keep the editorial clamps above and the aside stacks. */
 @media (min-width: 1024px) {
   .hero {
-    padding: 80px 0 40px;
+    padding: 80px 0 56px;
   }
-  /* Hero text shares the catalog/featured container width (1280px cap +
-     32px padding) so the left/right margins line up exactly with the
-     publication grid below. hero-sub keeps its 60ch cap via the rule
-     above so paragraphs stay readable. */
-  .hero-inner        { max-width: var(--container); }
+  /* Hero shares the catalog/featured container width (1280px cap + 32px
+     padding) so the left/right margins line up exactly with the grid
+     below, and adds a right-hand column for the vertical filter card. */
+  .hero-inner {
+    max-width: var(--container);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    gap: clamp(32px, 4vw, 64px);
+    align-items: start;
+  }
+  .hero-aside        { margin-top: 0; align-self: start; }
   .hero .eyebrow     { margin-bottom: 18px; }
-  .hero-title        { margin-bottom: 20px; font-size: clamp(52px, 6.6vw, 88px); }
+  .hero-title        { margin-bottom: 20px; font-size: clamp(44px, 4.6vw, 72px); }
   .hero-sub          { margin-bottom: 24px; }
   .hero-actions      { margin-bottom: 22px; }
   .featured          { padding: 36px 0 36px; }
@@ -342,7 +350,8 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 }
 @media (min-width: 1440px) {
   /* Even wider screens: keep the hero from ballooning vertically. */
-  .hero { padding-top: 88px; padding-bottom: 44px; }
+  .hero { padding-top: 88px; padding-bottom: 64px; }
+  .hero-title { font-size: clamp(52px, 5.4vw, 84px); }
 }
 
 /* ─── Buttons ────────────────────────────────────────────────────────── */
@@ -499,39 +508,57 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   .bento-card--wide { grid-column: span 1; min-height: 260px; }
 }
 
-/* ─── Search band (between hero and featured) ────────────────────────── */
-.search-band {
-  background: var(--bg);
-  padding: 20px 0;
-}
-.search-band .container {
+/* ─── Hero aside / vertical filter card ──────────────────────────────── */
+.hero-aside .search-bar-vertical {
   display: flex;
-  justify-content: center;
-}
-.search-band .search-bar {
-  margin: 0;
-  width: 100%;
-  max-width: 880px;
+  flex-direction: column;
+  gap: 14px;
   background: var(--bg-elev);
   border: 1px solid var(--border-strong);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius);
+  padding: 22px 22px 24px;
+  margin: 0;
+}
+.hero-aside .search-bar-vertical .btn {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 4px;
+}
+.search-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.search-head .eyebrow { margin-bottom: 0; }
+.search-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
 }
 @media (min-width: 1024px) {
-  .search-band {
-    /* Tuck the form slightly under the hero so it visually anchors the
-       editorial composition without breaking the rhythm. */
-    margin-top: -28px;
-    padding-bottom: 28px;
-    position: relative;
-    z-index: 4;
-  }
-  .search-band .search-bar {
-    padding: 12px;
-    box-shadow: var(--shadow-md);
-  }
+  .hero-aside .search-bar-vertical { padding: 24px 24px 26px; }
 }
-@media (max-width: 720px) {
-  .search-band { padding: 14px 0 10px; }
+.hero-aside .search-bar-vertical .search-field input,
+.hero-aside .search-bar-vertical .search-field select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+.hero-aside .search-bar-vertical .search-field input:hover,
+.hero-aside .search-bar-vertical .search-field select:hover {
+  border-color: var(--border-strong);
+}
+.hero-aside .search-bar-vertical .search-field input:focus,
+.hero-aside .search-bar-vertical .search-field select:focus {
+  border-color: var(--ink);
+  background: var(--surface-alt);
 }
 
 /* ─── Catalog / Search ───────────────────────────────────────────────── */
@@ -542,18 +569,6 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   font-variant-numeric: tabular-nums;
 }
 
-.search-bar {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr auto;
-  gap: 10px;
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  padding: 10px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-xs);
-  align-items: end;
-  margin: 0 0 28px;
-}
 .search-field { display: flex; flex-direction: column; gap: 4px; }
 .search-field label {
   font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
@@ -591,9 +606,7 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
 
 @media (max-width: 720px) {
-  .search-bar { grid-template-columns: 1fr 1fr; padding: 10px; gap: 10px; }
-  .search-bar .btn { grid-column: 1 / -1; }
-  .search-field-min { min-width: 0; }
+  .hero-aside .search-bar-vertical { padding: 18px 18px 20px; }
 }
 
 /* ─── Catalog Grid ───────────────────────────────────────────────────── */
