@@ -287,7 +287,7 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   background-size: cover;
   background-position: center 40%;
   background-repeat: no-repeat;
-  opacity: 0.22;
+  opacity: 0.42;
   z-index: -1;
   pointer-events: none;
   /* Fade hacia los bordes para que el título y el footer del hero respiren */
@@ -305,7 +305,7 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
       rgba(0,0,0,0) 100%);
 }
 :root[data-theme="dark"] .hero::before {
-  opacity: 0.16;
+  opacity: 0.28;
   mix-blend-mode: lighten;
 }
 .hero::after {
