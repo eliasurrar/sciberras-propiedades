@@ -597,13 +597,14 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 }
 
 /* ─── Catalog Grid ───────────────────────────────────────────────────── */
+/* CSS columns give us masonry-style packing so vertical-orientation cards
+   (taller) sit naturally next to horizontal cards without leaving gaps. */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
+  column-count: 3;
+  column-gap: 28px;
 }
-@media (max-width: 980px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; } }
-@media (max-width: 600px) { .grid { grid-template-columns: 1fr; gap: 18px; } }
+@media (max-width: 980px) { .grid { column-count: 2; column-gap: 20px; } }
+@media (max-width: 600px) { .grid { column-count: 1; column-gap: 0; } }
 
 .card {
   background: var(--bg-elev);
@@ -616,7 +617,11 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   text-align: left; padding: 0; width: 100%;
   font-family: inherit; color: inherit;
   -webkit-tap-highlight-color: transparent;
+  break-inside: avoid;
+  margin: 0 0 28px;
 }
+@media (max-width: 980px) { .card { margin-bottom: 20px; } }
+@media (max-width: 600px) { .card { margin-bottom: 18px; } }
 @media (hover: hover) {
   .card:hover {
     transform: translateY(-3px);
@@ -632,12 +637,13 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 }
 .card-image {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 3;            /* default: horizontal listing */
   background:
     radial-gradient(circle at 30% 30%, rgba(180,106,58,0.18), transparent 60%),
     linear-gradient(135deg, var(--surface-alt), #e6dec9);
   overflow: hidden;
 }
+.card-image--vertical { aspect-ratio: 3 / 4; }
 .card-image img {
   width: 100%; height: 100%; object-fit: cover;
   transition: transform 0.5s ease;
@@ -786,12 +792,18 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   background: #14171c;
 }
 .detail-gallery > img {
+  /* Fixed stage shape so the dialog doesn't jump between mixed-orientation
+     photos. object-fit: contain shows the full image without cropping —
+     verticals get letterboxed sides, very-wide horizontals get thin
+     letterbox top/bottom. background fills the letterbox area. */
+  display: block;
   width: 100%;
   aspect-ratio: 16 / 10;
-  object-fit: cover;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #14171c;
   border-top-left-radius: var(--radius-lg);
   border-top-right-radius: var(--radius-lg);
-  display: block;
 }
 .gallery-nav {
   position: absolute;

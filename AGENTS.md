@@ -253,6 +253,10 @@ El sitio incluye un conversor automático:
   "type":        "casa",
   "images":      ["images/casa-en-las-condes-a1b2c3.jpg",
                   "images/casa-en-las-condes-a1b2c3-2.jpg"],
+  "image_meta":  [
+    {"w": 2400, "h": 1800, "orientation": "h"},
+    {"w": 1800, "h": 2400, "orientation": "v"}
+  ],
   "created_at":  "2026-05-01T14:30:00-04:00",
   "offer": {                       // OPCIONAL — sólo cuando hay oferta vigente
     "price":      7800,
@@ -279,6 +283,25 @@ legacy `image` (string) si alguna vez aparece. Si `offer.until` está vencida,
 el frontend ignora la oferta automáticamente (no hace falta limpiarla, pero
 podés correr `offer.py --clear --confirm` si querés que desaparezca del
 JSON).
+
+`image_meta[]` es paralelo a `images[]` (mismo índice = misma foto). Lo
+escribe `publish.py` automáticamente leyendo dimensiones con `sips -g
+pixelWidth -g pixelHeight` después del resize. Cada entrada tiene
+`{w, h, orientation}` con `orientation: "h" | "v"` ("h" para landscape y
+square, "v" para portrait). El frontend lo usa para:
+
+- **Cards del catálogo:** las cards horizontales se renderean con
+  `aspect-ratio: 4/3`, las verticales con `3/4`. Mismo ancho de columna,
+  altura distinta. El catálogo usa CSS columns (masonry-style) para que
+  las cards verticales más altas no dejen huecos al lado de las
+  horizontales.
+- **Galería del detalle:** cada foto se muestra con `object-fit: contain`
+  dentro de un stage 16:10 fijo, así verticales y panorámicas no se
+  recortan (quedan letterbox sobre el fondo oscuro).
+
+Listings legacy sin `image_meta` se renderean asumiendo orientación
+horizontal por default — sigue funcionando, sólo no aprovechan el
+detect-orientation.
 
 ## Diseño del sitio
 

@@ -93,6 +93,32 @@ def process_image(src: Path, dst: Path) -> None:
         raise RuntimeError(f"sips failed (rc={rc}) processing {src}")
 
 
+def get_image_dims(path: Path) -> tuple[int, int] | None:
+    """Read pixel dimensions of a JPEG via sips. Returns None on failure."""
+    try:
+        out = subprocess.check_output(
+            ["/usr/bin/sips", "-g", "pixelWidth", "-g", "pixelHeight", str(path)],
+            stderr=subprocess.DEVNULL, text=True,
+        )
+        w = h = None
+        for line in out.splitlines():
+            line = line.strip()
+            if line.startswith("pixelWidth:"):
+                w = int(line.split(":", 1)[1].strip())
+            elif line.startswith("pixelHeight:"):
+                h = int(line.split(":", 1)[1].strip())
+        if w and h:
+            return (w, h)
+    except Exception as e:
+        log(f"sips dims failed for {path}: {e!r}")
+    return None
+
+
+def orientation_for(w: int, h: int) -> str:
+    """'v' for portrait, 'h' for landscape (square defaults to 'h')."""
+    return "v" if h > w else "h"
+
+
 def load_listings() -> dict:
     with open(DATA) as f:
         return json.load(f)
@@ -167,12 +193,19 @@ def main() -> None:
     listing_id = make_id(args.title)
 
     image_rel_paths = []
+    image_meta: list[dict] = []
     for idx, src in enumerate(sources, start=1):
         suffix = "" if (len(sources) == 1 and idx == 1) else f"-{idx}"
         image_name = f"{listing_id}{suffix}.jpg"
         dst = IMAGES / image_name
         process_image(src, dst)
         image_rel_paths.append(f"images/{image_name}")
+        dims = get_image_dims(dst)
+        if dims:
+            image_meta.append({"w": dims[0], "h": dims[1],
+                               "orientation": orientation_for(*dims)})
+        else:
+            image_meta.append({"orientation": "h"})
 
     payload = load_listings()
     listing = {
@@ -183,6 +216,7 @@ def main() -> None:
         "currency":    args.currency,
         "type":        args.ptype,
         "images":      image_rel_paths,
+        "image_meta":  image_meta,
         "created_at":  dt.datetime.now().astimezone().isoformat(timespec="seconds"),
     }
     payload.setdefault("listings", []).insert(0, listing)
