@@ -1,8 +1,33 @@
 {
-  "updated_at": "2026-05-02T18:21:52-04:00",
+  "updated_at": "2026-05-02T18:31:37-04:00",
   "uf_clp_rate": 40146.82,
   "uf_rate_updated_at": "2026-05-02T04:00:00.000Z",
   "listings": [
+    {
+      "id": "departamento-arriendo-condominio-los-libertadores-quillota-54dddc",
+      "title": "Departamento Arriendo Condominio Los Libertadores Quillota",
+      "description": "El departamento se encuentra en el Condominio Libertadores, en Quillota, en el tercer piso. Cuenta con tres dormitorios, ideales para una familia, dos baños completos, un amplio living-comedor perfecto para compartir, una logia para lavadero o almacenamiento, y además incluye un estacionamiento. El condominio ofrece seguridad, espacios bien distribuidos y una excelente conectividad en Quillota. El precio incluye los gastos comunes.",
+      "price": 400000.0,
+      "currency": "CLP",
+      "type": "departamento",
+      "operation": "arriendo",
+      "images": [
+        "images/departamento-arriendo-condominio-los-libertadores-quillota-54dddc.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 2400,
+          "h": 1599,
+          "orientation": "h"
+        }
+      ],
+      "created_at": "2026-05-02T18:31:36-04:00",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "parking": 1,
+      "commune": "Quillota",
+      "region": "valparaiso"
+    },
     {
       "id": "casa-en-nogales-6d-5b-540-m-terreno-10-600-m-6f4c4f",
       "title": "Casa en Nogales 6D 5B - 540 m² / Terreno 10.600 m²",
