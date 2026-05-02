@@ -1,6 +1,7 @@
 (() => {
   'use strict';
 
+  const WHATSAPP_PHONE = '56954901879';
   const TYPE_LABEL = { casa: 'Casa', departamento: 'Departamento', terreno: 'Terreno' };
   const TITLES = {
     inicio:         'Todas las propiedades',
@@ -50,6 +51,7 @@
     detailPrice:    document.getElementById('detailPrice'),
     detailDesc:     document.getElementById('detailDescription'),
     detailMeta:     document.getElementById('detailMeta'),
+    detailWhatsapp: document.getElementById('detailWhatsapp'),
     footerYear:     document.getElementById('footerYear'),
     footerUpdated:  document.getElementById('footerUpdated'),
     heroCount:      document.getElementById('heroCount'),
@@ -81,6 +83,23 @@
     const d = new Date(iso);
     if (Number.isNaN(+d)) return '';
     return d.toLocaleDateString('es-CL', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function buildShareUrl(id) {
+    return `${location.origin}${location.pathname}#prop/${id}`;
+  }
+
+  function buildWhatsappLink(l) {
+    const url = buildShareUrl(l.id);
+    const title = (l.title || 'Sin título').replace(/"/g, "'");
+    const msg = `Hola Grace, me interesa la propiedad "${title}". Link: ${url}`;
+    return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`;
+  }
+
+  function parsePropFromHash() {
+    const h = (location.hash || '').replace('#', '').trim();
+    if (h.startsWith('prop/')) return h.slice(5);
+    return null;
   }
 
   function escapeHtml(s) {
@@ -255,6 +274,7 @@
     els.detailPrice.textContent = fmtPrice(l.price, l.currency);
     els.detailDesc.textContent  = l.description || '';
     els.detailMeta.textContent  = `Publicada el ${fmtDate(l.created_at)} · ID ${l.id}`;
+    if (els.detailWhatsapp) els.detailWhatsapp.href = buildWhatsappLink(l);
     if (typeof els.detail.showModal === 'function') els.detail.showModal();
     else els.detail.setAttribute('open', 'open');
   }
@@ -314,6 +334,8 @@
     window.addEventListener('hashchange', () => {
       state.route = parseHash();
       render();
+      const propId = parsePropFromHash();
+      if (propId) openDetail(propId);
     });
 
     els.searchForm.addEventListener('submit', e => {
@@ -329,6 +351,9 @@
       if (e.target.matches('[data-close]') || e.target === els.detail) {
         if (els.detail.close) els.detail.close();
         else els.detail.removeAttribute('open');
+        if (parsePropFromHash()) {
+          history.replaceState(null, '', location.pathname + location.search);
+        }
         return;
       }
       if (e.target.closest('.gallery-prev')) { galleryStep(-1); return; }
@@ -411,6 +436,8 @@
     observeFadeIns(document.querySelectorAll('.hero .fade-in, .section-head.fade-in, .search-bar.fade-in'));
     await loadListings();
     render();
+    const propId = parsePropFromHash();
+    if (propId) openDetail(propId);
   }
 
   init();
