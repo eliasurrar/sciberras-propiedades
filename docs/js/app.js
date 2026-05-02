@@ -316,6 +316,12 @@
     return `<span class="commune-badge">${ICONS.pin}<span>${escapeHtml(l.commune)}</span></span>`;
   }
 
+  function operationBadgeHtml(l) {
+    const op = (l.operation || 'venta').toLowerCase();
+    const label = op === 'arriendo' ? 'ARRIENDO' : 'VENTA';
+    return `<span class="operation-badge operation-badge--${op}">${label}</span>`;
+  }
+
   /* ── Filtering ──────────────────────────────────────────────── */
 
   /**
@@ -541,7 +547,7 @@
       : '';
     return `
       <div class="bento-card ${modifier} fade-in" data-id="${escapeAttr(l.id)}">
-        ${img}${badge}${videoBadge}${photoHint}
+        ${img}${badge}${operationBadgeHtml(l)}${videoBadge}${photoHint}
         <div class="bento-body">
           ${communeBadgeHtml(l)}
           <span class="bento-title">${escapeHtml(l.title || 'Sin título')}</span>
@@ -586,7 +592,7 @@
     const orientCls = coverOrientation(l) === 'v' ? ' card-image--vertical' : '';
     return `
       <div class="card fade-in" data-id="${escapeAttr(l.id)}">
-        <div class="card-image${orientCls}">${img}${badge}${videoBadge}${photoHint}</div>
+        <div class="card-image${orientCls}">${img}${badge}${operationBadgeHtml(l)}${videoBadge}${photoHint}</div>
         <div class="card-body">
           ${priceBlockHtml(l, 'card')}
           ${communeBadgeHtml(l)}
