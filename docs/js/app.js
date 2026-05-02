@@ -819,6 +819,9 @@
       e.preventDefault();
       readFiltersFromForm();
       renderCatalog();
+      if (els.catalog) {
+        els.catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
 
     if (els.filterReset) {
