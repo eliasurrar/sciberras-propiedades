@@ -123,11 +123,53 @@ def orientation_for(w: int, h: int) -> str:
     return "v" if h > w else "h"
 
 
+WEB_SAFE_VIDEO_CODECS = {"h264", "avc1"}
+
+
+def _video_codec(path: Path) -> str:
+    """Return the v:0 codec name (e.g. 'h264', 'hevc', 'vp9') or '' if unknown."""
+    if not shutil.which("ffprobe"):
+        return ""
+    try:
+        out = subprocess.check_output(
+            ["ffprobe", "-v", "error", "-select_streams", "v:0",
+             "-show_entries", "stream=codec_name", "-of", "csv=p=0", str(path)],
+            text=True,
+        ).strip()
+        return out.splitlines()[0].strip().lower() if out else ""
+    except Exception as e:
+        log(f"ffprobe codec check failed for {path}: {e!r}")
+        return ""
+
+
 def copy_video(src: Path, dst: Path) -> None:
-    """Copy video as-is. We don't transcode — Telegram delivers H.264 mp4 by default,
-    which plays in every browser via the native HTML5 video element."""
+    """Copy and (if needed) transcode video to H.264/AAC for universal browser support.
+
+    iPhone records HEVC and Telegram sometimes re-wraps it as VP9-in-MP4 — both
+    fail in Safari/Chrome respectively. We probe the codec; if it's not in
+    WEB_SAFE_VIDEO_CODECS, we transcode with libx264 + AAC + faststart.
+    """
     VIDEOS.mkdir(parents=True, exist_ok=True)
-    shutil.copy(src, dst)
+
+    codec = _video_codec(src)
+    if codec in WEB_SAFE_VIDEO_CODECS or not shutil.which("ffmpeg"):
+        if codec and codec not in WEB_SAFE_VIDEO_CODECS:
+            log(f"warn: ffmpeg missing — copying {src.name} as-is despite codec={codec}")
+        shutil.copy(src, dst)
+        return
+
+    log(f"transcoding {src.name} ({codec}) → H.264/AAC")
+    rc = subprocess.call(
+        ["ffmpeg", "-y", "-i", str(src),
+         "-c:v", "libx264", "-preset", "medium", "-crf", "23",
+         "-c:a", "aac", "-b:a", "128k",
+         "-movflags", "+faststart",
+         str(dst)],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+    if rc != 0 or not dst.exists():
+        log(f"ffmpeg transcode failed (rc={rc}) for {src} — falling back to copy")
+        shutil.copy(src, dst)
 
 
 def get_video_meta(path: Path) -> dict:
