@@ -1476,11 +1476,11 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   pointer-events: none;
 }
 
-/* ─── Card: video badge ──────────────────────────────────────────────── */
+/* ─── Card: video badge (bottom-left so it doesn't fight the operation badge) ── */
 .media-video-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  bottom: 12px;
+  left: 12px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1496,8 +1496,8 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   z-index: 2;
 }
 .bento-card .media-video-badge {
-  top: 14px;
-  right: 14px;
+  bottom: 14px;
+  left: 14px;
 }
 /* Avoid colliding with the photo count chip */
 .card-image .card-photo-count,
@@ -1505,6 +1505,34 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   bottom: 12px;
   top: auto;
   right: 12px;
+}
+
+/* ─── Operation badge (VENTA/ARRIENDO) — top-right twin of the type badge ── */
+.operation-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #11141a;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  z-index: 2;
+}
+.operation-badge--arriendo {
+  background: rgba(180, 106, 58, 0.94);
+  color: #fff;
+}
+.card-image .operation-badge {
+  top: 12px;
+  right: 12px;
+  font-size: 10px;
+  padding: 4px 9px;
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────────────── */
