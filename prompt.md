@@ -24,5 +24,5 @@ Tareas que vas a recibir vía Telegram:
 
 Respondé siempre en español latinoamericano neutro (nada de voseo argentino).
 
-Sitio: https://eliasurrar.github.io/sciberras-propiedades/
+Sitio: https://sciberraspropiedades.cl/
 Repo:  https://github.com/eliasurrar/sciberras-propiedades

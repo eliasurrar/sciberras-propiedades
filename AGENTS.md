@@ -108,8 +108,8 @@ sugerí gentilmente reenviar como documento antes de publicar.
 5. El script imprime JSON con `ok`, `listing` (incluye el array `images`) y
    `pushed`. Si `pushed=true`, confirmá a Elias con el id, el título, la
    cantidad de fotos y el link al sitio
-   (`https://eliasurrar.github.io/sciberras-propiedades/`). GitHub Pages
-   tarda ~30–60 s en propagar; mencionalo.
+   (`https://sciberraspropiedades.cl/`). GitHub Pages tarda ~30–60 s en
+   propagar; mencionalo.
 
 ### 2. Despublicar (título de la propiedad)
 
@@ -336,10 +336,18 @@ serif display + bento layouts dominantes en 2025-2026).
 
 ## Hosting / dominio
 
-- **Hosting actual:** GitHub Pages — `https://eliasurrar.github.io/sciberras-propiedades/`
-- **Dominio futuro:** un `.cl` de NIC. Cuando llegue: agregar `CNAME` en
-  el repo + configurar DNS A records de NIC apuntando a GitHub Pages
-  (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`).
+- **Dominio:** `https://sciberraspropiedades.cl` (registrado en NIC.cl).
+- **Hosting:** GitHub Pages, repo `eliasurrar/sciberras-propiedades`.
+  La URL legacy `https://eliasurrar.github.io/sciberras-propiedades/`
+  sigue funcionando y redirige al custom domain.
+- **DNS:** Cloudflare (plan free), nameservers configurados en NIC.cl.
+  Registros: 4× `A @` → `185.199.108.153/.109.153/.110.153/.111.153`,
+  `CNAME www → eliasurrar.github.io`. Todos en modo "DNS only" (nube
+  gris, sin proxy) para no interferir con la emisión de SSL de GitHub.
+- **CNAME** está en `docs/CNAME` con valor `sciberraspropiedades.cl`,
+  que es lo que GitHub Pages lee para servir bajo el custom domain.
+- **SSL:** Let's Encrypt automático vía GitHub Pages, con "Enforce
+  HTTPS" activado en Settings → Pages.
 
 ## Cómo deploya
 
