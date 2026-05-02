@@ -31,10 +31,21 @@
 <meta name="twitter:description" content="Catálogo curado de propiedades en venta.">
 <meta name="twitter:image" content="https://sciberraspropiedades.cl/apple-touch-icon.png">
 
+<script>
+  // FOUC-safe: aplica el tema desde localStorage antes del primer paint
+  (function () {
+    try {
+      var t = localStorage.getItem('sciberras:theme') || 'auto';
+      var dark = t === 'dark' || (t === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme-mode', t);
+    } catch (e) { /* ignore */ }
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=16">
+<link rel="stylesheet" href="css/styles.css?v=17">
 
 <!-- JSON-LD: RealEstateAgent (per-listing schema injected by app.js) -->
 <script type="application/ld+json">
@@ -73,8 +84,19 @@
       <a href="#contacto" data-route="contacto" class="nav-link">Contacto</a>
     </nav>
     <div class="currency-toggle" id="currencyToggle" role="group" aria-label="Moneda mostrada" title="Cambiar moneda mostrada">
-      <button type="button" data-currency="UF" class="is-active" aria-pressed="true">UF</button>
-      <button type="button" data-currency="CLP" aria-pressed="false">CLP</button>
+      <button type="button" data-currency="UF" aria-pressed="false">UF</button>
+      <button type="button" data-currency="CLP" class="is-active" aria-pressed="true">CLP</button>
+    </div>
+    <div class="theme-toggle" id="themeToggle" role="group" aria-label="Tema de la página" title="Tema (auto / claro / oscuro)">
+      <button type="button" data-theme-mode="auto" class="is-active" aria-pressed="true" aria-label="Auto">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>
+      </button>
+      <button type="button" data-theme-mode="light" aria-pressed="false" aria-label="Claro">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <button type="button" data-theme-mode="dark" aria-pressed="false" aria-label="Oscuro">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+      </button>
     </div>
     <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -311,6 +333,6 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=12"></script>
+<script src="js/app.js?v=13"></script>
 </body>
 </html>

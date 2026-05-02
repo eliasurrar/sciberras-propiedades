@@ -16,6 +16,7 @@
   };
   const FEATURED_COUNT = 5;
   const CURRENCY_KEY = 'sciberras:displayCurrency';
+  const THEME_KEY    = 'sciberras:theme';
   const UF_API = 'https://mindicador.cl/api/uf';
   const UF_FETCH_TIMEOUT_MS = 4000;
 
@@ -36,9 +37,10 @@
     furnishedOnly:   false,
     galleryItems:    [],
     galleryIndex:    0,
-    displayCurrency: 'UF',
+    displayCurrency: 'CLP',
     ufRate:          null,
     ufRateDate:      null,
+    theme:           'auto',
   };
 
   const els = {
@@ -57,6 +59,7 @@
     navToggle:       document.querySelector('.nav-toggle'),
     currencyToggle:  document.getElementById('currencyToggle'),
     operationToggle: document.getElementById('operationToggle'),
+    themeToggle:     document.getElementById('themeToggle'),
     searchForm:      document.getElementById('searchForm'),
     qInput:          document.getElementById('q'),
     typeSelect:      document.getElementById('filterType'),
@@ -829,6 +832,40 @@
     refreshDetailPrice();
   }
 
+  /* ── Theme toggle (Auto / Light / Dark) ─────────────────────────── */
+
+  function applyTheme() {
+    const t = state.theme;
+    const dark = t === 'dark' || (t === 'auto' &&
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme-mode', t);
+  }
+
+  function syncThemeToggleUi() {
+    if (!els.themeToggle) return;
+    els.themeToggle.querySelectorAll('button[data-theme-mode]').forEach(btn => {
+      const active = btn.dataset.themeMode === state.theme;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function setTheme(mode) {
+    if (mode !== 'auto' && mode !== 'light' && mode !== 'dark') return;
+    state.theme = mode;
+    try { localStorage.setItem(THEME_KEY, mode); } catch (_) {}
+    applyTheme();
+    syncThemeToggleUi();
+  }
+
+  function loadStoredTheme() {
+    try {
+      const v = localStorage.getItem(THEME_KEY);
+      if (v === 'auto' || v === 'light' || v === 'dark') state.theme = v;
+    } catch (_) {}
+  }
+
   function loadStoredCurrency() {
     try {
       const v = localStorage.getItem(CURRENCY_KEY);
@@ -935,6 +972,21 @@
         syncUrlFromFilters();
         renderCatalog();
       });
+    }
+
+    if (els.themeToggle) {
+      els.themeToggle.addEventListener('click', e => {
+        const btn = e.target.closest('button[data-theme-mode]');
+        if (!btn) return;
+        setTheme(btn.dataset.themeMode);
+      });
+    }
+
+    if (window.matchMedia) {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      const onChange = () => { if (state.theme === 'auto') applyTheme(); };
+      if (mq.addEventListener) mq.addEventListener('change', onChange);
+      else if (mq.addListener) mq.addListener(onChange);
     }
 
     els.detail.addEventListener('click', e => {
@@ -1044,6 +1096,9 @@
     els.detailGallery = els.detailStage ? els.detailStage.closest('.detail-gallery') : null;
     els.footerYear.textContent = new Date().getFullYear();
     state.route = parseHash();
+    loadStoredTheme();
+    applyTheme();
+    syncThemeToggleUi();
     loadStoredCurrency();
     bindEvents();
     observeFadeIns(document.querySelectorAll('.hero .fade-in, .section-head.fade-in, .search-bar.fade-in'));
