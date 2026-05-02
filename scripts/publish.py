@@ -41,6 +41,8 @@ LOG = ROOT / "logs" / "publish.log"
 
 VALID_TYPES = {"casa", "departamento", "terreno"}
 VALID_CURRENCIES = {"UF", "CLP", "USD"}
+VALID_OPERATIONS = {"venta", "arriendo"}
+VALID_REGIONS = {"metropolitana", "valparaiso"}
 MAX_IMAGE_DIM = 2400      # max width/height in px (retina-friendly, web-optimized)
 JPEG_QUALITY  = 90        # 0-100 (sips formatOptions)
 UF_API = "https://mindicador.cl/api/uf"
@@ -180,6 +182,20 @@ def main() -> None:
     ap.add_argument("--price",        required=True, type=float)
     ap.add_argument("--currency",     default="UF", choices=sorted(VALID_CURRENCIES))
     ap.add_argument("--type",         dest="ptype", required=True, choices=sorted(VALID_TYPES))
+    ap.add_argument("--operation",    default="venta", choices=sorted(VALID_OPERATIONS),
+                    help="venta o arriendo")
+    ap.add_argument("--bedrooms",     type=int, default=None)
+    ap.add_argument("--bathrooms",    type=int, default=None)
+    ap.add_argument("--area-built",   dest="area_built", type=float, default=None,
+                    help="Superficie construida en m²")
+    ap.add_argument("--area-lot",     dest="area_lot", type=float, default=None,
+                    help="Superficie del terreno en m²")
+    ap.add_argument("--parking",      type=int, default=None,
+                    help="Cantidad de estacionamientos")
+    ap.add_argument("--commune",      default=None, help="Comuna (ej: Nogales)")
+    ap.add_argument("--region",       default=None, choices=sorted(VALID_REGIONS))
+    ap.add_argument("--pool",         action="store_true", help="Tiene piscina")
+    ap.add_argument("--furnished",    action="store_true", help="Amoblado")
     ap.add_argument("--no-push",      action="store_true",
                     help="Skip git commit/push (use for dry-runs)")
     args = ap.parse_args()
@@ -215,10 +231,20 @@ def main() -> None:
         "price":       args.price,
         "currency":    args.currency,
         "type":        args.ptype,
+        "operation":   args.operation,
         "images":      image_rel_paths,
         "image_meta":  image_meta,
         "created_at":  dt.datetime.now().astimezone().isoformat(timespec="seconds"),
     }
+    if args.bedrooms is not None:    listing["bedrooms"]      = args.bedrooms
+    if args.bathrooms is not None:   listing["bathrooms"]     = args.bathrooms
+    if args.area_built is not None:  listing["area_built_m2"] = args.area_built
+    if args.area_lot is not None:    listing["area_lot_m2"]   = args.area_lot
+    if args.parking is not None:     listing["parking"]       = args.parking
+    if args.pool:                    listing["pool"]          = True
+    if args.furnished:               listing["furnished"]     = True
+    if args.commune:                 listing["commune"]       = args.commune.strip()
+    if args.region:                  listing["region"]        = args.region
     payload.setdefault("listings", []).insert(0, listing)
     refresh_uf_rate(payload)
     save_listings(payload)

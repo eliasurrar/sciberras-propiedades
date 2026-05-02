@@ -1279,6 +1279,107 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   .footer-uf { display: block; margin-top: 4px; }
 }
 
+/* ─── Search filters: expanded layout ────────────────────────────────── */
+.search-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.search-amenities {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px 12px;
+  margin: 4px 0 0;
+  background: var(--bg-elev);
+}
+.search-amenities legend {
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.search-amenities label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 14px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.search-amenities input[type="checkbox"] {
+  margin: 0;
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+.search-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.search-actions .btn { flex: 1 1 auto; }
+
+@media (max-width: 480px) {
+  .search-row { grid-template-columns: 1fr; }
+}
+
+/* ─── Amenity icons on cards ─────────────────────────────────────────── */
+.amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 6px 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.amenity {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.amenity svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.amenity span {
+  color: var(--ink);
+}
+
+/* ─── Commune badge ──────────────────────────────────────────────────── */
+.commune-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+  padding: 3px 10px 3px 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 4px 0 6px;
+}
+.commune-badge svg {
+  flex-shrink: 0;
+}
+.bento-card .commune-badge {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Detail dialog amenities styling */
+.detail-price + .commune-badge { margin-top: 8px; }
+.detail-price ~ .amenities { margin-top: 4px; margin-bottom: 14px; font-size: 14px; }
+
 /* ─── Reduced motion ─────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

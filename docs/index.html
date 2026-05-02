@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=10">
+<link rel="stylesheet" href="css/styles.css?v=11">
 
 <!-- JSON-LD: RealEstateAgent (per-listing schema injected by app.js) -->
 <script type="application/ld+json">
@@ -109,24 +109,96 @@
             <span class="eyebrow">Filtrar</span>
             <h2 class="search-title">Encuentra tu propiedad</h2>
           </header>
+
+          <div class="search-row">
+            <div class="search-field">
+              <label for="filterOperation">Operación</label>
+              <select id="filterOperation">
+                <option value="">Todas</option>
+                <option value="venta">Venta</option>
+                <option value="arriendo">Arriendo</option>
+              </select>
+            </div>
+            <div class="search-field">
+              <label for="filterType">Tipo</label>
+              <select id="filterType">
+                <option value="">Todos</option>
+                <option value="casa">Casa</option>
+                <option value="departamento">Departamento</option>
+                <option value="terreno">Terreno / Parcela</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="search-row">
+            <div class="search-field">
+              <label for="filterRegion">Región</label>
+              <select id="filterRegion">
+                <option value="">Todas</option>
+                <option value="metropolitana">Metropolitana</option>
+                <option value="valparaiso">Valparaíso</option>
+              </select>
+            </div>
+            <div class="search-field">
+              <label for="filterCommune">Comuna</label>
+              <select id="filterCommune">
+                <option value="">Todas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="search-row">
+            <div class="search-field">
+              <label for="filterBedrooms">Dorm.</label>
+              <select id="filterBedrooms">
+                <option value="">Cualquiera</option>
+                <option value="1">1 ó más</option>
+                <option value="2">2 ó más</option>
+                <option value="3">3 ó más</option>
+                <option value="4">4 ó más</option>
+                <option value="5">5 ó más</option>
+              </select>
+            </div>
+            <div class="search-field">
+              <label for="filterBathrooms">Baños</label>
+              <select id="filterBathrooms">
+                <option value="">Cualquiera</option>
+                <option value="1">1 ó más</option>
+                <option value="2">2 ó más</option>
+                <option value="3">3 ó más</option>
+                <option value="4">4 ó más</option>
+                <option value="5">5 ó más</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="search-row">
+            <div class="search-field">
+              <label for="filterPriceMin">Precio mín.</label>
+              <input type="number" id="filterPriceMin" min="0" step="100" placeholder="—">
+            </div>
+            <div class="search-field">
+              <label for="filterPriceMax">Precio máx.</label>
+              <input type="number" id="filterPriceMax" min="0" step="100" placeholder="Sin límite">
+            </div>
+          </div>
+
           <div class="search-field">
             <label for="q">Buscar</label>
-            <input type="search" id="q" placeholder="Comuna, barrio, palabra clave…">
+            <input type="search" id="q" placeholder="Palabra clave, código, descripción…">
           </div>
-          <div class="search-field">
-            <label for="filterType">Tipo</label>
-            <select id="filterType">
-              <option value="">Todos</option>
-              <option value="casa">Casas</option>
-              <option value="departamento">Departamentos</option>
-              <option value="terreno">Terrenos</option>
-            </select>
+
+          <fieldset class="search-amenities">
+            <legend>Características</legend>
+            <label><input type="checkbox" id="filterPool"> Piscina</label>
+            <label><input type="checkbox" id="filterParking"> Estacionamiento</label>
+            <label><input type="checkbox" id="filterFurnished"> Amoblado</label>
+          </fieldset>
+
+          <div class="search-actions">
+            <button type="submit" class="btn btn-dark">Filtrar</button>
+            <button type="button" class="btn btn-ghost" id="filterReset">Limpiar</button>
           </div>
-          <div class="search-field">
-            <label for="filterPriceMax">Precio máx.</label>
-            <input type="number" id="filterPriceMax" min="0" step="100" placeholder="Sin límite">
-          </div>
-          <button type="submit" class="btn btn-dark">Filtrar</button>
         </form>
       </aside>
     </div>
@@ -198,7 +270,7 @@
     <div class="detail-body">
       <span class="badge" id="detailBadge"></span>
       <h2 id="detailTitle"></h2>
-      <p class="detail-price" id="detailPrice"></p>
+      <div class="detail-price" id="detailPrice"></div>
       <p class="detail-description" id="detailDescription"></p>
       <p class="detail-meta" id="detailMeta"></p>
       <div class="detail-actions">
@@ -233,6 +305,6 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=6"></script>
+<script src="js/app.js?v=7"></script>
 </body>
 </html>
