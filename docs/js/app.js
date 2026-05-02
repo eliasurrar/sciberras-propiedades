@@ -362,6 +362,66 @@
     return items;
   }
 
+  /* ── URL <-> filter state sync ──────────────────────────────── */
+
+  function serializeFilters() {
+    const p = new URLSearchParams();
+    if (state.query)            p.set('q',        state.query);
+    if (state.typeFilter)       p.set('tipo',     state.typeFilter);
+    if (state.operationFilter)  p.set('op',       state.operationFilter);
+    if (state.regionFilter)     p.set('region',   state.regionFilter);
+    if (state.communeFilter)    p.set('comuna',   state.communeFilter);
+    if (state.bedroomsMin != null)  p.set('dorm', String(state.bedroomsMin));
+    if (state.bathroomsMin != null) p.set('bano', String(state.bathroomsMin));
+    if (state.priceMin != null) p.set('pmin', String(state.priceMin));
+    if (state.priceMax != null) p.set('pmax', String(state.priceMax));
+    if (state.poolOnly)         p.set('piscina',  '1');
+    if (state.parkingOnly)      p.set('parking',  '1');
+    if (state.furnishedOnly)    p.set('amoblado', '1');
+    return p.toString();
+  }
+
+  function syncUrlFromFilters() {
+    const qs = serializeFilters();
+    const url = location.pathname + (qs ? '?' + qs : '') + location.hash;
+    history.replaceState(null, '', url);
+  }
+
+  function readFiltersFromUrl() {
+    const p = new URLSearchParams(location.search);
+    state.query           = p.get('q') || '';
+    state.typeFilter      = p.get('tipo') || '';
+    state.operationFilter = p.get('op') || '';
+    state.regionFilter    = p.get('region') || '';
+    state.communeFilter   = p.get('comuna') || '';
+    const dorm = parseInt(p.get('dorm') || '', 10);
+    state.bedroomsMin     = Number.isFinite(dorm) ? dorm : null;
+    const bano = parseInt(p.get('bano') || '', 10);
+    state.bathroomsMin    = Number.isFinite(bano) ? bano : null;
+    const pmin = parseFloat(p.get('pmin'));
+    state.priceMin        = Number.isFinite(pmin) ? pmin : null;
+    const pmax = parseFloat(p.get('pmax'));
+    state.priceMax        = Number.isFinite(pmax) ? pmax : null;
+    state.poolOnly        = p.get('piscina')  === '1';
+    state.parkingOnly     = p.get('parking')  === '1';
+    state.furnishedOnly   = p.get('amoblado') === '1';
+  }
+
+  function syncFormFromState() {
+    if (els.qInput)          els.qInput.value          = state.query;
+    if (els.typeSelect)      els.typeSelect.value      = state.typeFilter;
+    if (els.operationSelect) els.operationSelect.value = state.operationFilter;
+    if (els.regionSelect)    els.regionSelect.value    = state.regionFilter;
+    if (els.communeSelect)   els.communeSelect.value   = state.communeFilter;
+    if (els.bedroomsSelect)  els.bedroomsSelect.value  = state.bedroomsMin  != null ? String(state.bedroomsMin)  : '';
+    if (els.bathroomsSelect) els.bathroomsSelect.value = state.bathroomsMin != null ? String(state.bathroomsMin) : '';
+    if (els.priceMinInput)   els.priceMinInput.value   = state.priceMin != null ? String(state.priceMin) : '';
+    if (els.priceInput)      els.priceInput.value      = state.priceMax != null ? String(state.priceMax) : '';
+    if (els.poolCheck)       els.poolCheck.checked      = state.poolOnly;
+    if (els.parkingCheck)    els.parkingCheck.checked   = state.parkingOnly;
+    if (els.furnishedCheck)  els.furnishedCheck.checked = state.furnishedOnly;
+  }
+
   function populateCommuneOptions() {
     if (!els.communeSelect) return;
     const set = new Set();
@@ -818,6 +878,7 @@
     els.searchForm.addEventListener('submit', e => {
       e.preventDefault();
       readFiltersFromForm();
+      syncUrlFromFilters();
       renderCatalog();
       if (els.catalog) {
         els.catalog.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -828,9 +889,16 @@
       els.filterReset.addEventListener('click', () => {
         els.searchForm.reset();
         readFiltersFromForm();
+        syncUrlFromFilters();
         renderCatalog();
       });
     }
+
+    window.addEventListener('popstate', () => {
+      readFiltersFromUrl();
+      syncFormFromState();
+      renderCatalog();
+    });
 
     if (els.currencyToggle) {
       els.currencyToggle.addEventListener('click', e => {
@@ -955,6 +1023,8 @@
     // First render with the cached/stored data — guarantees something paints fast.
     if (!state.ufRate && state.displayCurrency === 'CLP') state.displayCurrency = 'UF';
     populateCommuneOptions();
+    readFiltersFromUrl();
+    syncFormFromState();
     syncCurrencyToggleUi();
     updateFooterUf();
     render();
