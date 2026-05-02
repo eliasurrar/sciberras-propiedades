@@ -30,6 +30,7 @@ import re
 import shutil
 import subprocess
 import sys
+import urllib.request
 from pathlib import Path
 
 ROOT = Path("/Users/openclaw/Desktop/real-estate")
@@ -41,6 +42,8 @@ LOG = ROOT / "logs" / "publish.log"
 VALID_TYPES = {"casa", "departamento", "terreno"}
 VALID_CURRENCIES = {"UF", "CLP", "USD"}
 MAX_IMAGE_DIM = 1600  # max width/height in px
+UF_API = "https://mindicador.cl/api/uf"
+UF_FETCH_TIMEOUT = 5  # seconds
 
 
 def log(msg: str) -> None:
@@ -86,6 +89,26 @@ def process_image(src: Path, dst: Path) -> None:
 def load_listings() -> dict:
     with open(DATA) as f:
         return json.load(f)
+
+
+def refresh_uf_rate(payload: dict) -> None:
+    """Best-effort UF rate refresh from mindicador.cl. Never raises."""
+    try:
+        req = urllib.request.Request(UF_API, headers={"User-Agent": "sciberras-propiedades/1.0"})
+        with urllib.request.urlopen(req, timeout=UF_FETCH_TIMEOUT) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        serie = data.get("serie") or []
+        if not serie:
+            return
+        latest = serie[0]
+        valor = latest.get("valor")
+        fecha = latest.get("fecha")
+        if isinstance(valor, (int, float)) and valor > 0:
+            payload["uf_clp_rate"] = float(valor)
+            if fecha:
+                payload["uf_rate_updated_at"] = fecha
+    except Exception as e:
+        log(f"uf refresh skipped: {e!r}")
 
 
 def save_listings(payload: dict) -> None:
@@ -156,6 +179,7 @@ def main() -> None:
         "created_at":  dt.datetime.now().astimezone().isoformat(timespec="seconds"),
     }
     payload.setdefault("listings", []).insert(0, listing)
+    refresh_uf_rate(payload)
     save_listings(payload)
     log(f"added {listing_id}: {args.title} ({len(image_rel_paths)} foto/s)")
 

@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=4">
+<link rel="stylesheet" href="css/styles.css?v=5">
 
 <!-- JSON-LD: RealEstateAgent (per-listing schema injected by app.js) -->
 <script type="application/ld+json">
@@ -72,6 +72,10 @@
       <a href="#terrenos" data-route="terrenos" class="nav-link">Terrenos</a>
       <a href="#contacto" data-route="contacto" class="nav-link">Contacto</a>
     </nav>
+    <div class="currency-toggle" id="currencyToggle" role="group" aria-label="Moneda mostrada" title="Cambiar moneda mostrada">
+      <button type="button" data-currency="UF" class="is-active" aria-pressed="true">UF</button>
+      <button type="button" data-currency="CLP" aria-pressed="false">CLP</button>
+    </div>
     <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -213,10 +217,14 @@
       <span class="brand-mark small"></span>
       <span class="footer-brand">Sciberras Propiedades</span>
     </div>
-    <p class="footer-meta">© <span id="footerYear"></span> · Catálogo actualizado <time id="footerUpdated"></time></p>
+    <p class="footer-meta">
+      © <span id="footerYear"></span> · Catálogo actualizado <time id="footerUpdated"></time>
+      <span class="footer-meta-sep" aria-hidden="true">·</span>
+      <span class="footer-uf" id="footerUf" hidden>UF <span id="footerUfValue">—</span> · al <time id="footerUfDate"></time></span>
+    </p>
   </div>
 </footer>
 
-<script src="js/app.js?v=3"></script>
+<script src="js/app.js?v=4"></script>
 </body>
 </html>

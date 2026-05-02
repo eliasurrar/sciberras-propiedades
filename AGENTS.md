@@ -18,14 +18,15 @@ real-estate/
 ├── scripts/
 │   ├── publish.py             # agrega listing (1+ fotos + título + descripción + precio)
 │   ├── unpublish.py           # quita listing por título (con --confirm)
-│   └── inspect.py             # lista catálogo actual
+│   ├── offer.py               # setea/quita oferta temporal sobre un listing
+│   └── inspect.py             # lista catálogo actual (incluye ofertas y tasa UF)
 ├── docs/                      # raíz del sitio (GitHub Pages sirve desde /docs)
 │   ├── index.html             # SPA estática, filtros client-side por hash
 │   ├── css/styles.css         # diseño editorial (Fraunces + Inter, paleta cálida)
-│   ├── js/app.js              # carga listings.json, render, filtros, galería modal
-│   ├── data/listings.json     # fuente de verdad del catálogo
+│   ├── js/app.js              # carga listings.json, render, filtros, galería, conversor UF↔CLP
+│   ├── data/listings.json     # fuente de verdad del catálogo + cache de tasa UF
 │   └── images/                # JPEGs de propiedades (resized a max 1600px)
-└── logs/                      # publish.log, unpublish.log
+└── logs/                      # publish.log, unpublish.log, offer.log
 ```
 
 ## Contacto que aparece en el sitio
@@ -131,7 +132,87 @@ Si Elias pide "qué hay publicado", "muéstrame el catálogo", etc.:
 ```
 /usr/bin/python3 /Users/openclaw/Desktop/real-estate/scripts/inspect.py
 ```
-Imprime un resumen humano con la cantidad de fotos por publicación.
+Imprime un resumen humano con la cantidad de fotos por publicación, las
+ofertas activas (con su fecha de vencimiento si la tienen) y la tasa UF
+cacheada en `listings.json`.
+
+### 4. Ofertar / poner oferta temporal
+
+**Cuando:** Elias pide "ofertá X a Y UF [hasta DD]", "pone oferta a X por Y",
+"baja el precio de X temporalmente a Y", o variantes. La oferta es una
+reducción temporal de precio: el sitio muestra el precio original tachado
+y el precio nuevo destacado, con badge `OFERTA` y la fecha de vencimiento
+si la informaste.
+
+Pasos:
+
+1. Llamá primero **dry-run** (sin `--confirm`) por título o id para
+   detectar el match:
+   ```
+   /usr/bin/python3 /Users/openclaw/Desktop/real-estate/scripts/offer.py \
+       --title "Vitacura" \
+       --price 6000 --currency UF --until 2026-06-15
+   ```
+2. Casos del JSON resultante:
+   - `error: no_match` → "no encontré ninguna publicación con ese título".
+   - `error: ambiguous` → mostrá la lista a Elias y pedí cuál.
+   - 1 match → mostrá título + precio actual + oferta planeada y **pedí
+     confirmación** explícita ("¿confirmás la oferta sobre …?").
+3. Tras confirmación, ejecutá con `--confirm`:
+   ```
+   /usr/bin/python3 ... offer.py --title "Vitacura" \
+       --price 6000 --currency UF --until 2026-06-15 --confirm
+   ```
+4. Confirmá a Elias el cambio y mencioná que GitHub Pages tarda ~30–60 s
+   en propagar.
+
+**Reglas:**
+
+- `--currency` por defecto = la moneda original del listing.
+- `--until` es opcional. Acepta `YYYY-MM-DD` (se trata como fin de día
+  local) o ISO completo. Si no se pasa, la oferta es indefinida.
+- Si Elias dice algo como "hasta el viernes" / "por una semana" / "fin de
+  mes": resolvé la fecha absoluta antes de llamar al script (referenciá la
+  fecha actual del runtime). Si hay ambigüedad, preguntá.
+- Si Elias dice "$" o "millones" sin aclarar moneda, asumí CLP. "UF" → UF.
+- **Nunca** corras `--confirm` sin "sí" de Elias.
+
+### 5. Quitar oferta temporal
+
+**Cuando:** "quitá la oferta de X", "saca el descuento de X", "vuelve al
+precio original de X".
+
+Pasos:
+
+1. Dry-run para confirmar match:
+   ```
+   /usr/bin/python3 ... offer.py --title "Vitacura" --clear
+   ```
+2. Si match único, mostrá la oferta vigente a Elias y pedí confirmación.
+3. Ejecutá con `--confirm`:
+   ```
+   /usr/bin/python3 ... offer.py --title "Vitacura" --clear --confirm
+   ```
+
+## Conversor UF ↔ CLP (frontend)
+
+El sitio incluye un conversor automático:
+
+- **Toggle global** en el header (pill `UF | CLP`) que cambia la moneda
+  primaria mostrada en todas las cards, bento y detalle. La preferencia
+  queda en `localStorage` (`sciberras:displayCurrency`).
+- **Toggle por publicación**: bajo cada precio, un texto chico
+  `≈ <moneda alternativa>` clickable que también flippea el toggle global
+  cuando se toca. Así el toggle "vive" tanto en cada publicación como en
+  el header.
+- **Tasa UF**: el frontend intenta primero `https://mindicador.cl/api/uf`
+  (CORS habilitado); si falla o demora >4 s, usa la tasa cacheada en
+  `listings.json` (`uf_clp_rate` + `uf_rate_updated_at`). El footer
+  muestra el valor usado.
+- **`publish.py` y `offer.py`** refrescan opportunistamente la tasa
+  cacheada cada vez que escriben `listings.json` (best-effort, no falla
+  si la API no responde).
+- **USD** se muestra siempre en USD sin conversión (caso raro).
 
 ## Reglas
 
@@ -160,12 +241,32 @@ Imprime un resumen humano con la cantidad de fotos por publicación.
   "type":        "casa",
   "images":      ["images/casa-en-las-condes-a1b2c3.jpg",
                   "images/casa-en-las-condes-a1b2c3-2.jpg"],
-  "created_at":  "2026-05-01T14:30:00-04:00"
+  "created_at":  "2026-05-01T14:30:00-04:00",
+  "offer": {                       // OPCIONAL — sólo cuando hay oferta vigente
+    "price":      7800,
+    "currency":   "UF",
+    "started_at": "2026-05-02T09:30:00-04:00",
+    "until":      "2026-06-15T23:59:59-04:00"   // opcional, sin esto es indefinida
+  }
+}
+```
+
+El nivel raíz de `listings.json` también lleva la **tasa UF cacheada**:
+
+```json
+{
+  "updated_at":          "...",
+  "uf_clp_rate":         40146.82,
+  "uf_rate_updated_at":  "2026-05-02T00:00:00-04:00",
+  "listings": [ ... ]
 }
 ```
 
 El frontend lee `images[]`. Para retrocompatibilidad, también acepta el campo
-legacy `image` (string) si alguna vez aparece.
+legacy `image` (string) si alguna vez aparece. Si `offer.until` está vencida,
+el frontend ignora la oferta automáticamente (no hace falta limpiarla, pero
+podés correr `offer.py --clear --confirm` si querés que desaparezca del
+JSON).
 
 ## Diseño del sitio
 
@@ -207,3 +308,17 @@ serif display + bento layouts dominantes en 2025-2026).
 GitHub Pages re-construye y publica en ~30–60 s. El JSON tiene
 cache-busting (`?t=<timestamp>`) en el fetch del JS, así que el sitio toma el
 nuevo data sin recarga manual.
+
+## Skills disponibles (instaladas el 2026-05-01)
+
+Tres skills habilitados en este workspace que aplican a este proyecto:
+
+- **find-skills** (`~/.claude/skills/find-skills/`) — Úsalo PRIMERO cada vez que necesites una capacidad nueva (ej. "¿hay una skill para resize de imágenes?", "necesito algo para SEO de listings"). Descubre antes de implementar a mano.
+- **superpowers** (OpenClaw plugin) — Methodología TDD + debugging sistemático. Aplicar cuando:
+  - Tocás `publish.py` / `unpublish.py` / `inspect.py` (un bug acá corrompe el sitio en producción → red-green-refactor obligatorio).
+  - Debuggeás un push fallido a GitHub o un listing que no aparece (4-phase debugging: causa raíz primero).
+- **ui-ux-pro-max** (OpenClaw plugin) — **VALOR MÁXIMO acá**: este es un sitio diseño-céntrico. Aplicar cuando:
+  - Iterás sobre `docs/css/styles.css` o `docs/index.html` (paleta cálida + Fraunces/Inter ya definidos — cualquier cambio debe validarse contra el design system existente).
+  - Trabajás en el detail dialog / galería modal / bento grid de destacadas.
+  - Mejorás accesibilidad (contrast ratios, focus states, ARIA), responsive breakpoints, o microanimaciones (siempre respetando `prefers-reduced-motion`).
+  - Pedile sugerencias de palette/font pairings ANTES de improvisar — la skill tiene 95+ paletas curadas.
