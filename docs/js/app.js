@@ -40,6 +40,7 @@
     catalog:         document.getElementById('catalog'),
     contact:         document.getElementById('contacto-section'),
     hero:            document.getElementById('inicio-hero'),
+    searchBand:      document.getElementById('searchBand'),
     featured:        document.getElementById('destacadas'),
     featuredGrid:    document.getElementById('featuredGrid'),
     featuredEmpty:   document.getElementById('featuredEmpty'),
@@ -295,10 +296,11 @@
     const isInicio = state.route === 'inicio';
     const isContacto = state.route === 'contacto';
 
-    els.hero.hidden     = !isInicio;
-    els.featured.hidden = !isInicio;
-    els.catalog.hidden  = isContacto;
-    els.contact.hidden  = !isContacto;
+    els.hero.hidden       = !isInicio;
+    els.featured.hidden   = !isInicio;
+    els.catalog.hidden    = isContacto;
+    els.contact.hidden    = !isContacto;
+    if (els.searchBand) els.searchBand.hidden = isContacto;
 
     if (isContacto) return;
 

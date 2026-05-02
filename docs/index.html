@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=6">
+<link rel="stylesheet" href="css/styles.css?v=7">
 
 <!-- JSON-LD: RealEstateAgent (per-listing schema injected by app.js) -->
 <script type="application/ld+json">
@@ -87,7 +87,7 @@
     <div class="container hero-inner">
       <span class="eyebrow fade-in">Catálogo curado · Chile</span>
       <h1 class="hero-title fade-in">
-        Propiedades <em>seleccionadas</em>,<br>
+        Propiedades <em>seleccionadas</em>,
         contacto directo.
       </h1>
       <p class="hero-sub fade-in">Casas, departamentos y terrenos en venta. Fotografía honesta, descripciones claras y trato directo con quien las representa.</p>
@@ -100,6 +100,31 @@
         <span class="hero-meta-dot" aria-hidden="true">·</span>
         <span class="hero-meta-item">Actualizado <time id="heroUpdated">—</time></span>
       </div>
+    </div>
+  </section>
+
+  <section class="search-band" id="searchBand" aria-label="Buscar propiedades">
+    <div class="container">
+      <form class="search-bar fade-in" id="searchForm" role="search" autocomplete="off" aria-label="Buscar y filtrar propiedades">
+        <div class="search-field">
+          <label for="q">Buscar</label>
+          <input type="search" id="q" placeholder="Comuna, barrio, palabra clave…">
+        </div>
+        <div class="search-field search-field-min">
+          <label for="filterType">Tipo</label>
+          <select id="filterType">
+            <option value="">Todos</option>
+            <option value="casa">Casas</option>
+            <option value="departamento">Departamentos</option>
+            <option value="terreno">Terrenos</option>
+          </select>
+        </div>
+        <div class="search-field search-field-min">
+          <label for="filterPriceMax">Precio máx.</label>
+          <input type="number" id="filterPriceMax" min="0" step="100" placeholder="Sin límite">
+        </div>
+        <button type="submit" class="btn btn-dark">Filtrar</button>
+      </form>
     </div>
   </section>
 
@@ -129,27 +154,6 @@
         <h2 class="section-title" id="catalogTitle">Todas las propiedades</h2>
         <span class="catalog-count" id="catalogCount" aria-live="polite"></span>
       </header>
-
-      <form class="search-bar fade-in" id="searchForm" role="search" autocomplete="off" aria-label="Buscar y filtrar propiedades">
-        <div class="search-field">
-          <label for="q">Buscar</label>
-          <input type="search" id="q" placeholder="Comuna, barrio, palabra clave…">
-        </div>
-        <div class="search-field search-field-min">
-          <label for="filterType">Tipo</label>
-          <select id="filterType">
-            <option value="">Todos</option>
-            <option value="casa">Casas</option>
-            <option value="departamento">Departamentos</option>
-            <option value="terreno">Terrenos</option>
-          </select>
-        </div>
-        <div class="search-field search-field-min">
-          <label for="filterPriceMax">Precio máx.</label>
-          <input type="number" id="filterPriceMax" min="0" step="100" placeholder="Sin límite">
-        </div>
-        <button type="submit" class="btn btn-dark">Filtrar</button>
-      </form>
 
       <div class="grid" id="grid" aria-busy="true">
         <div class="card is-skeleton" aria-hidden="true"></div>
@@ -225,6 +229,6 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=4"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>

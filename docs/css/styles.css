@@ -286,6 +286,7 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   pointer-events: none;
 }
 .hero-inner { max-width: 920px; }
+.hero-inner > .hero-sub { max-width: 60ch; }
 .hero .eyebrow { margin-bottom: 24px; }
 .hero-title {
   font-family: var(--font-display);
@@ -320,23 +321,27 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 .hero-meta strong { color: var(--ink); font-weight: 600; }
 .hero-meta-dot { opacity: 0.5; }
 
-/* Tight desktop rhythm: collapse the dead air between hero and featured.
-   Mobile and tablet (<1024px) keep the editorial breathing room from the
-   clamp() values above; only wide screens get this compression. */
+/* Wide-screen rhythm: let the hero use the full container width and
+   collapse the dead air between hero, search band and featured. Mobile
+   and tablet (<1024px) keep the editorial clamps above. */
 @media (min-width: 1024px) {
   .hero {
-    padding: 88px 0 48px;
+    padding: 80px 0 40px;
   }
-  .hero .eyebrow      { margin-bottom: 18px; }
-  .hero-title         { margin-bottom: 20px; }
-  .hero-sub           { margin-bottom: 24px; }
-  .hero-actions       { margin-bottom: 22px; }
-  .featured           { padding: 32px 0 36px; margin-top: -8px; }
+  /* Hero text uses the full container width so the title can spread
+     into 2 logical lines instead of 3. hero-sub keeps its 60ch cap via
+     the rule above so paragraphs stay readable. */
+  .hero-inner        { max-width: none; }
+  .hero .eyebrow     { margin-bottom: 18px; }
+  .hero-title        { margin-bottom: 20px; font-size: clamp(56px, 7.4vw, 96px); }
+  .hero-sub          { margin-bottom: 24px; }
+  .hero-actions      { margin-bottom: 22px; }
+  .featured          { padding: 36px 0 36px; }
   .featured .section-head { margin: 0 0 22px; }
 }
 @media (min-width: 1440px) {
   /* Even wider screens: keep the hero from ballooning vertically. */
-  .hero { padding-top: 96px; padding-bottom: 52px; }
+  .hero { padding-top: 88px; padding-bottom: 44px; }
 }
 
 /* ─── Buttons ────────────────────────────────────────────────────────── */
@@ -491,6 +496,41 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   .bento-card,
   .bento-card--feature,
   .bento-card--wide { grid-column: span 1; min-height: 260px; }
+}
+
+/* ─── Search band (between hero and featured) ────────────────────────── */
+.search-band {
+  background: var(--bg);
+  padding: 20px 0;
+}
+.search-band .container {
+  display: flex;
+  justify-content: center;
+}
+.search-band .search-bar {
+  margin: 0;
+  width: 100%;
+  max-width: 880px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+@media (min-width: 1024px) {
+  .search-band {
+    /* Tuck the form slightly under the hero so it visually anchors the
+       editorial composition without breaking the rhythm. */
+    margin-top: -28px;
+    padding-bottom: 28px;
+    position: relative;
+    z-index: 4;
+  }
+  .search-band .search-bar {
+    padding: 12px;
+    box-shadow: var(--shadow-md);
+  }
+}
+@media (max-width: 720px) {
+  .search-band { padding: 14px 0 10px; }
 }
 
 /* ─── Catalog / Search ───────────────────────────────────────────────── */
