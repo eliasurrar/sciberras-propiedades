@@ -52,11 +52,15 @@
     detailDesc:     document.getElementById('detailDescription'),
     detailMeta:     document.getElementById('detailMeta'),
     detailWhatsapp: document.getElementById('detailWhatsapp'),
+    detailShare:    document.getElementById('detailShare'),
+    detailShareLbl: document.getElementById('detailShareLabel'),
     footerYear:     document.getElementById('footerYear'),
     footerUpdated:  document.getElementById('footerUpdated'),
     heroCount:      document.getElementById('heroCount'),
     heroUpdated:    document.getElementById('heroUpdated'),
   };
+
+  let currentListing = null;
 
   /* ── Data helpers ────────────────────────────────────────────── */
 
@@ -195,8 +199,12 @@
 
     const cover = listingCover(l);
     const imgs  = listingImages(l);
+    const isHero = idx === 0;
+    const imgAttrs = isHero
+      ? `fetchpriority="high" decoding="async"`
+      : `loading="lazy" decoding="async"`;
     const img = cover
-      ? `<img class="bento-img" src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" loading="lazy">`
+      ? `<img class="bento-img" src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" ${imgAttrs}>`
       : `<div class="bento-img-fallback" aria-hidden="true"></div>`;
     const badge = `<span class="bento-badge">${TYPE_LABEL[l.type] || l.type}</span>`;
     const photoHint = imgs.length > 1
@@ -242,7 +250,7 @@
       ? `<span class="card-photo-count" aria-label="${imgs.length} fotos">◫ ${imgs.length}</span>`
       : '';
     const img = cover
-      ? `<img src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" loading="lazy">`
+      ? `<img src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" loading="lazy" decoding="async">`
       : '';
     return `
       <button class="card fade-in" data-id="${escapeAttr(l.id)}" type="button">
@@ -264,6 +272,7 @@
   function openDetail(id) {
     const l = state.listings.find(x => x.id === id);
     if (!l) return;
+    currentListing = l;
     state.galleryImages = listingImages(l);
     state.galleryIndex  = 0;
 
@@ -275,8 +284,75 @@
     els.detailDesc.textContent  = l.description || '';
     els.detailMeta.textContent  = `Publicada el ${fmtDate(l.created_at)} · ID ${l.id}`;
     if (els.detailWhatsapp) els.detailWhatsapp.href = buildWhatsappLink(l);
+    resetShareLabel();
+    injectListingSchema(l);
+    document.title = `${l.title || 'Propiedad'} · Sciberras Propiedades`;
     if (typeof els.detail.showModal === 'function') els.detail.showModal();
     else els.detail.setAttribute('open', 'open');
+  }
+
+  function resetShareLabel() {
+    if (!els.detailShareLbl) return;
+    els.detailShareLbl.textContent = 'Compartir';
+    els.detailShare.classList.remove('is-copied');
+  }
+
+  function injectListingSchema(l) {
+    const old = document.getElementById('listingSchema');
+    if (old) old.remove();
+    const cover = listingCover(l);
+    const data = {
+      '@context': 'https://schema.org',
+      '@type': 'RealEstateListing',
+      'name': l.title || '',
+      'description': l.description || '',
+      'url': buildShareUrl(l.id),
+      'datePosted': l.created_at || undefined,
+      'image': cover ? new URL(cover, location.href).href : undefined,
+      'offers': {
+        '@type': 'Offer',
+        'price': l.price,
+        'priceCurrency': l.currency === 'UF' ? 'CLF' : (l.currency || 'CLP'),
+        'availability': 'https://schema.org/InStock',
+      },
+    };
+    const tag = document.createElement('script');
+    tag.type = 'application/ld+json';
+    tag.id = 'listingSchema';
+    tag.textContent = JSON.stringify(data);
+    document.head.appendChild(tag);
+  }
+
+  function removeListingSchema() {
+    const old = document.getElementById('listingSchema');
+    if (old) old.remove();
+    document.title = 'Sciberras Propiedades — Casas, Departamentos y Terrenos';
+  }
+
+  async function shareListing() {
+    if (!currentListing) return;
+    const l = currentListing;
+    const url = buildShareUrl(l.id);
+    const title = l.title || 'Propiedad';
+    const text = `${title} — ${fmtPrice(l.price, l.currency)}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url });
+        return;
+      } catch (_) {
+        /* user cancelled or unsupported MIME — fall back to copy */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      els.detailShareLbl.textContent = 'Link copiado';
+      els.detailShare.classList.add('is-copied');
+      setTimeout(resetShareLabel, 2200);
+    } catch (_) {
+      /* clipboard blocked — open WhatsApp link as last resort */
+      window.open(buildWhatsappLink(l), '_blank', 'noopener');
+    }
   }
 
   function setGalleryImage() {
@@ -354,15 +430,23 @@
         if (parsePropFromHash()) {
           history.replaceState(null, '', location.pathname + location.search);
         }
+        currentListing = null;
+        removeListingSchema();
         return;
       }
       if (e.target.closest('.gallery-prev')) { galleryStep(-1); return; }
       if (e.target.closest('.gallery-next')) { galleryStep(1);  return; }
+      if (e.target.closest('#detailShare'))  { shareListing();  return; }
       const thumb = e.target.closest('.gallery-thumb');
       if (thumb) {
         state.galleryIndex = Number(thumb.dataset.idx) || 0;
         setGalleryImage();
       }
+    });
+
+    els.detail.addEventListener('close', () => {
+      currentListing = null;
+      removeListingSchema();
     });
 
     document.addEventListener('keydown', e => {
