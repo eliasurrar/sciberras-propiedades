@@ -56,6 +56,7 @@
     nav:             document.querySelector('.main-nav'),
     navToggle:       document.querySelector('.nav-toggle'),
     currencyToggle:  document.getElementById('currencyToggle'),
+    operationToggle: document.getElementById('operationToggle'),
     searchForm:      document.getElementById('searchForm'),
     qInput:          document.getElementById('q'),
     typeSelect:      document.getElementById('filterType'),
@@ -463,6 +464,16 @@
     renderCatalog();
     updateHeroMeta();
     syncCurrencyToggleUi();
+    syncOperationToggleUi();
+  }
+
+  function syncOperationToggleUi() {
+    if (!els.operationToggle) return;
+    els.operationToggle.querySelectorAll('button[data-op]').forEach(btn => {
+      const active = btn.dataset.op === state.operationFilter;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
   }
 
   function syncCurrencyToggleUi() {
@@ -911,6 +922,18 @@
         const btn = e.target.closest('button[data-currency]');
         if (!btn || btn.disabled) return;
         setDisplayCurrency(btn.dataset.currency);
+      });
+    }
+
+    if (els.operationToggle) {
+      els.operationToggle.addEventListener('click', e => {
+        const btn = e.target.closest('button[data-op]');
+        if (!btn) return;
+        state.operationFilter = btn.dataset.op || '';
+        syncOperationToggleUi();
+        syncFormFromState();
+        syncUrlFromFilters();
+        renderCatalog();
       });
     }
 
