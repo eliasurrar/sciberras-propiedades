@@ -16,6 +16,7 @@
   --ink-mute:     #8b8e96;
   --on-dark:      #f5f0e1;
   --on-dark-soft: #c4c1b6;
+  --ink-on:       #f5f0e1;
 
   /* Brand (kept blue for continuity) */
   --primary:      #1e40af;
@@ -77,6 +78,9 @@
     --ink-mute:      #8b8e96;
     --on-dark:       #f5f0e1;
     --on-dark-soft:  #c4c1b6;
+    /* Text color that sits ON TOP of --ink (varies with theme).
+       Light: --ink is dark → text is cream. Dark: --ink is cream → text is near-black. */
+    --ink-on:        #0f1115;
 
     --accent:        #d4885a;     /* warmer bronze for dark */
     --accent-soft:   #2a1f17;
@@ -236,8 +240,8 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   min-height: 36px;
 }
 .nav-link:hover { background: var(--surface-alt); color: var(--ink); text-decoration: none; }
-.nav-link.active { background: var(--ink); color: var(--on-dark); }
-.nav-link:active { background: var(--ink); color: var(--on-dark); }
+.nav-link.active { background: var(--ink); color: var(--ink-on); }
+.nav-link:active { background: var(--ink); color: var(--ink-on); }
 
 .nav-toggle {
   display: none; flex-direction: column; gap: 4px;
@@ -331,20 +335,20 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 .btn:hover { text-decoration: none; }
 
 .btn-primary {
-  background: var(--ink); color: var(--on-dark);
+  background: var(--ink); color: var(--ink-on);
   box-shadow: 0 6px 18px rgba(17, 20, 26, 0.18);
 }
-.btn-primary:hover { background: #000; color: #fff; }
-.btn-primary:active { background: #000; }
+.btn-primary:hover  { background: var(--ink); color: var(--ink-on); filter: brightness(0.92); }
+.btn-primary:active { filter: brightness(0.86); }
 
-.btn-dark { background: var(--ink); color: var(--on-dark); border-radius: var(--radius-sm); }
-.btn-dark:hover { background: #000; color: #fff; }
+.btn-dark { background: var(--ink); color: var(--ink-on); border-radius: var(--radius-sm); }
+.btn-dark:hover { background: var(--ink); color: var(--ink-on); filter: brightness(0.92); }
 
 .btn-ghost {
   background: transparent; color: var(--ink);
   border-color: var(--border-strong);
 }
-.btn-ghost:hover { background: var(--ink); color: var(--on-dark); border-color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: var(--ink-on); border-color: var(--ink); }
 
 /* ─── Featured / Bento ───────────────────────────────────────────────── */
 .featured { padding: clamp(56px, 8vw, 96px) 0 clamp(36px, 5vw, 56px); }
@@ -360,8 +364,8 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: var(--ink);
-  color: var(--on-dark);
+  background: var(--surface-deep);
+  color: #f5f0e1;
   border-radius: var(--radius);
   overflow: hidden;
   text-align: left;
@@ -586,15 +590,15 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   display: inline-block;
   position: absolute; top: 14px; left: 14px;
   background: rgba(255, 255, 255, 0.92);
-  color: var(--ink);
+  color: #11141a;
   font-size: 11px; font-weight: 600;
   padding: 5px 11px; border-radius: var(--radius-pill);
   text-transform: uppercase; letter-spacing: 0.08em;
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   box-shadow: var(--shadow-xs);
 }
-.badge-casa         { background: rgba(255, 255, 255, 0.92); color: var(--ink); }
-.badge-departamento { background: rgba(17, 20, 26, 0.92); color: var(--on-dark); }
+.badge-casa         { background: rgba(255, 255, 255, 0.92); color: #11141a; }
+.badge-departamento { background: rgba(17, 20, 26, 0.92); color: #f5f0e1; }
 .badge-terreno      { background: rgba(180, 106, 58, 0.92); color: #fff; }
 
 .card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
@@ -707,7 +711,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 .detail-close {
   position: absolute; top: 14px; right: 14px;
   width: 42px; height: 42px;
-  background: rgba(255,255,255,0.96); color: var(--ink);
+  background: var(--bg-elev); color: var(--ink);
   border: 1px solid var(--border); border-radius: 50%;
   font-size: 24px; line-height: 1;
   display: flex; align-items: center; justify-content: center;
@@ -908,7 +912,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 .share-button:hover,
 .share-button:focus-visible {
   background: var(--ink);
-  color: var(--on-dark);
+  color: var(--ink-on);
   border-color: var(--ink);
 }
 .share-button.is-copied {
@@ -924,7 +928,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   z-index: 100;
   padding: 10px 16px;
   background: var(--ink);
-  color: var(--on-dark);
+  color: var(--ink-on);
   border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 500;
