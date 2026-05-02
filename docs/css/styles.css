@@ -320,6 +320,25 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 .hero-meta strong { color: var(--ink); font-weight: 600; }
 .hero-meta-dot { opacity: 0.5; }
 
+/* Tight desktop rhythm: collapse the dead air between hero and featured.
+   Mobile and tablet (<1024px) keep the editorial breathing room from the
+   clamp() values above; only wide screens get this compression. */
+@media (min-width: 1024px) {
+  .hero {
+    padding: 88px 0 48px;
+  }
+  .hero .eyebrow      { margin-bottom: 18px; }
+  .hero-title         { margin-bottom: 20px; }
+  .hero-sub           { margin-bottom: 24px; }
+  .hero-actions       { margin-bottom: 22px; }
+  .featured           { padding: 32px 0 36px; margin-top: -8px; }
+  .featured .section-head { margin: 0 0 22px; }
+}
+@media (min-width: 1440px) {
+  /* Even wider screens: keep the hero from ballooning vertically. */
+  .hero { padding-top: 96px; padding-bottom: 52px; }
+}
+
 /* ─── Buttons ────────────────────────────────────────────────────────── */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
