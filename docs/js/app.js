@@ -844,11 +844,11 @@
 
   function syncThemeToggleUi() {
     if (!els.themeToggle) return;
-    els.themeToggle.querySelectorAll('button[data-theme-mode]').forEach(btn => {
-      const active = btn.dataset.themeMode === state.theme;
-      btn.classList.toggle('is-active', active);
-      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-    });
+    const tip = state.theme === 'auto' ? 'Tema: auto (click → claro)'
+              : state.theme === 'light' ? 'Tema: claro (click → oscuro)'
+              :                            'Tema: oscuro (click → auto)';
+    els.themeToggle.title = tip;
+    els.themeToggle.setAttribute('aria-label', tip);
   }
 
   function setTheme(mode) {
@@ -975,10 +975,10 @@
     }
 
     if (els.themeToggle) {
-      els.themeToggle.addEventListener('click', e => {
-        const btn = e.target.closest('button[data-theme-mode]');
-        if (!btn) return;
-        setTheme(btn.dataset.themeMode);
+      const cycle = ['auto', 'light', 'dark'];
+      els.themeToggle.addEventListener('click', () => {
+        const next = cycle[(cycle.indexOf(state.theme) + 1) % cycle.length];
+        setTheme(next);
       });
     }
 
