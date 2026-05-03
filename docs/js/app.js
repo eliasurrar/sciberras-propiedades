@@ -545,9 +545,12 @@
     const cover = listingCover(l);
     const imgs  = listingImages(l);
     const isHero = idx === 0;
+    // Bento cards are above-the-fold on desktop; lazy-loading absolute-
+    // positioned images inside grid spans was breaking in Safari (image
+    // never resolved layout, card rendered blank). Always eager here.
     const imgAttrs = isHero
       ? `fetchpriority="high" decoding="async"`
-      : `loading="lazy" decoding="async"`;
+      : `decoding="async"`;
     const img = cover
       ? `<img class="bento-img" src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" ${imgAttrs}>`
       : `<div class="bento-img-fallback" aria-hidden="true"></div>`;
