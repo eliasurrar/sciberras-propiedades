@@ -242,9 +242,13 @@ def git(*args: str) -> int:
 def git_publish(commit_msg: str) -> bool:
     if (ROOT / ".git").is_dir():
         targets = ["docs/data/listings.json", "docs/images/",
-                   "docs/sitemap.xml", "docs/prop/"]
+                   "docs/sitemap.xml", "docs/prop/", "docs/robots.txt"]
         if VIDEOS.is_dir():
             targets.append("docs/videos/")
+        # IndexNow keyfile (debe estar accesible en el dominio)
+        for kf in SITE.glob("*.txt"):
+            if kf.name not in {"robots.txt"}:
+                targets.append(f"docs/{kf.name}")
         if git("add", *targets) != 0:
             log("git add failed")
             return False
@@ -373,7 +377,19 @@ def main() -> None:
         commit_msg = f"publish: {args.title} ({listing_id}, {len(image_rel_paths)} foto/s{n_video_msg})"
         pushed = git_publish(commit_msg)
 
-    print(json.dumps({"ok": True, "listing": listing, "pushed": pushed}, ensure_ascii=False))
+    # IndexNow: notifica a Bing/Yandex/Naver/Seznam que hay URL nueva
+    # (Google no participa de IndexNow → eso queda manual / sitemap).
+    indexnow_result = None
+    if pushed:
+        indexnow_result = seo_helpers.ping_indexnow([
+            seo_helpers.listing_url(listing_id),
+            f"{seo_helpers.CANONICAL}/",
+            f"{seo_helpers.CANONICAL}/sitemap.xml",
+        ])
+        log(f"indexnow: {indexnow_result}")
+
+    print(json.dumps({"ok": True, "listing": listing, "pushed": pushed,
+                      "indexnow": indexnow_result}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

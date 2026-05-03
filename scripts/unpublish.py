@@ -53,9 +53,14 @@ def git(*args, check=True):
 
 def commit_and_push(commit_msg):
     targets = ["docs/data/listings.json", "docs/images/",
-               "docs/sitemap.xml", "docs/prop/"]
+               "docs/sitemap.xml", "docs/prop/", "docs/robots.txt"]
     if os.path.isdir(os.path.join(ROOT, "docs", "videos")):
         targets.append("docs/videos/")
+    # IndexNow keyfile
+    docs_path = os.path.join(ROOT, "docs")
+    for fname in os.listdir(docs_path):
+        if fname.endswith(".txt") and fname != "robots.txt":
+            targets.append(f"docs/{fname}")
     git("add", *targets)
     if not git("status", "--porcelain").stdout.strip():
         return False
@@ -163,6 +168,18 @@ def main():
     else:
         summary["pushed"] = False
         log("commit/push step did not push")
+
+    # IndexNow: avisa a Bing/Yandex/etc que la URL ya no existe (al
+    # crawlearla obtienen 404 y la sacan del índice). También refrescamos
+    # sitemap/home para que vean los cambios al toque.
+    if summary["pushed"]:
+        result = seo_helpers.ping_indexnow([
+            seo_helpers.listing_url(target["id"]),
+            f"{seo_helpers.CANONICAL}/",
+            f"{seo_helpers.CANONICAL}/sitemap.xml",
+        ])
+        summary["indexnow"] = result
+        log(f"indexnow: {result}")
 
     print(json.dumps(summary, ensure_ascii=False))
     return 0
