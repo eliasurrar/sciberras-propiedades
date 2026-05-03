@@ -3,8 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Sciberras Propiedades — Casas, Departamentos y Terrenos</title>
-<meta name="description" content="Sciberras Propiedades — catálogo curado de casas, departamentos y terrenos en venta. Fotografía honesta, trato directo.">
+<title>Sciberras Propiedades — Casas, Departamentos y Terrenos en Chile</title>
+<meta name="description" content="Sciberras Propiedades — catálogo curado de casas, departamentos y terrenos en venta y arriendo en Chile. Fotografía honesta, trato directo con la corredora.">
+<meta name="keywords" content="propiedades, inmobiliaria, casas, departamentos, terrenos, venta, arriendo, Chile, Quillota, Nogales, Valparaíso, Región Metropolitana, Sciberras, corredora de propiedades">
+<meta name="author" content="Sciberras Propiedades">
+
+<!-- Search engine indexing -->
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="bingbot" content="index, follow">
+
+<!-- Geo (Chile) -->
+<meta name="geo.region" content="CL">
+<meta name="geo.placename" content="Chile">
+<meta name="language" content="Spanish">
+<meta http-equiv="content-language" content="es-CL">
+
+<!-- Search-engine ownership verification (rellenar con los códigos de cada
+     consola; mientras estén vacíos no afectan la indexación) -->
+<!-- <meta name="google-site-verification" content="REEMPLAZAR_CON_CODIGO_GOOGLE"> -->
+<!-- <meta name="msvalidate.01" content="REEMPLAZAR_CON_CODIGO_BING"> -->
+<!-- <meta name="yandex-verification" content="REEMPLAZAR_CON_CODIGO_YANDEX"> -->
 
 <!-- iOS / Safari -->
 <meta name="theme-color" content="#faf8f3" media="(prefers-color-scheme: light)">
@@ -17,6 +36,8 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="canonical" href="https://sciberraspropiedades.cl/">
+<link rel="alternate" hreflang="es-cl" href="https://sciberraspropiedades.cl/">
+<link rel="alternate" hreflang="x-default" href="https://sciberraspropiedades.cl/">
 
 <!-- Open Graph / Twitter -->
 <meta property="og:type" content="website">
@@ -47,22 +68,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css?v=21">
 
-<!-- JSON-LD: RealEstateAgent (per-listing schema injected by app.js) -->
+<!-- JSON-LD: RealEstateAgent / LocalBusiness (per-listing schema injected by app.js) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "RealEstateAgent",
+  "@type": ["RealEstateAgent", "LocalBusiness"],
+  "@id": "https://sciberraspropiedades.cl/#org",
   "name": "Sciberras Propiedades",
+  "alternateName": "Sciberras",
+  "description": "Catálogo curado de casas, departamentos y terrenos en venta y arriendo en Chile.",
   "url": "https://sciberraspropiedades.cl/",
-  "areaServed": "CL",
-  "founder": {"@type":"Person","name":"Grace Sciberras"},
-  "contactPoint": {
+  "image": "https://sciberraspropiedades.cl/apple-touch-icon.png",
+  "logo": "https://sciberraspropiedades.cl/apple-touch-icon.png",
+  "areaServed": [
+    {"@type": "Country", "name": "Chile"},
+    {"@type": "AdministrativeArea", "name": "Región de Valparaíso"},
+    {"@type": "AdministrativeArea", "name": "Región Metropolitana"}
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "CL"
+  },
+  "founder": {"@type": "Person", "name": "Grace Sciberras"},
+  "contactPoint": [{
     "@type": "ContactPoint",
     "contactType": "sales",
     "email": "gsciberras28@gmail.com",
     "telephone": "+56954901879",
     "availableLanguage": ["es"]
-  }
+  }],
+  "sameAs": []
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://sciberraspropiedades.cl/#website",
+  "url": "https://sciberraspropiedades.cl/",
+  "name": "Sciberras Propiedades",
+  "inLanguage": "es-CL",
+  "publisher": {"@id": "https://sciberraspropiedades.cl/#org"}
 }
 </script>
 </head>
