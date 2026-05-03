@@ -52,7 +52,8 @@ def git(*args, check=True):
 
 
 def commit_and_push(commit_msg):
-    targets = ["docs/data/listings.json", "docs/images/"]
+    targets = ["docs/data/listings.json", "docs/images/",
+               "docs/sitemap.xml", "docs/prop/"]
     if os.path.isdir(os.path.join(ROOT, "docs", "videos")):
         targets.append("docs/videos/")
     git("add", *targets)
@@ -141,6 +142,12 @@ def main():
         json.dump(data, f, indent=2, ensure_ascii=False)
         f.write("\n")
     log(f"removed id={target['id']} title={target['title']!r}; remaining={len(data['listings'])}")
+
+    # SEO: regenera sitemap.xml + páginas estáticas por listing
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import seo_helpers
+    seo_helpers.regenerate_all()
+    log("regenerated sitemap.xml + per-listing pages")
 
     summary["removed_id"]    = target["id"]
     summary["removed_title"] = target["title"]

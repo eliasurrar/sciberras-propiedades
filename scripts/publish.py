@@ -241,7 +241,8 @@ def git(*args: str) -> int:
 
 def git_publish(commit_msg: str) -> bool:
     if (ROOT / ".git").is_dir():
-        targets = ["docs/data/listings.json", "docs/images/"]
+        targets = ["docs/data/listings.json", "docs/images/",
+                   "docs/sitemap.xml", "docs/prop/"]
         if VIDEOS.is_dir():
             targets.append("docs/videos/")
         if git("add", *targets) != 0:
@@ -360,6 +361,12 @@ def main() -> None:
     save_listings(payload)
     n_video_msg = f", {len(video_rel_paths)} video/s" if video_rel_paths else ""
     log(f"added {listing_id}: {args.title} ({len(image_rel_paths)} foto/s{n_video_msg})")
+
+    # SEO: regenera sitemap.xml + páginas estáticas por listing
+    sys.path.insert(0, str(Path(__file__).parent))
+    import seo_helpers
+    seo_helpers.regenerate_all()
+    log("regenerated sitemap.xml + per-listing pages")
 
     pushed = False
     if not args.no_push:

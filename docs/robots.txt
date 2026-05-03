@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /data/
+
+# Bots conocidos (explícito por si rotan políticas)
+User-agent: Googlebot
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: DuckDuckBot
+Allow: /
+User-agent: YandexBot
+Allow: /
+User-agent: Applebot
+Allow: /
+
+Sitemap: https://sciberraspropiedades.cl/sitemap.xml
