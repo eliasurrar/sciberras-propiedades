@@ -1,14 +1,23 @@
-"""SEO helpers — sitemap.xml + per-listing static HTML stubs.
+"""SEO helpers — sitemap.xml, per-listing static HTML stubs, IndexNow pings.
 
-Both regeneran cada vez que publish.py / unpublish.py modifican
-listings.json. Los stubs en docs/prop/<id>/index.html dan a Google/Bing
-contenido HTML real por listing (la SPA usa hash routes que los crawlers
-no indexan bien); los visitantes humanos son redirigidos al SPA por JS.
+Sitemap + páginas se regeneran cada vez que publish.py / unpublish.py
+modifican listings.json. Los stubs en docs/prop/<id>/index.html dan a
+Google/Bing contenido HTML real por listing (la SPA usa hash routes que
+los crawlers no indexan bien); los visitantes humanos son redirigidos al
+SPA por JS.
+
+IndexNow (Bing/Yandex/Naver/Seznam) recibe un ping inmediato cuando
+publicás o despublicás. Google no participa de IndexNow — para Google
+sigue siendo "Solicitar indexación" manual en Search Console (o esperar
+al próximo crawl del sitemap).
 """
 import datetime as dt
 import html
 import json
 import shutil
+import sys
+import urllib.request
+import urllib.error
 from pathlib import Path
 
 ROOT = Path("/Users/openclaw/Desktop/real-estate")
@@ -18,6 +27,10 @@ PROP_DIR = SITE / "prop"
 SITEMAP = SITE / "sitemap.xml"
 
 CANONICAL = "https://sciberraspropiedades.cl"
+INDEXNOW_HOST = "sciberraspropiedades.cl"
+INDEXNOW_KEY = "d602f9e564903c97aeb70fa6d08157a3"
+INDEXNOW_KEYFILE = SITE / f"{INDEXNOW_KEY}.txt"
+INDEXNOW_ENDPOINT = "https://api.indexnow.org/indexnow"
 
 TYPE_LABEL = {
     "casa": "Casa",
@@ -227,6 +240,9 @@ def regenerate_all():
     listings = data.get("listings", [])
     write_listing_pages(listings)
     write_sitemap(listings, updated_at=data.get("updated_at"))
+    # Asegura que el keyfile de IndexNow exista (idempotente)
+    if not INDEXNOW_KEYFILE.exists():
+        INDEXNOW_KEYFILE.write_text(INDEXNOW_KEY + "\n", encoding="utf-8")
     return {
         "listings": len(listings),
         "sitemap": str(SITEMAP.relative_to(ROOT)),
@@ -234,5 +250,45 @@ def regenerate_all():
     }
 
 
+def listing_url(listing_id):
+    return f"{CANONICAL}/prop/{listing_id}/"
+
+
+def ping_indexnow(urls):
+    """Notifica a IndexNow (Bing, Yandex, Naver, Seznam) sobre URLs nuevas
+    o eliminadas. URLs eliminadas → cuando crawlean encuentran 404 y las
+    sacan del índice. Devuelve dict con status/error; no lanza."""
+    urls = sorted({u for u in (urls or []) if u})
+    if not urls:
+        return {"skipped": "no_urls"}
+    payload = {
+        "host": INDEXNOW_HOST,
+        "key": INDEXNOW_KEY,
+        "keyLocation": f"{CANONICAL}/{INDEXNOW_KEY}.txt",
+        "urlList": urls,
+    }
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        INDEXNOW_ENDPOINT,
+        data=data,
+        headers={"Content-Type": "application/json; charset=utf-8"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as r:
+            body = r.read(500).decode("utf-8", "replace")
+            return {"status": r.status, "urls": len(urls), "body": body}
+    except urllib.error.HTTPError as e:
+        # 200/202 = OK. 422 = una o más URLs inválidas (no fatal).
+        body = e.read(500).decode("utf-8", "replace") if hasattr(e, "read") else ""
+        return {"status": e.code, "urls": len(urls), "error": str(e), "body": body}
+    except Exception as e:
+        return {"error": str(e), "urls": len(urls)}
+
+
 if __name__ == "__main__":
-    print(json.dumps(regenerate_all(), ensure_ascii=False))
+    if len(sys.argv) > 1 and sys.argv[1] == "ping":
+        # `python3 seo_helpers.py ping <url> [<url> ...]`
+        print(json.dumps(ping_indexnow(sys.argv[2:]), ensure_ascii=False))
+    else:
+        print(json.dumps(regenerate_all(), ensure_ascii=False))
