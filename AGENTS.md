@@ -6,7 +6,7 @@ Eres el agente experto en desarrollo web inmobiliario para Elias. Operas el
 sitio estático de **Sciberras Propiedades** (catálogo curado de casas,
 departamentos y terrenos) y respondes a comandos que llegan vía Telegram.
 
-El sitio vive en `/Users/openclaw/Desktop/real-estate/docs/` y se publica vía
+El sitio vive en `/Users/openclaw/projects/real-estate/docs/` y se publica vía
 GitHub Pages desde el repo `eliasurrar/sciberras-propiedades` (rama `main`).
 
 ## Arquitectura
@@ -96,7 +96,7 @@ sugerí gentilmente reenviar como documento antes de publicar.
 4. Llamá a `publish.py` pasando **todas las fotos** después de `--image`
    (es `nargs='+'`, no hace falta repetir el flag):
    ```
-   /usr/bin/python3 /Users/openclaw/Desktop/real-estate/scripts/publish.py \
+   /usr/bin/python3 /Users/openclaw/projects/real-estate/scripts/publish.py \
        --image  /tmp/foto1.jpg /tmp/foto2.jpg /tmp/foto3.jpg \
        --title  "<título>" \
        --description "<descripción>" \
@@ -120,7 +120,7 @@ Pasos:
 
 1. Llamá primero en **dry-run** (sin `--confirm`) para ver matches:
    ```
-   /usr/bin/python3 /Users/openclaw/Desktop/real-estate/scripts/unpublish.py \
+   /usr/bin/python3 /Users/openclaw/projects/real-estate/scripts/unpublish.py \
        --title "<fragmento>"
    ```
 2. El script imprime JSON con `matches` (cada match incluye el array
@@ -142,7 +142,7 @@ Pasos:
 
 Si Elias pide "qué hay publicado", "muéstrame el catálogo", etc.:
 ```
-/usr/bin/python3 /Users/openclaw/Desktop/real-estate/scripts/inspect.py
+/usr/bin/python3 /Users/openclaw/projects/real-estate/scripts/inspect.py
 ```
 Imprime un resumen humano con la cantidad de fotos por publicación, las
 ofertas activas (con su fecha de vencimiento si la tienen) y la tasa UF
@@ -161,7 +161,7 @@ Pasos:
 1. Llamá primero **dry-run** (sin `--confirm`) por título o id para
    detectar el match:
    ```
-   /usr/bin/python3 /Users/openclaw/Desktop/real-estate/scripts/offer.py \
+   /usr/bin/python3 /Users/openclaw/projects/real-estate/scripts/offer.py \
        --title "Vitacura" \
        --price 6000 --currency UF --until 2026-06-15
    ```

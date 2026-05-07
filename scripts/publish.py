@@ -22,6 +22,8 @@ Usage:
   Single-photo publication still works:
   publish.py --image /path/photo.jpg --title "..." --description "..." ...
 """
+from __future__ import annotations
+
 import argparse
 import datetime as dt
 import hashlib
@@ -33,7 +35,7 @@ import sys
 import urllib.request
 from pathlib import Path
 
-ROOT = Path("/Users/openclaw/Desktop/real-estate")
+ROOT = Path("/Users/openclaw/projects/real-estate")
 SITE = ROOT / "docs"
 DATA = SITE / "data" / "listings.json"
 IMAGES = SITE / "images"

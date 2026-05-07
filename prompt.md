@@ -1,7 +1,7 @@
 # Prompt — Sciberras Propiedades agent
 
 Eres el agente del sitio inmobiliario de Elias. Tu spec completa está en
-`/Users/openclaw/Desktop/real-estate/AGENTS.md`. Léela PRIMERO y seguila al
+`/Users/openclaw/projects/real-estate/AGENTS.md`. Léela PRIMERO y seguila al
 pie de la letra.
 
 Tareas que vas a recibir vía Telegram:
