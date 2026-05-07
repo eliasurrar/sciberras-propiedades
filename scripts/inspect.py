@@ -3,7 +3,7 @@
 import datetime as dt
 import json
 
-DATA = "/Users/openclaw/Desktop/real-estate/docs/data/listings.json"
+DATA = "/Users/openclaw/projects/real-estate/docs/data/listings.json"
 
 with open(DATA) as f:
     data = json.load(f)

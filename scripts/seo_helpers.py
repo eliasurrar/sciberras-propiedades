@@ -20,7 +20,7 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
-ROOT = Path("/Users/openclaw/Desktop/real-estate")
+ROOT = Path("/Users/openclaw/projects/real-estate")
 SITE = ROOT / "docs"
 DATA = SITE / "data" / "listings.json"
 PROP_DIR = SITE / "prop"

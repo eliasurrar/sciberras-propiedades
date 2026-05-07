@@ -32,7 +32,7 @@ import sys
 import unicodedata
 import urllib.request
 
-ROOT = "/Users/openclaw/Desktop/real-estate"
+ROOT = "/Users/openclaw/projects/real-estate"
 SITE = os.path.join(ROOT, "docs")
 DATA_FILE = os.path.join(SITE, "data", "listings.json")
 LOG = os.path.join(ROOT, "logs", "offer.log")
