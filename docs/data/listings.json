@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-07T08:34:25-04:00",
+  "updated_at": "2026-05-07T08:39:12-04:00",
   "uf_clp_rate": 40213.45,
   "uf_rate_updated_at": "2026-05-07T04:00:00.000Z",
   "listings": [
@@ -21,9 +21,39 @@
         "images/casa-en-arriendo-villa-el-sendero-5002d1-7.jpg",
         "images/casa-en-arriendo-villa-el-sendero-5002d1-8.jpg",
         "images/casa-en-arriendo-villa-el-sendero-5002d1-9.jpg",
-        "images/casa-en-arriendo-villa-el-sendero-5002d1-10.jpg"
+        "images/casa-en-arriendo-villa-el-sendero-5002d1-10.jpg",
+        "images/casa-en-arriendo-villa-el-sendero-5002d1-11.jpg",
+        "images/casa-en-arriendo-villa-el-sendero-5002d1-12.jpg",
+        "images/casa-en-arriendo-villa-el-sendero-5002d1-13.jpg",
+        "images/casa-en-arriendo-villa-el-sendero-5002d1-14.jpg",
+        "images/casa-en-arriendo-villa-el-sendero-5002d1-15.jpg"
       ],
       "image_meta": [
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h"
+        },
         {
           "w": 2400,
           "h": 1800,
@@ -78,7 +108,8 @@
       "created_at": "2026-05-07T08:34:24-04:00",
       "bedrooms": 3,
       "bathrooms": 1,
-      "parking": 1
+      "parking": 1,
+      "updated_at": "2026-05-07T08:39:09-04:00"
     },
     {
       "id": "departamento-arriendo-condominio-los-libertadores-quillota-13eded",
