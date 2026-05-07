@@ -265,17 +265,106 @@ def git_publish(commit_msg: str) -> bool:
     return False
 
 
+def append_to_listing(listing_id: str, sources: list[Path],
+                       video_sources: list[Path], no_push: bool) -> None:
+    """Modo --append-to: agregar fotos/videos a un listing existente sin
+    cambiar metadata. Útil cuando Telegram divide >10 fotos en mensajes
+    múltiples (ver feedback_telegram_image_batches en memory)."""
+    payload = load_listings()
+    listing = next((l for l in payload.get("listings", []) if l["id"] == listing_id), None)
+    if not listing:
+        print(f"ERROR: listing not found: {listing_id}", file=sys.stderr)
+        sys.exit(3)
+
+    existing_images = listing.get("images", [])
+    existing_meta = listing.get("image_meta", [])
+    existing_videos = listing.get("videos", [])
+    existing_video_meta = listing.get("video_meta", [])
+    start_img = len(existing_images) + 1
+    start_vid = len(existing_videos) + 1
+
+    new_image_rel: list[str] = []
+    new_image_meta: list[dict] = []
+    for idx, src in enumerate(sources, start=start_img):
+        image_name = f"{listing_id}-{idx}.jpg"
+        dst = IMAGES / image_name
+        process_image(src, dst)
+        new_image_rel.append(f"images/{image_name}")
+        dims = get_image_dims(dst)
+        meta = {"w": dims[0], "h": dims[1], "orientation": orientation_for(*dims)} if dims \
+               else {"orientation": "h"}
+        new_image_meta.append(meta)
+
+    new_video_rel: list[str] = []
+    new_video_meta: list[dict] = []
+    for idx, src in enumerate(video_sources, start=start_vid):
+        ext = src.suffix.lower()
+        video_name = f"{listing_id}-{idx}{ext}"
+        dst = VIDEOS / video_name
+        copy_video(src, dst)
+        new_video_rel.append(f"videos/{video_name}")
+        new_video_meta.append(get_video_meta(dst))
+
+    listing["images"] = existing_images + new_image_rel
+    listing["image_meta"] = existing_meta + new_image_meta
+    if new_video_rel:
+        listing["videos"] = existing_videos + new_video_rel
+        listing["video_meta"] = existing_video_meta + new_video_meta
+    listing["updated_at"] = dt.datetime.now().astimezone().isoformat(timespec="seconds")
+
+    refresh_uf_rate(payload)
+    save_listings(payload)
+    log(f"appended {len(new_image_rel)} foto/s + {len(new_video_rel)} video/s to {listing_id}")
+
+    sys.path.insert(0, str(Path(__file__).parent))
+    import seo_helpers
+    seo_helpers.regenerate_all()
+    log("regenerated sitemap.xml + per-listing pages")
+
+    pushed = False
+    if not no_push:
+        n_msg = f"{len(new_image_rel)} foto/s"
+        if new_video_rel:
+            n_msg += f", {len(new_video_rel)} video/s"
+        commit_msg = f"publish: append {n_msg} to {listing_id}"
+        pushed = git_publish(commit_msg)
+
+    indexnow_result = None
+    if pushed:
+        indexnow_result = seo_helpers.ping_indexnow([
+            seo_helpers.listing_url(listing_id),
+            f"{seo_helpers.CANONICAL}/",
+            f"{seo_helpers.CANONICAL}/sitemap.xml",
+        ])
+        log(f"indexnow: {indexnow_result}")
+
+    print(json.dumps({
+        "ok": True,
+        "mode": "append",
+        "listing_id": listing_id,
+        "added_images": new_image_rel,
+        "added_videos": new_video_rel,
+        "total_images": len(listing["images"]),
+        "pushed": pushed,
+        "indexnow": indexnow_result,
+    }, ensure_ascii=False))
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--image",        required=True, nargs="+",
                     help="One or more paths to photo files. First is the cover.")
     ap.add_argument("--video",        nargs="+", default=[],
                     help="Optional path(s) to video files (.mp4/.mov/.webm).")
-    ap.add_argument("--title",        required=True)
-    ap.add_argument("--description",  required=True)
-    ap.add_argument("--price",        required=True, type=float)
+    ap.add_argument("--append-to",    dest="append_to", default=None,
+                    help="Listing ID to append images/videos to (no metadata "
+                         "change). When set, --title/--description/--price/--type "
+                         "are not required.")
+    ap.add_argument("--title",        default=None)
+    ap.add_argument("--description",  default=None)
+    ap.add_argument("--price",        type=float, default=None)
     ap.add_argument("--currency",     default="UF", choices=sorted(VALID_CURRENCIES))
-    ap.add_argument("--type",         dest="ptype", required=True, choices=sorted(VALID_TYPES))
+    ap.add_argument("--type",         dest="ptype", default=None, choices=sorted(VALID_TYPES))
     ap.add_argument("--operation",    default="venta", choices=sorted(VALID_OPERATIONS),
                     help="venta o arriendo")
     ap.add_argument("--bedrooms",     type=int, default=None)
@@ -308,6 +397,21 @@ def main() -> None:
         if src.suffix.lower() not in VIDEO_EXTS:
             print(f"ERROR: unsupported video format: {src.suffix}", file=sys.stderr)
             sys.exit(2)
+
+    if args.append_to:
+        # Modo append: ignora todos los args de metadata, sólo agrega fotos/videos.
+        append_to_listing(args.append_to, sources, video_sources, args.no_push)
+        return
+
+    # Modo create (default): requiere metadata mínima.
+    missing = [a for a in ("title", "description", "price", "ptype")
+               if getattr(args, a) is None]
+    if missing:
+        print(f"ERROR: missing required args for new listing: {missing}",
+              file=sys.stderr)
+        print("(use --append-to <listing-id> if you only want to add photos)",
+              file=sys.stderr)
+        sys.exit(2)
 
     listing_id = make_id(args.title)
 
