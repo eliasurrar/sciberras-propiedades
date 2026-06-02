@@ -1274,6 +1274,26 @@
     lb.appendChild(counter);
     lb.appendChild(prevBtn);
     lb.appendChild(nextBtn);
+
+    // Spinner (visible mientras carga la foto)
+    const spinner = document.createElement('div');
+    spinner.id = 'lbSpinner';
+    spinner.setAttribute('aria-label', 'Cargando foto');
+    spinner.style.cssText = [
+      'display:none',
+      'position:absolute',
+      'inset:0',
+      'align-items:center',
+      'justify-content:center',
+      'pointer-events:none',
+    ].join(';');
+    spinner.innerHTML = `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" style="animation:lbSpin 0.8s linear infinite">
+      <circle cx="20" cy="20" r="16" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <path d="M20 4 a16 16 0 0 1 16 16" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <style>@keyframes lbSpin{to{transform:rotate(360deg)}}</style>`;
+    lb.appendChild(spinner);
+
     document.body.appendChild(lb);
 
     // State
@@ -1285,11 +1305,10 @@
       lbItems = items;
       lbIdx   = idx;
       lbOpen  = true;
+      // Mostrar overlay INMEDIATAMENTE — antes de que cargue la foto
       lb.style.display = 'flex';
-      // Trap scroll
       document.body.style.overflow = 'hidden';
       render();
-      // Focus close btn for keyboard nav
       requestAnimationFrame(() => closeBtn.focus());
     }
 
@@ -1297,28 +1316,50 @@
       lbOpen = false;
       lb.style.display = 'none';
       document.body.style.overflow = '';
+      // Cancelar cualquier carga pendiente
+      img.src = '';
     }
 
     function render() {
       const it = lbItems[lbIdx];
-      img.style.opacity = '0';
-      img.src = '';
-      if (!it) return;
-      const newImg = new window.Image();
-      newImg.onload = () => {
-        img.src = it.src;
-        img.alt = `Foto ${lbIdx + 1} de ${lbItems.length}`;
-        requestAnimationFrame(() => { img.style.opacity = '1'; });
-      };
-      newImg.src = it.src;
-      // Fallback in case onload already fired
-      if (newImg.complete) { img.src = it.src; img.alt = `Foto ${lbIdx + 1} de ${lbItems.length}`; img.style.opacity = '1'; }
 
+      // Actualizar counter y botones de nav ANTES de cargar imagen
       const multi = lbItems.length > 1;
       counter.style.display = multi ? '' : 'none';
       counter.textContent   = multi ? `${lbIdx + 1} / ${lbItems.length}` : '';
       prevBtn.style.display = multi ? '' : 'none';
       nextBtn.style.display = multi ? '' : 'none';
+
+      if (!it) return;
+
+      // Mostrar spinner mientras carga
+      img.style.opacity = '0';
+      spinner.style.display = 'flex';
+
+      // Si la imagen ya está en caché del browser, onload dispara síncronamente
+      // En cualquier caso el overlay ya está visible con spinner
+      const newImg = new window.Image();
+      const loadedIdx = lbIdx; // capturar por closure por si el usuario navega antes
+      newImg.onload = () => {
+        if (lbIdx !== loadedIdx) return; // usuario ya navegó a otra foto
+        img.src = it.src;
+        img.alt = `Foto ${lbIdx + 1} de ${lbItems.length}`;
+        spinner.style.display = 'none';
+        requestAnimationFrame(() => { img.style.opacity = '1'; });
+      };
+      newImg.onerror = () => {
+        if (lbIdx !== loadedIdx) return;
+        spinner.style.display = 'none';
+        img.style.opacity = '0.4';
+      };
+      newImg.src = it.src;
+      // Si ya está en caché, complete=true antes de asignar onload → setear directo
+      if (newImg.complete && newImg.naturalWidth > 0) {
+        img.src = it.src;
+        img.alt = `Foto ${lbIdx + 1} de ${lbItems.length}`;
+        spinner.style.display = 'none';
+        img.style.opacity = '1';
+      }
     }
 
     function step(delta) {
