@@ -1875,8 +1875,14 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 }
 
 /* ── Gallery stage image: clickable hint for lightbox ── */
+/* iOS Safari requires cursor:pointer (not zoom-in) to fire click events */
 .gallery-stage img {
-  cursor: zoom-in;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover: hover) {
+  /* zoom-in hint only for devices with a real cursor */
+  .gallery-stage img { cursor: zoom-in; }
 }
 .gallery-stage img:active {
   opacity: 0.92;

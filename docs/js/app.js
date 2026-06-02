@@ -789,6 +789,19 @@
         im.src = it.src;
         im.alt = `Imagen ${idx + 1} de ${items.length}`;
         im.decoding = 'async';
+        // iOS Safari fix: attach direct click listener so touch events fire
+        // reliably (event delegation on #detail alone fails without cursor:pointer)
+        im.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (window._lightbox) {
+            const photoItems = state.galleryItems.filter(gi => gi.kind !== 'video');
+            if (!photoItems.length) return;
+            const curBase = im.src.split('/').pop();
+            let li = photoItems.findIndex(pi => pi.src.split('/').pop() === curBase);
+            if (li < 0) li = 0;
+            window._lightbox.show(photoItems, li);
+          }
+        });
         stage.appendChild(im);
       }
     }
