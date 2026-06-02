@@ -1169,26 +1169,38 @@
   // Click en la foto del stage → overlay fullscreen negro.
   // Swipe horizontal para navegar. ESC / click fuera / botón × cierra.
   // Se adapta a cualquier orientación; NO fuerza rotación.
+  //
+  // iOS Safari FIX: usamos <dialog> + showModal() en vez de un <div> fixed.
+  // El elemento <dialog> entra al "top layer" del browser, que rinde
+  // SOBRE cualquier otro <dialog> abierto y sobre z-index 9999.
+  // Un <div> fixed con z-index alto queda DEBAJO del <dialog> modal del
+  // detalle — por eso la foto "aparecía" solo al cerrar el detalle.
   // ────────────────────────────────────────────────────────────────────────
   (function() {
-    // Build the lightbox DOM once
-    const lb = document.createElement('div');
+    // Build the lightbox DOM once — using <dialog> for top-layer rendering
+    const lb = document.createElement('dialog');
     lb.id = 'photoLightbox';
-    lb.setAttribute('role', 'dialog');
-    lb.setAttribute('aria-modal', 'true');
     lb.setAttribute('aria-label', 'Foto ampliada');
+    // <dialog> con showModal() ya es modal/top-layer; no necesita position:fixed extra
+    // pero sí reseteamos el UA stylesheet que le pone margin:auto/max-width/etc.
     lb.style.cssText = [
-      'display:none',
-      'position:fixed',
-      'inset:0',
-      'z-index:9000',
+      'border:none',
+      'padding:0',
+      'margin:0',
+      'width:100vw',
+      'height:100dvh',
+      'max-width:100vw',
+      'max-height:100dvh',
       'background:rgba(0,0,0,0.96)',
       '-webkit-backdrop-filter:blur(2px)',
       'backdrop-filter:blur(2px)',
+      'display:flex',
       'align-items:center',
       'justify-content:center',
       'touch-action:pan-y pinch-zoom',
       'overscroll-behavior:contain',
+      'position:fixed',
+      'inset:0',
     ].join(';');
 
     const img = document.createElement('img');
@@ -1318,17 +1330,16 @@
       lbItems = items;
       lbIdx   = idx;
       lbOpen  = true;
-      // Mostrar overlay INMEDIATAMENTE — antes de que cargue la foto
-      lb.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
+      // showModal() pone el <dialog> en el top layer del browser
+      // — rinde SOBRE cualquier otro <dialog> abierto (ej: el detalle)
+      if (!lb.open) lb.showModal();
       render();
       requestAnimationFrame(() => closeBtn.focus());
     }
 
     function hideLightbox() {
       lbOpen = false;
-      lb.style.display = 'none';
-      document.body.style.overflow = '';
+      if (lb.open) lb.close();
       // Cancelar cualquier carga pendiente
       img.src = '';
     }
@@ -1387,15 +1398,20 @@
     prevBtn.addEventListener('click', (e) => { e.stopPropagation(); step(-1); });
     nextBtn.addEventListener('click', (e) => { e.stopPropagation(); step(1); });
 
-    // Click outside image → close
+    // Click outside image → close  (en <dialog> el target del backdrop es el propio dialog)
     lb.addEventListener('click', (e) => {
       if (e.target === lb) hideLightbox();
     });
 
-    // Keyboard
+    // ESC nativo del <dialog> — Safari iOS lo dispara antes del keydown
+    lb.addEventListener('close', () => {
+      lbOpen = false;
+      img.src = '';
+    });
+
+    // Keyboard (flechas — ESC ya lo maneja el <dialog> nativamente)
     document.addEventListener('keydown', (e) => {
       if (!lbOpen) return;
-      if (e.key === 'Escape')      hideLightbox();
       if (e.key === 'ArrowLeft')   step(-1);
       if (e.key === 'ArrowRight')  step(1);
     });
