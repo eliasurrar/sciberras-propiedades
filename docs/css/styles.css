@@ -1888,3 +1888,19 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   opacity: 0.92;
 }
 
+/* ── Lightbox <dialog> — top-layer fullscreen overlay ── */
+/* El <dialog> con showModal() entra al top-layer, sobre cualquier otro dialog */
+#photoLightbox {
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+}
+/* El backdrop del <dialog> es transparente — el fondo negro está en el propio dialog */
+#photoLightbox::backdrop {
+  background: transparent;
+}
+
