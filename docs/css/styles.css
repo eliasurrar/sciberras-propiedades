@@ -1899,6 +1899,13 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   height: 100dvh;
   max-height: 100dvh;
 }
+/* Mostrar SOLO cuando tiene [open] — el UA stylesheet oculta <dialog> por defecto,
+   pero si alguien pone display:flex en el inline style se muestra aunque esté cerrado */
+#photoLightbox[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* El backdrop del <dialog> es transparente — el fondo negro está en el propio dialog */
 #photoLightbox::backdrop {
   background: transparent;

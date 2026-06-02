@@ -1194,7 +1194,8 @@
       'background:rgba(0,0,0,0.96)',
       '-webkit-backdrop-filter:blur(2px)',
       'backdrop-filter:blur(2px)',
-      'display:flex',
+      // NO display:flex aquí — <dialog> sin open se oculta solo (UA stylesheet)
+      // display:flex se aplica vía CSS solo cuando tiene [open]
       'align-items:center',
       'justify-content:center',
       'touch-action:pan-y pinch-zoom',
