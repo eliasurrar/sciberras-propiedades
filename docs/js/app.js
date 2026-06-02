@@ -1136,4 +1136,19 @@
   }
 
   init();
+
+  // ── Sticky header scroll shadow (Modernization v2) ──
+  (function() {
+    const hdr = document.querySelector('.site-header');
+    if (!hdr) return;
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        hdr.classList.toggle('is-scrolled', window.scrollY > 6);
+        ticking = false;
+      });
+    }, { passive: true });
+  })();
 })();
