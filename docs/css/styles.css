@@ -1874,3 +1874,11 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
+/* ── Gallery stage image: clickable hint for lightbox ── */
+.gallery-stage img {
+  cursor: zoom-in;
+}
+.gallery-stage img:active {
+  opacity: 0.92;
+}
+
