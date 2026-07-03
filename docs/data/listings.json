@@ -109,7 +109,9 @@
       "bedrooms": 3,
       "bathrooms": 1,
       "parking": 1,
-      "updated_at": "2026-05-07T08:39:09-04:00"
+      "commune": "Quillota",
+      "region": "valparaiso",
+      "updated_at": "2026-07-03T14:20:00-04:00"
     },
     {
       "id": "departamento-arriendo-condominio-los-libertadores-quillota-13eded",
