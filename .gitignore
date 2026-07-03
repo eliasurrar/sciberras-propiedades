@@ -5,3 +5,9 @@ __pycache__/
 *.pyc
 .idea/
 .vscode/
+.playwright-mcp/
+
+# Brand: experimentos descartados y favicons duplicados (los oficiales viven en docs/)
+docs/brand/logo-propuestas/
+docs/brand/favicon-*.png
+docs/brand/favicon.ico
