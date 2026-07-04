@@ -436,7 +436,13 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   border-radius: var(--radius);
   overflow: hidden;
   text-align: left;
-  padding: 0;
+  /* Reserve a top band for the floating type/operation badges so the body
+     content (commune badge + title + amenities + price) can never rise into
+     them. Fixes "CASA" overlapping "Quillota" on short/tall bento cards
+     (feature + wide variants) across all viewports. Absolute badges + the
+     absolute .bento-img are offset from the padding BOX, so this padding
+     doesn't shift them or clip the photo — it only floors the flex body. */
+  padding: 46px 0 0;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
   font-family: inherit;
@@ -477,6 +483,7 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 .bento-body {
   position: relative;
   z-index: 2;
+  margin-top: auto;              /* pin content to the bottom, below the badge band */
   padding: 18px 20px 20px;
   display: flex; flex-direction: column; gap: 6px;
 }
@@ -522,6 +529,7 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   grid-column: span 2;
   grid-row: span 2;
   min-height: clamp(360px, 38vw, 520px);
+  padding-top: 52px;             /* slightly taller badge band for the bigger card */
 }
 .bento-card--feature .bento-title { font-size: clamp(24px, 2.2vw, 32px); }
 .bento-card--feature .bento-price { font-size: clamp(20px, 1.6vw, 24px); }
@@ -547,6 +555,11 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   .bento-card,
   .bento-card--feature,
   .bento-card--wide { grid-column: span 1; min-height: 260px; }
+  /* On a single narrow column the feature card is no wider than the rest, so
+     drop its enlarged title/price back to normal — the oversized type was what
+     inflated the body enough to reach the badge band. */
+  .bento-card--feature .bento-title { font-size: 22px; }
+  .bento-card--feature .bento-price { font-size: 19px; }
 }
 
 /* ─── Hero aside / vertical filter card ──────────────────────────────── */
