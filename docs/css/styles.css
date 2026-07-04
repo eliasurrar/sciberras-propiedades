@@ -513,7 +513,6 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   pointer-events: none;            /* el click sigue abriendo la tarjeta */
 }
 .badge-bar > * { pointer-events: auto; flex-shrink: 0; }
-.badge-bar .operation-badge { margin-left: auto; }
 /* Los badges dentro de la barra dejan de ser absolutos y fluyen en la fila */
 .badge-bar .bento-badge,
 .badge-bar .badge,
@@ -524,6 +523,27 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   margin: 0;
   align-self: center;
 }
+/* Operación empujada a la derecha; tipo + comuna quedan a la izquierda.
+   Debe ir DESPUÉS del reset de arriba, si no `margin:0` lo anula. */
+.badge-bar .operation-badge { margin-left: auto; }
+
+/* ── Colores de los badges en la barra ──
+   tipo (casa/depto/terreno) = fondo oscuro · operación = terracota ·
+   comuna = blanco con transparencia. */
+.badge-bar .bento-badge,
+.badge-bar .badge,
+.badge-bar .badge-casa,
+.badge-bar .badge-departamento,
+.badge-bar .badge-terreno {
+  background: rgba(17, 20, 26, 0.92);
+  color: #f5f0e1;
+}
+.badge-bar .operation-badge,
+.badge-bar .operation-badge--venta,
+.badge-bar .operation-badge--arriendo {
+  background: rgba(180, 106, 58, 0.94);
+  color: #fff;
+}
 /* Comuna legible sobre la foto en cualquier tarjeta (glass blanco) */
 .badge-bar .commune-badge {
   background: rgba(255, 255, 255, 0.92);
@@ -533,6 +553,7 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   box-shadow: var(--shadow-xs);
   min-width: 0;
 }
+.badge-bar .commune-badge svg { color: #11141a; }
 .badge-bar .commune-badge span {
   overflow: hidden;
   text-overflow: ellipsis;
