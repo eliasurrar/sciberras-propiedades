@@ -158,9 +158,11 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   content: "";
   display: inline-block;
   width: 18px;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.55;
+  height: 2px;
+  border-radius: 2px;
+  /* marcador con el degradado del logo (navy → teal → esmeralda) */
+  background: var(--brand-gradient, currentColor);
+  opacity: 0.9;
 }
 
 .section-head {
@@ -1694,21 +1696,34 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
    Safari Desktop + iPhone 15 Pro polish
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Palette refresh: primary → slate-deep, accent stays terracota ── */
+/* ── Palette refresh: alineada al LOGO (navy → esmeralda).
+   El logo Sciberras es un degradado navy #002040 → esmeralda #10d090.
+   Alineamos la identidad del sitio a eso: primary navy profundo + una
+   familia verde (teal seguro para texto + esmeralda para acentos chicos),
+   y el gradiente de marca replica el del logo. La TERRACOTA se conserva
+   exclusivamente para la semántica de operación (venta/arriendo). ── */
 :root {
-  --primary:     #1a2744;   /* slate-deep inmobiliario, menos azul eléctrico */
-  --primary-600: #243560;
-  --primary-500: #3b52a0;
-  --primary-50:  #eef1f9;
+  --primary:     #14233f;   /* navy profundo, hacia el #002040 del logo */
+  --primary-600: #1d3358;
+  --primary-500: #2b6f66;   /* teal-navy puente (ya no azul royal) */
+  --primary-50:  #eaf1f0;   /* tinte teal muy claro para chips activos */
+
+  /* Familia verde del logo */
+  --brand-teal:    #0F766E; /* teal profundo — seguro para texto blanco (AA 5:1) */
+  --brand-emerald: #10c088; /* esmeralda del logo — solo acentos chicos, no fondo de texto */
+
   --shadow-sm:   0 2px 8px rgba(15,17,21,0.07), 0 1px 2px rgba(15,17,21,0.05);
   --shadow-md:   0 16px 40px rgba(15,17,21,0.12);
   --shadow-lg:   0 32px 80px rgba(15,17,21,0.20);
-  --brand-gradient: linear-gradient(135deg, #1a2744 0%, #3b52a0 100%);
+  /* Gradiente de marca = degradado del logo (navy → teal esmeralda) */
+  --brand-gradient: linear-gradient(135deg, #14233f 0%, #0f766e 55%, #10c088 100%);
 }
 :root[data-theme="dark"] {
-  --primary:     #3b52a0;
-  --primary-50:  #1c2140;
-  --brand-gradient: linear-gradient(135deg, #2a3a6e 0%, #4d65b8 100%);
+  --primary:     #2b8f80;   /* teal claro para navy oscuro */
+  --primary-50:  #14231f;
+  --brand-teal:    #14b8a6;
+  --brand-emerald: #2fe0a6;
+  --brand-gradient: linear-gradient(135deg, #16324f 0%, #0f766e 55%, #17c391 100%);
 }
 
 /* ── Brand mark: real logo emblem as <img>, theme-adaptive translucent bg ── */
