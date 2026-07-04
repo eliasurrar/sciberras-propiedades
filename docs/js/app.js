@@ -564,9 +564,14 @@
       : '';
     return `
       <div class="bento-card ${modifier} fade-in" data-id="${escapeAttr(l.id)}">
-        ${img}${badge}${operationBadgeHtml(l)}${videoBadge}${photoHint}
-        <div class="bento-body">
+        ${img}
+        <div class="badge-bar badge-bar--bento">
+          ${badge}
           ${communeBadgeHtml(l)}
+          ${operationBadgeHtml(l)}
+        </div>
+        ${videoBadge}${photoHint}
+        <div class="bento-body">
           <span class="bento-title">${escapeHtml(l.title || 'Sin título')}</span>
           ${amenityHtml(l)}
           ${priceBlockHtml(l, 'bento')}
@@ -609,10 +614,16 @@
     const orientCls = coverOrientation(l) === 'v' ? ' card-image--vertical' : '';
     return `
       <div class="card fade-in" data-id="${escapeAttr(l.id)}">
-        <div class="card-image${orientCls}">${img}${badge}${operationBadgeHtml(l)}${videoBadge}${photoHint}</div>
+        <div class="card-image${orientCls}">${img}
+          <div class="badge-bar badge-bar--card">
+            ${badge}
+            ${communeBadgeHtml(l)}
+            ${operationBadgeHtml(l)}
+          </div>
+          ${videoBadge}${photoHint}
+        </div>
         <div class="card-body">
           ${priceBlockHtml(l, 'card')}
-          ${communeBadgeHtml(l)}
           <span class="card-title">${escapeHtml(l.title || 'Sin título')}</span>
           ${amenityHtml(l)}
           <span class="card-desc">${escapeHtml(l.description || '')}</span>

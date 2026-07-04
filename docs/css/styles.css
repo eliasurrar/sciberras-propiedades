@@ -497,6 +497,50 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
   padding: 5px 10px; border-radius: var(--radius-pill);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
 }
+
+/* ─── Badge bar: tipo · ubicación · operación en una sola línea arriba ───
+   Los badges viven en una fila flex sobre la foto (tipo + comuna a la
+   izquierda, operación empujada a la derecha) en vez de flotar sueltos.
+   Esto elimina el solape entre "CASA" y la comuna en cualquier tarjeta. */
+.badge-bar {
+  position: absolute;
+  top: 14px; left: 14px; right: 14px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  pointer-events: none;            /* el click sigue abriendo la tarjeta */
+}
+.badge-bar > * { pointer-events: auto; flex-shrink: 0; }
+.badge-bar .operation-badge { margin-left: auto; }
+/* Los badges dentro de la barra dejan de ser absolutos y fluyen en la fila */
+.badge-bar .bento-badge,
+.badge-bar .badge,
+.badge-bar .operation-badge,
+.badge-bar .commune-badge {
+  position: static;
+  top: auto; left: auto; right: auto; bottom: auto;
+  margin: 0;
+  align-self: center;
+}
+/* Comuna legible sobre la foto en cualquier tarjeta (glass blanco) */
+.badge-bar .commune-badge {
+  background: rgba(255, 255, 255, 0.92);
+  color: #11141a;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-xs);
+  min-width: 0;
+}
+.badge-bar .commune-badge span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .badge-bar { gap: 6px; }
+}
 .bento-title {
   font-family: var(--font-display);
   font-weight: 500;
