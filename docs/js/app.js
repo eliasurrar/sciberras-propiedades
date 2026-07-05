@@ -3,6 +3,10 @@
 
   const WHATSAPP_PHONE = '56954901879';
   const TYPE_LABEL = { casa: 'Casa', departamento: 'Departamento', terreno: 'Terreno' };
+  // Etiqueta compacta para el badge sobre la foto (bento/card): "Departamento"
+  // es demasiado largo y desborda la barra de badges en tarjetas angostas.
+  // El detalle sigue usando TYPE_LABEL (nombre completo).
+  const TYPE_LABEL_SHORT = { casa: 'Casa', departamento: 'Dpto', terreno: 'Terreno' };
   const TITLES = {
     inicio:         'Todas las propiedades',
     casas:          'Casas en venta',
@@ -554,7 +558,7 @@
     const img = cover
       ? `<img class="bento-img" src="${escapeAttr(cover)}" alt="${escapeAttr(l.title || '')}" ${imgAttrs}>`
       : `<div class="bento-img-fallback" aria-hidden="true"></div>`;
-    const badge = `<span class="bento-badge">${TYPE_LABEL[l.type] || l.type}</span>`;
+    const badge = `<span class="bento-badge">${TYPE_LABEL_SHORT[l.type] || TYPE_LABEL[l.type] || l.type}</span>`;
     const vidCount = listingVideos(l).length;
     const videoBadge = vidCount > 0
       ? `<span class="media-video-badge" aria-label="${vidCount} video${vidCount > 1 ? 's' : ''}">▶ ${vidCount > 1 ? vidCount + ' videos' : 'Video'}</span>`
@@ -570,7 +574,7 @@
           ${communeBadgeHtml(l)}
           ${operationBadgeHtml(l)}
         </div>
-        ${videoBadge}${photoHint}
+        <div class="bento-media">${videoBadge}${photoHint}</div>
         <div class="bento-body">
           <span class="bento-title">${escapeHtml(l.title || 'Sin título')}</span>
           ${amenityHtml(l)}
