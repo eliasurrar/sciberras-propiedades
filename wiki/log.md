@@ -169,3 +169,39 @@ confirmados con visión: cero naranjo/terracota en todo el sitio.
 
 **Reversión:** backup `docs/css/styles.css.bak.pre-navy` (borrado tras QA);
 `git revert` del commit para volver a la terracota si Elias lo prefiere.
+
+### [2026-07-04] Fix bento cards: badge "Dpto" + solape media↔precio
+
+Elias reportó (screenshot con marcas rojas) 2 bugs en "Últimas publicaciones"
+(solo las bento cards del home; el catálogo normal no los tenía):
+
+**1. Badge de tipo largo desbordaba la barra.** En la card angosta del
+departamento, `Departamento + Quillota + ARRIENDO` no cabían en la fila
+`.badge-bar` → la operación se cortaba ("ARRIEN…") y quedaba tapada por el
+chip de video. Fix doble:
+- `TYPE_LABEL_SHORT` (`departamento → Dpto`) usado SOLO en el badge sobre la
+  foto de bento (`bentoHtml`). El detalle y el resto siguen con nombre completo.
+- Red de seguridad CSS: `.badge-bar .commune-badge { flex-shrink: 1 }` — la
+  comuna es lo único que puede encogerse con elipsis (ya la tenía) cuando aun
+  así no cupieran los 3; antes `.badge-bar > *{flex-shrink:0}` lo impedía y
+  empujaba la operación fuera. Así la operación NUNCA se corta.
+
+**2. "▶ Video" / "▶ 6 videos" se solapaba con "≈ UF …".** En bento el cuerpo
+(título+precio) se pinta SOBRE la foto, pinado abajo-izquierda; el chip de
+video también estaba abajo-izquierda → solape. NO pasaba en `.card` normales
+(cuerpo debajo de la foto). Fix: nuevo contenedor `.bento-media` (abajo-derecha,
+`z-index:3`) que agrupa video + contador de fotos juntos, lejos del precio.
+Los `.card` normales no se tocaron (su HTML dejó los chips como estaban).
+
+**Archivos:** `docs/js/app.js` (TYPE_LABEL_SHORT, badge bento, wrapper
+`.bento-media`), `docs/css/styles.css` (`.bento-media` + `flex-shrink:1` en
+commune), `docs/index.html` (cache-bust css v28→29, app.js v21→22).
+
+**Verificación:** Playwright, geometría medida en 390px + 1280px sobre las 3
+cards reales: operación 0 overflow, 0 solape op↔comuna, 0 solape video↔precio;
+badge del depto = "Dpto". Screenshot + visión confirman "DPTO · Quillota ·
+ARRIENDO" completo y los chips de media abajo-derecha separados del precio.
+
+**Nota:** el bug #3 del reporte (link `#prop/<id>` de WhatsApp no abría la
+publicación) Elias confirmó que SÍ funciona — no requirió cambio. El routing
+ya lo maneja `init()`/`hashchange` → `parsePropFromHash()` → `openDetail()`.

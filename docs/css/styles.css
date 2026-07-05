@@ -556,6 +556,11 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
           backdrop-filter: blur(8px);
   box-shadow: var(--shadow-xs);
   min-width: 0;
+  /* La comuna es lo único que puede encogerse (con elipsis) cuando tipo +
+     comuna + operación no caben en la fila. Sin esto, `.badge-bar > *`
+     (flex-shrink:0) impedía encoger y la operación se salía/cortaba
+     (ej. "ARRIEN…" en una card angosta con "Departamento"). */
+  flex-shrink: 1;
 }
 .badge-bar .commune-badge svg { color: #11141a; }
 .badge-bar .commune-badge span {
@@ -1583,6 +1588,29 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   bottom: 12px;
   top: auto;
   right: 12px;
+}
+
+/* ─── Bento media cluster: video + fotos juntos abajo-derecha ───────────
+   En las bento cards el cuerpo (título + precio) se pinta SOBRE la foto,
+   pinado abajo-izquierda. Antes el "▶ Video" flotaba abajo-izquierda y se
+   solapaba con el "≈ UF …". Ahora ambos indicadores viven en un clúster
+   abajo-derecha, lejos del precio. Solo aplica a bento (las .card normales
+   tienen el cuerpo debajo de la foto, sin solape). */
+.bento-media {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+.bento-media:empty { display: none; }
+.bento-media .media-video-badge,
+.bento-media .bento-photos {
+  position: static;
+  top: auto; right: auto; bottom: auto; left: auto;
 }
 
 /* ─── Operation badge (VENTA/ARRIENDO) — top-right twin of the type badge ── */
