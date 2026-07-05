@@ -24,16 +24,17 @@
   --primary-500:  #3b82f6;
   --primary-50:   #eff6ff;
 
-  /* Editorial accent */
-  --accent:       #b46a3a;       /* terracotta bronze */
-  --accent-soft:  #f4e9d9;
+  /* Brand accent — navy del logo (reemplaza la terracota) */
+  --accent:        #16335c;      /* navy del logo · texto/íconos/acentos */
+  --accent-strong: #16335c;      /* navy de relleno (tags/badges con texto blanco) */
+  --accent-soft:   #e6edf5;      /* tinte navy muy claro para chips */
 
   /* Header surface (theme-aware) */
   --header-bg:    rgba(250, 248, 243, 0.82);
   --header-border:rgba(236, 231, 217, 0.7);
 
   /* Hero gradient stops */
-  --hero-stop-a:  rgba(180, 106, 58, 0.12);
+  --hero-stop-a:  rgba(22, 51, 92, 0.12);
   --hero-stop-b:  rgba(30, 64, 175, 0.06);
 
   /* Skeleton */
@@ -80,13 +81,14 @@
   --on-dark-soft:  #c4c1b6;
   --ink-on:        #0f1115;
 
-  --accent:        #d4885a;
-  --accent-soft:   #2a1f17;
+  --accent:        #7aa2d6;      /* navy claro legible sobre superficies oscuras */
+  --accent-strong: #274d7d;      /* navy de relleno con texto blanco en dark */
+  --accent-soft:   #16273f;
 
   --header-bg:     rgba(15, 17, 21, 0.78);
   --header-border: rgba(38, 42, 54, 0.7);
 
-  --hero-stop-a:   rgba(212, 136, 90, 0.16);
+  --hero-stop-a:   rgba(122, 162, 214, 0.16);
   --hero-stop-b:   rgba(59, 130, 246, 0.10);
 
   --skeleton-base: #1c1f29;
@@ -478,8 +480,8 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 .bento-card .bento-img-fallback {
   position: absolute; inset: 0;
   background:
-    radial-gradient(circle at 30% 30%, rgba(180,106,58,0.35), transparent 60%),
-    linear-gradient(135deg, #2a2f38, #14171c);
+    radial-gradient(circle at 30% 30%, rgba(22,51,92,0.42), transparent 60%),
+    linear-gradient(135deg, #22304a, #14171c);
   z-index: 0;
 }
 .bento-body {
@@ -543,7 +545,7 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 .badge-bar .operation-badge,
 .badge-bar .operation-badge--venta,
 .badge-bar .operation-badge--arriendo {
-  background: rgba(180, 106, 58, 0.94);
+  background: var(--accent-strong);
   color: #fff;
 }
 /* Comuna legible sobre la foto en cualquier tarjeta (glass blanco) */
@@ -772,8 +774,8 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   position: relative;
   aspect-ratio: 4 / 3;            /* default: horizontal listing */
   background:
-    radial-gradient(circle at 30% 30%, rgba(180,106,58,0.18), transparent 60%),
-    linear-gradient(135deg, var(--surface-alt), #e6dec9);
+    radial-gradient(circle at 30% 30%, rgba(22,51,92,0.16), transparent 60%),
+    linear-gradient(135deg, var(--surface-alt), #dfe6ef);
   overflow: hidden;
 }
 .card-image--vertical { aspect-ratio: 3 / 4; }
@@ -798,7 +800,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 }
 .badge-casa         { background: rgba(255, 255, 255, 0.92); color: #11141a; }
 .badge-departamento { background: rgba(17, 20, 26, 0.92); color: #f5f0e1; }
-.badge-terreno      { background: rgba(180, 106, 58, 0.92); color: #fff; }
+.badge-terreno      { background: var(--accent-strong); color: #fff; }
 
 .card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .card-price {
@@ -1346,7 +1348,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #fff;
   padding: 3px 9px;
   border-radius: var(--radius-pill);
@@ -1363,7 +1365,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 
 /* Listing card with active offer — show a corner ribbon-ish accent */
 .card:has(.price-block.has-offer) {
-  border-color: rgba(180, 106, 58, 0.35);
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
 }
 
 /* ─── Card / Bento as div (was button) — keep cursor + focus ─────────── */
@@ -1490,7 +1492,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   font-weight: 600;
 }
 .bento-card .amenity svg {
-  color: #f4d4b8;
+  color: #bcd4f0;
 }
 .bento-card .amenity span {
   color: #fff;
@@ -1601,7 +1603,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   z-index: 2;
 }
 .operation-badge--arriendo {
-  background: rgba(180, 106, 58, 0.94);
+  background: var(--accent-strong);
   color: #fff;
 }
 .card-image .operation-badge {
@@ -1677,7 +1679,7 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   box-shadow: var(--shadow-xs);
 }
 .operation-toggle button[data-op="arriendo"].is-active {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #fff;
 }
 
@@ -1749,9 +1751,9 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 /* ── Hero: richer gradient, tighter on desktop ── */
 .hero {
   background:
-    radial-gradient(1000px 700px at 10% -5%, rgba(180,106,58,0.14), transparent 55%),
-    radial-gradient(600px 400px at 92% 5%,  rgba(26,39,68,0.10),   transparent 55%),
-    radial-gradient(400px 400px at 50% 100%, rgba(180,106,58,0.06), transparent 70%),
+    radial-gradient(1000px 700px at 10% -5%, rgba(22,51,92,0.14),   transparent 55%),
+    radial-gradient(600px 400px at 92% 5%,  rgba(26,39,68,0.10),    transparent 55%),
+    radial-gradient(400px 400px at 50% 100%, rgba(15,118,110,0.06), transparent 70%),
     var(--bg);
 }
 
@@ -1964,9 +1966,9 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 
 /* ── Operation toggle: Arriendo badge ── */
 .operation-toggle button[data-op="arriendo"].is-active {
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #fff;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-strong) 35%, transparent);
 }
 
 /* ── Gallery stage image: clickable hint for lightbox ── */
