@@ -78,6 +78,8 @@
     parkingCheck:    document.getElementById('filterParking'),
     furnishedCheck:  document.getElementById('filterFurnished'),
     filterReset:     document.getElementById('filterReset'),
+    searchAdvanced:  document.getElementById('searchAdvanced'),
+    searchAdvancedBadge: document.getElementById('searchAdvancedBadge'),
     detail:          document.getElementById('detail'),
     detailGallery:   null,
     detailStage:     document.getElementById('detailStage'),
@@ -136,11 +138,12 @@
     if (currency === 'USD') {
       return `US$ ${Math.round(num).toLocaleString('es-CL')}`;
     }
-    // UF: keep one decimal if not integer
-    const opts = Number.isInteger(num)
-      ? { maximumFractionDigits: 0 }
-      : { minimumFractionDigits: 1, maximumFractionDigits: 2 };
-    return `UF ${num.toLocaleString('es-CL', opts)}`;
+    // UF: sin decimales, separador de miles. Cualquier resto fraccionario
+    // (por chico que sea, no solo ≥.5) sube a la unidad entera siguiente.
+    // -1e-9 evita que errores de coma flotante (p.ej. 8500.0000000001 al
+    // convertir CLP→UF) disparen un ceil falso sobre un valor ya entero.
+    const uf = Math.ceil(num - 1e-9);
+    return `UF ${uf.toLocaleString('es-CL', { maximumFractionDigits: 0 })}`;
   }
 
   function convert(amount, fromCcy, toCcy) {
@@ -434,6 +437,31 @@
     if (els.poolCheck)       els.poolCheck.checked      = state.poolOnly;
     if (els.parkingCheck)    els.parkingCheck.checked   = state.parkingOnly;
     if (els.furnishedCheck)  els.furnishedCheck.checked = state.furnishedOnly;
+    syncSearchAdvancedUi(true);
+  }
+
+  /** Cuenta cuántos filtros "avanzados" (dentro del <details> colapsable)
+   *  están activos, y refleja eso en el badge del toggle.
+   *  autoOpen=true (usado al cargar la página / URL compartida / back-forward)
+   *  además abre el panel si hay filtros activos, para que no queden
+   *  invisibles. Al enviar el form manualmente no forzamos apertura: el
+   *  usuario decide si quiere el panel abierto o colapsado. */
+  function syncSearchAdvancedUi(autoOpen) {
+    if (!els.searchAdvanced) return;
+    const count = [
+      state.bedroomsMin != null,
+      state.bathroomsMin != null,
+      state.priceMin != null,
+      state.priceMax != null,
+      state.poolOnly,
+      state.parkingOnly,
+      state.furnishedOnly,
+    ].filter(Boolean).length;
+    if (els.searchAdvancedBadge) {
+      els.searchAdvancedBadge.hidden = count === 0;
+      els.searchAdvancedBadge.textContent = String(count);
+    }
+    if (autoOpen && count > 0) els.searchAdvanced.open = true;
   }
 
   function populateCommuneOptions() {
@@ -958,6 +986,7 @@
       state.poolOnly        = !!els.poolCheck?.checked;
       state.parkingOnly     = !!els.parkingCheck?.checked;
       state.furnishedOnly   = !!els.furnishedCheck?.checked;
+      syncSearchAdvancedUi(false);
     }
 
     els.searchForm.addEventListener('submit', e => {
