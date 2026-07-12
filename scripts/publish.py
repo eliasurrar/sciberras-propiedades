@@ -379,6 +379,11 @@ def main() -> None:
     ap.add_argument("--region",       default=None, choices=sorted(VALID_REGIONS))
     ap.add_argument("--pool",         action="store_true", help="Tiene piscina")
     ap.add_argument("--furnished",    action="store_true", help="Amoblado")
+    ap.add_argument("--status",       default="active", choices=["active", "inactive"],
+                    help="Estado de publicación (default: active). 'inactive' sube "
+                         "fotos/videos y crea el listing en listings.json pero lo "
+                         "oculta del catálogo/destacadas/búsqueda y del sitemap/prop "
+                         "hasta que se active con activate.py.")
     ap.add_argument("--no-push",      action="store_true",
                     help="Skip git commit/push (use for dry-runs)")
     args = ap.parse_args()
@@ -466,11 +471,13 @@ def main() -> None:
     if args.furnished:               listing["furnished"]     = True
     if args.commune:                 listing["commune"]       = args.commune.strip()
     if args.region:                  listing["region"]        = args.region
+    if args.status == "inactive":    listing["status"]        = "inactive"
     payload.setdefault("listings", []).insert(0, listing)
     refresh_uf_rate(payload)
     save_listings(payload)
     n_video_msg = f", {len(video_rel_paths)} video/s" if video_rel_paths else ""
-    log(f"added {listing_id}: {args.title} ({len(image_rel_paths)} foto/s{n_video_msg})")
+    status_msg = " [INACTIVE]" if args.status == "inactive" else ""
+    log(f"added {listing_id}: {args.title} ({len(image_rel_paths)} foto/s{n_video_msg}){status_msg}")
 
     # SEO: regenera sitemap.xml + páginas estáticas por listing
     sys.path.insert(0, str(Path(__file__).parent))

@@ -1,8 +1,613 @@
 {
-  "updated_at": "2026-05-07T08:39:12-04:00",
-  "uf_clp_rate": 40213.45,
-  "uf_rate_updated_at": "2026-05-07T04:00:00.000Z",
+  "updated_at": "2026-07-12T15:18:43-04:00",
+  "uf_clp_rate": 40844.79,
+  "uf_rate_updated_at": "2026-07-12T04:00:00.000Z",
   "listings": [
+    {
+      "id": "departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748",
+      "title": "Departamento en venta en Condominio Los Libertadores — 3D/2B con logia",
+      "description": "Departamento en el Condominio Los Libertadores, en primer piso, con living-comedor amplio y muy luminoso. Cuenta con 3 dormitorios, 2 baños completos, cocina con muebles empotrados y una logia independiente para lavado y almacenamiento.\n\nEl condominio ofrece áreas comunes y juegos infantiles, ideal para familias que buscan tranquilidad y buena conectividad. Una opción cómoda y funcional para vivir en el día a día.",
+      "price": 66500000.0,
+      "currency": "CLP",
+      "type": "departamento",
+      "operation": "venta",
+      "images": [
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-1.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-2.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-3.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-4.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-5.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-6.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-7.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-8.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-9.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-10.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-11.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-12.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-13.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-14.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-15.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-16.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-17.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-18.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1350,
+          "orientation": "h"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1350,
+          "orientation": "h"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        }
+      ],
+      "created_at": "2026-07-12T15:18:42-04:00",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "parking": 0,
+      "commune": "Quillota",
+      "region": "valparaiso"
+    },
+    {
+      "id": "casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e",
+      "title": "Casa en venta en Quillota, sector Sendero — 4D/2B con bodega",
+      "description": "Casa en Quillota, sector Sendero, con terminaciones modernas y luminosas: pisos porcelanato, baños revestidos en porcelanato gris con mesón flotante, y cocina amoblada con mesón tipo isla.\n\nCuenta con living, comedor con ampliación, 4 dormitorios y 2 baños completos. Para el almacenamiento y los vehículos, ofrece estacionamiento para 2 autos y bodega. El entorno incluye áreas comunes con quinchos y espacios de esparcimiento.\n\nUna propiedad lista para entrar a vivir, ideal para familias que buscan comodidad y buenas terminaciones en Quillota.",
+      "price": 115000000.0,
+      "currency": "CLP",
+      "type": "casa",
+      "operation": "venta",
+      "images": [
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-1.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-2.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-3.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-4.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-5.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-6.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-7.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-8.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-9.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-10.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-11.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-12.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-13.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-14.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-15.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-16.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-17.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-18.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-19.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-20.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-21.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-22.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-23.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-24.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-25.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-26.jpg",
+        "images/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e-27.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1350,
+          "orientation": "h"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1350,
+          "orientation": "h"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        }
+      ],
+      "created_at": "2026-07-12T15:16:42-04:00",
+      "videos": [
+        "videos/casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e.mp4"
+      ],
+      "video_meta": [
+        {
+          "size_bytes": 12737339,
+          "w": 478,
+          "h": 850,
+          "orientation": "v",
+          "duration_s": 68.4
+        }
+      ],
+      "bedrooms": 4,
+      "bathrooms": 2,
+      "parking": 2,
+      "commune": "Quillota",
+      "region": "valparaiso"
+    },
+    {
+      "id": "casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c",
+      "title": "Casa en venta en Villa Las Américas, La Calera — 4D/2B regularizada",
+      "description": "Casa de dos pisos ubicada en Villa Las Américas, sector Artificio, comuna de La Calera. Terreno de 95 m² con 70 m² construidos, propiedad totalmente regularizada.\n\nEn el primer piso encontrarás living, comedor con ampliación, cocina, 1 baño, un dormitorio, patio mediano y estacionamiento techado para un vehículo. Además cuenta con el arranque listo para instalar un segundo baño en este nivel. En el segundo piso se distribuyen 3 dormitorios adicionales y otro baño completo, totalizando 4 dormitorios y 2 baños.\n\nUna excelente opción para familias que buscan una casa regularizada, con espacio para crecer y ubicación cercana a La Calera. Precio conversable.",
+      "price": 57000000.0,
+      "currency": "CLP",
+      "type": "casa",
+      "operation": "venta",
+      "images": [
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-1.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-2.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-3.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-4.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-5.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-6.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-7.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-8.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-9.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-10.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-11.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-12.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-13.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-14.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-15.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-16.jpg",
+        "images/casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c-17.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1800,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        }
+      ],
+      "created_at": "2026-07-12T15:06:04-04:00",
+      "bedrooms": 4,
+      "bathrooms": 2,
+      "parking": 1,
+      "commune": "La Calera",
+      "region": "valparaiso"
+    },
+    {
+      "id": "casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4",
+      "title": "Casa en venta en El Melón, Nogales — 5D/2B con piscina y gimnasio",
+      "description": "Casa de dos pisos en El Melón, comuna de Nogales, pensada para familias que buscan espacio y comodidad sin salir del pueblo. Al interior destaca un living-comedor ampliado y luminoso, cocina completamente amoblada y una sala de lavado independiente que libera los espacios comunes. Los 5 dormitorios se reparten en ambos niveles, con acceso a balcón desde el segundo piso, y 2 baños completos.\n\nEl gran atractivo está afuera: piscina propia, gimnasio equipado y una terraza techada perfecta para juntarse en familia o con amigos, además de estacionamiento techado para un vehículo.\n\nNota: la propiedad se encuentra actualmente en proceso de regularización — conversemos los detalles antes de agendar tu visita. Precio conversable.",
+      "price": 98000000.0,
+      "currency": "CLP",
+      "type": "casa",
+      "operation": "venta",
+      "images": [
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-1.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-2.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-3.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-4.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-5.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-6.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-7.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-8.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-9.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-10.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-11.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-12.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-13.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-14.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-15.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-16.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-17.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-18.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-19.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-20.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-21.jpg",
+        "images/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4-22.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1350,
+          "orientation": "h"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 1350,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1350,
+          "orientation": "h"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 1348,
+          "h": 2400,
+          "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        },
+        {
+          "w": 2400,
+          "h": 1348,
+          "orientation": "h"
+        }
+      ],
+      "created_at": "2026-07-12T14:58:51-04:00",
+      "videos": [
+        "videos/casa-en-venta-en-el-melon-nogales-5d-2b-con-piscina-y-gimnas-6554f4.mp4"
+      ],
+      "video_meta": [
+        {
+          "size_bytes": 875875,
+          "w": 478,
+          "h": 850,
+          "orientation": "v",
+          "duration_s": 3.9
+        }
+      ],
+      "bedrooms": 5,
+      "bathrooms": 2,
+      "parking": 1,
+      "pool": true,
+      "commune": "Nogales",
+      "region": "valparaiso"
+    },
     {
       "id": "casa-en-arriendo-villa-el-sendero-5002d1",
       "title": "Casa en arriendo · Villa El Sendero",

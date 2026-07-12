@@ -234,17 +234,25 @@ def write_sitemap(listings, updated_at=None):
 
 
 def regenerate_all():
-    """Vuelve a generar páginas por listing + sitemap.xml desde listings.json."""
+    """Vuelve a generar páginas por listing + sitemap.xml desde listings.json.
+
+    Listings con status:"inactive" quedan afuera del sitemap y no reciben
+    stub HTML en docs/prop/<id>/ (write_listing_pages borra huérfanos), así
+    que ni Google/Bing los indexan ni el link directo /prop/<id>/ funciona
+    mientras estén inactivos.
+    """
     with open(DATA, encoding="utf-8") as f:
         data = json.load(f)
     listings = data.get("listings", [])
-    write_listing_pages(listings)
-    write_sitemap(listings, updated_at=data.get("updated_at"))
+    public_listings = [l for l in listings if l.get("status") != "inactive"]
+    write_listing_pages(public_listings)
+    write_sitemap(public_listings, updated_at=data.get("updated_at"))
     # Asegura que el keyfile de IndexNow exista (idempotente)
     if not INDEXNOW_KEYFILE.exists():
         INDEXNOW_KEYFILE.write_text(INDEXNOW_KEY + "\n", encoding="utf-8")
     return {
         "listings": len(listings),
+        "public_listings": len(public_listings),
         "sitemap": str(SITEMAP.relative_to(ROOT)),
         "prop_dir": str(PROP_DIR.relative_to(ROOT)),
     }
