@@ -1104,7 +1104,12 @@
     try {
       const res = await fetch(`data/listings.json?t=${Date.now()}`, { cache: 'no-store' });
       const json = await res.json();
-      state.listings = Array.isArray(json.listings) ? json.listings : [];
+      // status:"inactive" listings quedan en el JSON (fotos/videos ya
+      // subidos) pero no deben aparecer en catálogo/destacadas/búsqueda
+      // ni ser accesibles por link directo #prop/<id>.
+      state.listings = Array.isArray(json.listings)
+        ? json.listings.filter(l => l.status !== 'inactive')
+        : [];
       // Cached UF rate as a fallback (publish.py refreshes this on each publish)
       if (typeof json.uf_clp_rate === 'number' && json.uf_clp_rate > 0) {
         state.ufRate = json.uf_clp_rate;

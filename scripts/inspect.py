@@ -44,7 +44,8 @@ print("-" * 80)
 for l in listings:
     imgs = listing_images(l)
     img_summary = f"{len(imgs)} foto/s" if imgs else "—"
-    print(f"[{l['type']:<13}] {l.get('currency','?')} {l.get('price',0):>8} · {l['title']}")
+    status_tag = "  [INACTIVE]" if l.get("status") == "inactive" else ""
+    print(f"[{l['type']:<13}] {l.get('currency','?')} {l.get('price',0):>8} · {l['title']}{status_tag}")
     offer_line = fmt_offer(l)
     if offer_line:
         print(offer_line)
