@@ -229,10 +229,30 @@ h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
 }
 .brand-mark.small { width: 18px; height: 18px; border-radius: 5px; display: inline-block; vertical-align: middle; }
 .brand-name {
-  font-family: var(--font-display);
-  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.brand-name-main {
+  font-family: var(--font);
+  font-weight: 800;
   font-size: 19px;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  background: var(--brand-gradient, linear-gradient(135deg, #14233f 0%, #0f766e 55%, #10c088 100%));
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.brand-name-sub {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-top: 2px;
 }
 
 .main-nav { display: flex; gap: 2px; }
