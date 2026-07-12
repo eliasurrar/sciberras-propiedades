@@ -44,7 +44,12 @@ def _format_price(amount, currency):
     if amount is None:
         return ""
     if currency == "UF":
-        return f"UF {amount:,.0f}".replace(",", ".")
+        # Sin decimales: cualquier resto fraccionario sube a la unidad
+        # entera siguiente (no es redondeo estándar .5). Igual criterio
+        # que fmtAmount() en docs/js/app.js — mantener sincronizado.
+        import math
+        uf = math.ceil(amount - 1e-9)
+        return f"UF {uf:,.0f}".replace(",", ".")
     if currency in ("USD", "EUR"):
         sym = "US$" if currency == "USD" else "€"
         return f"{sym} {amount:,.0f}".replace(",", ".")

@@ -68,7 +68,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=31">
+<link rel="stylesheet" href="css/styles.css?v=32">
 
 <!-- JSON-LD: RealEstateAgent / LocalBusiness (per-listing schema injected by app.js) -->
 <script type="application/ld+json">
@@ -223,53 +223,65 @@
             </div>
           </div>
 
-          <div class="search-row">
-            <div class="search-field">
-              <label for="filterBedrooms">Dorm.</label>
-              <select id="filterBedrooms">
-                <option value="">Cualquiera</option>
-                <option value="1">1 ó más</option>
-                <option value="2">2 ó más</option>
-                <option value="3">3 ó más</option>
-                <option value="4">4 ó más</option>
-                <option value="5">5 ó más</option>
-              </select>
-            </div>
-            <div class="search-field">
-              <label for="filterBathrooms">Baños</label>
-              <select id="filterBathrooms">
-                <option value="">Cualquiera</option>
-                <option value="1">1 ó más</option>
-                <option value="2">2 ó más</option>
-                <option value="3">3 ó más</option>
-                <option value="4">4 ó más</option>
-                <option value="5">5 ó más</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="search-row">
-            <div class="search-field">
-              <label for="filterPriceMin">Precio mín.</label>
-              <input type="number" id="filterPriceMin" min="0" step="100" placeholder="—">
-            </div>
-            <div class="search-field">
-              <label for="filterPriceMax">Precio máx.</label>
-              <input type="number" id="filterPriceMax" min="0" step="100" placeholder="Sin límite">
-            </div>
-          </div>
-
           <div class="search-field">
             <label for="q">Buscar</label>
             <input type="search" id="q" placeholder="Palabra clave, código, descripción…">
           </div>
 
-          <fieldset class="search-amenities">
-            <legend>Características</legend>
-            <label><input type="checkbox" id="filterPool"> Piscina</label>
-            <label><input type="checkbox" id="filterParking"> Estacionamiento</label>
-            <label><input type="checkbox" id="filterFurnished"> Amoblado</label>
-          </fieldset>
+          <details class="search-advanced" id="searchAdvanced">
+            <summary class="search-advanced-toggle">
+              <span class="search-advanced-toggle-text">Filtros avanzados</span>
+              <span class="search-advanced-badge" id="searchAdvancedBadge" hidden>0</span>
+              <svg class="search-advanced-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </summary>
+
+            <div class="search-advanced-body">
+              <div class="search-row">
+                <div class="search-field">
+                  <label for="filterBedrooms">Dorm.</label>
+                  <select id="filterBedrooms">
+                    <option value="">Cualquiera</option>
+                    <option value="1">1 ó más</option>
+                    <option value="2">2 ó más</option>
+                    <option value="3">3 ó más</option>
+                    <option value="4">4 ó más</option>
+                    <option value="5">5 ó más</option>
+                  </select>
+                </div>
+                <div class="search-field">
+                  <label for="filterBathrooms">Baños</label>
+                  <select id="filterBathrooms">
+                    <option value="">Cualquiera</option>
+                    <option value="1">1 ó más</option>
+                    <option value="2">2 ó más</option>
+                    <option value="3">3 ó más</option>
+                    <option value="4">4 ó más</option>
+                    <option value="5">5 ó más</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="search-row">
+                <div class="search-field">
+                  <label for="filterPriceMin">Precio mín.</label>
+                  <input type="number" id="filterPriceMin" min="0" step="100" placeholder="—">
+                </div>
+                <div class="search-field">
+                  <label for="filterPriceMax">Precio máx.</label>
+                  <input type="number" id="filterPriceMax" min="0" step="100" placeholder="Sin límite">
+                </div>
+              </div>
+
+              <fieldset class="search-amenities">
+                <legend>Características</legend>
+                <label><input type="checkbox" id="filterPool"> Piscina</label>
+                <label><input type="checkbox" id="filterParking"> Estacionamiento</label>
+                <label><input type="checkbox" id="filterFurnished"> Amoblado</label>
+              </fieldset>
+            </div>
+          </details>
 
           <div class="search-actions">
             <button type="submit" class="btn btn-dark">Filtrar</button>
@@ -389,6 +401,6 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=22"></script>
+<script src="js/app.js?v=23"></script>
 </body>
 </html>
