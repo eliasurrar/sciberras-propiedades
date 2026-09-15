@@ -35,7 +35,7 @@ import sys
 import urllib.request
 from pathlib import Path
 
-ROOT = Path("/Users/openclaw/projects/real-estate")
+ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "docs"
 DATA = SITE / "data" / "listings.json"
 IMAGES = SITE / "images"

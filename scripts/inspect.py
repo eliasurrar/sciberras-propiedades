@@ -2,8 +2,9 @@
 """inspect.py — imprime un listado humano del catálogo actual."""
 import datetime as dt
 import json
+from pathlib import Path
 
-DATA = "/Users/openclaw/projects/real-estate/docs/data/listings.json"
+DATA = Path(__file__).resolve().parents[1] / "docs/data/listings.json"
 
 with open(DATA) as f:
     data = json.load(f)

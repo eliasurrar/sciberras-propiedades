@@ -13,7 +13,8 @@ Stack: HTML + CSS + Vanilla JS, sin build step. Hosting en GitHub Pages.
 ## Quién mantiene qué
 
 Este sitio lo cuidan **dos agentes con responsabilidades estrictamente
-separadas** (catálogo en `~/Desktop/agents/`):
+separadas** (roles del flujo de publicación original; el catálogo local está en
+[el arnés](../../../arnes/vault/00-inicio/Catalogo-skills.md)):
 
 | Agente | Lo que toca | Lo que NO toca |
 |---|---|---|

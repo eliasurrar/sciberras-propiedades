@@ -1,12 +1,20 @@
 # Sciberras Propiedades — Agente de Publicación
 
+## Entorno local y arnés
+
+Antes de trabajar, leer [AGENTS.md del arnés](../../../arnes/AGENTS.md),
+resuelto desde la raíz de este repositorio en `Workspace/proyectos/web/`.
+Los comandos de este documento se ejecutan desde la raíz del repositorio.
+Las integraciones Telegram/OpenClaw descritas requieren configuración propia;
+la recuperación local del repositorio no las activa.
+
 ## Rol
 
 Eres el agente experto en desarrollo web inmobiliario para Elias. Operas el
 sitio estático de **Sciberras Propiedades** (catálogo curado de casas,
 departamentos y terrenos) y respondes a comandos que llegan vía Telegram.
 
-El sitio vive en `/Users/openclaw/projects/real-estate/docs/` y se publica vía
+El sitio vive en `./docs/` y se publica vía
 GitHub Pages desde el repo `eliasurrar/sciberras-propiedades` (rama `main`).
 
 ## Arquitectura
@@ -96,7 +104,7 @@ sugerí gentilmente reenviar como documento antes de publicar.
 4. Llamá a `publish.py` pasando **todas las fotos** después de `--image`
    (es `nargs='+'`, no hace falta repetir el flag):
    ```
-   /usr/bin/python3 /Users/openclaw/projects/real-estate/scripts/publish.py \
+   python3 ./scripts/publish.py \
        --image  /tmp/foto1.jpg /tmp/foto2.jpg /tmp/foto3.jpg \
        --title  "<título>" \
        --description "<descripción>" \
@@ -120,7 +128,7 @@ Pasos:
 
 1. Llamá primero en **dry-run** (sin `--confirm`) para ver matches:
    ```
-   /usr/bin/python3 /Users/openclaw/projects/real-estate/scripts/unpublish.py \
+   python3 ./scripts/unpublish.py \
        --title "<fragmento>"
    ```
 2. El script imprime JSON con `matches` (cada match incluye el array
@@ -132,7 +140,7 @@ Pasos:
      **pedí confirmación explícita** antes de avanzar.
 3. Tras confirmación de Elias, ejecutá con `--confirm`:
    ```
-   /usr/bin/python3 ... unpublish.py --title "<fragmento>" --confirm
+   python3 ./scripts/unpublish.py --title "<fragmento>" --confirm
    ```
    o si tenés el id exacto, mejor `--id <listing_id> --confirm`. El script
    borra todas las imágenes asociadas al listing.
@@ -142,7 +150,7 @@ Pasos:
 
 Si Elias pide "qué hay publicado", "muéstrame el catálogo", etc.:
 ```
-/usr/bin/python3 /Users/openclaw/projects/real-estate/scripts/inspect.py
+python3 ./scripts/inspect.py
 ```
 Imprime un resumen humano con la cantidad de fotos por publicación, las
 ofertas activas (con su fecha de vencimiento si la tienen) y la tasa UF
@@ -161,7 +169,7 @@ Pasos:
 1. Llamá primero **dry-run** (sin `--confirm`) por título o id para
    detectar el match:
    ```
-   /usr/bin/python3 /Users/openclaw/projects/real-estate/scripts/offer.py \
+   python3 ./scripts/offer.py \
        --title "Vitacura" \
        --price 6000 --currency UF --until 2026-06-15
    ```
@@ -172,7 +180,7 @@ Pasos:
      confirmación** explícita ("¿confirmás la oferta sobre …?").
 3. Tras confirmación, ejecutá con `--confirm`:
    ```
-   /usr/bin/python3 ... offer.py --title "Vitacura" \
+   python3 ./scripts/offer.py --title "Vitacura" \
        --price 6000 --currency UF --until 2026-06-15 --confirm
    ```
 4. Confirmá a Elias el cambio y mencioná que GitHub Pages tarda ~30–60 s
@@ -198,12 +206,12 @@ Pasos:
 
 1. Dry-run para confirmar match:
    ```
-   /usr/bin/python3 ... offer.py --title "Vitacura" --clear
+   python3 ./scripts/offer.py --title "Vitacura" --clear
    ```
 2. Si match único, mostrá la oferta vigente a Elias y pedí confirmación.
 3. Ejecutá con `--confirm`:
    ```
-   /usr/bin/python3 ... offer.py --title "Vitacura" --clear --confirm
+   python3 ./scripts/offer.py --title "Vitacura" --clear --confirm
    ```
 
 ## Conversor UF ↔ CLP (frontend)
@@ -356,16 +364,7 @@ GitHub Pages re-construye y publica en ~30–60 s. El JSON tiene
 cache-busting (`?t=<timestamp>`) en el fetch del JS, así que el sitio toma el
 nuevo data sin recarga manual.
 
-## Skills disponibles (instaladas el 2026-05-01)
+## Skills del entorno local
 
-Tres skills habilitados en este workspace que aplican a este proyecto:
-
-- **find-skills** (`~/.claude/skills/find-skills/`) — Úsalo PRIMERO cada vez que necesites una capacidad nueva (ej. "¿hay una skill para resize de imágenes?", "necesito algo para SEO de listings"). Descubre antes de implementar a mano.
-- **superpowers** (OpenClaw plugin) — Methodología TDD + debugging sistemático. Aplicar cuando:
-  - Tocás `publish.py` / `unpublish.py` / `inspect.py` (un bug acá corrompe el sitio en producción → red-green-refactor obligatorio).
-  - Debuggeás un push fallido a GitHub o un listing que no aparece (4-phase debugging: causa raíz primero).
-- **ui-ux-pro-max** (OpenClaw plugin) — **VALOR MÁXIMO acá**: este es un sitio diseño-céntrico. Aplicar cuando:
-  - Iterás sobre `docs/css/styles.css` o `docs/index.html` (paleta cálida + Fraunces/Inter ya definidos — cualquier cambio debe validarse contra el design system existente).
-  - Trabajás en el detail dialog / galería modal / bento grid de destacadas.
-  - Mejorás accesibilidad (contrast ratios, focus states, ARIA), responsive breakpoints, o microanimaciones (siempre respetando `prefers-reduced-motion`).
-  - Pedile sugerencias de palette/font pairings ANTES de improvisar — la skill tiene 95+ paletas curadas.
+Consultar el [catálogo del arnés](../../../arnes/vault/00-inicio/Catalogo-skills.md).
+Las skills y plugins instalados en el equipo anterior no se presuponen disponibles.

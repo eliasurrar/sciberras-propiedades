@@ -20,7 +20,7 @@ import subprocess
 import sys
 import unicodedata
 
-ROOT = "/Users/openclaw/projects/real-estate"
+ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 SITE = os.path.join(ROOT, "docs")
 DATA_FILE = os.path.join(SITE, "data", "listings.json")
 LOG = os.path.join(ROOT, "logs", "unpublish.log")
