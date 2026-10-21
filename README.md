@@ -1,10 +1,10 @@
 # Sciberras Propiedades
 
 Sitio estático del catálogo inmobiliario de Sciberras Propiedades, alimentado
-desde Telegram via un agente OpenClaw/Claude.
+desde Telegram via un agente /Claude.
 
 - **Sitio en vivo:** https://sciberraspropiedades.cl/
-- **Spec del agente:** [`AGENTS.md`](./AGENTS.md)
+- **Spec del agente:** [`AGENTE-PUBLICACION.md`](./AGENTE-PUBLICACION.md)
 - **Scripts:** `scripts/publish.py`, `scripts/unpublish.py`, `scripts/inspect.py`, `scripts/offer.py`
 - **Fuente de datos:** `docs/data/listings.json`
 
