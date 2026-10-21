@@ -2125,3 +2125,86 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
   background: transparent;
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ESTADO DEL AVISO — RESERVADA / VENDIDA / ARRENDADA (bot de Grace, U1)
+   Solo variables de marca ya existentes (sin colores nuevos). Contraste
+   texto/fondo ≥ 4,5:1 en claro y oscuro (lo verifica tests/site/contrast.test.js).
+     reserved → teal de marca   (--primary-500, texto blanco)
+     sold     → navy del logo   (--accent-strong, texto blanco)
+     rented   → tinta profunda  (--surface-deep, texto --on-dark)
+   El anillo interior distingue estos badges del de operación (también navy).
+   ═══════════════════════════════════════════════════════════════════════ */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, #fff 38%, transparent);
+}
+.status-badge[hidden] { display: none; }
+.status-badge--reserved { background: var(--primary-500);   color: #fff; }
+.status-badge--sold     { background: var(--accent-strong); color: #fff; }
+.status-badge--rented   { background: var(--surface-deep);  color: var(--on-dark); }
+
+/* En la barra de badges fluye en la fila, junto al tipo. Si con estado no cabe
+   todo en una línea (tarjetas angostas), la barra pasa a dos líneas en vez de
+   aplastar la comuna. */
+.badge-bar .status-badge {
+  position: static;
+  margin: 0;
+  align-self: center;
+}
+.card-image .status-badge,
+.bento-card .status-badge { font-size: 10px; padding: 4px 9px; }
+.badge-bar:has(.status-badge) { flex-wrap: wrap; row-gap: 6px; }
+
+/* Tarjetas vendidas/arrendadas: portada atenuada; siguen siendo enlaces. */
+.card--closed .card-image img {
+  filter: grayscale(0.35) brightness(0.94);
+}
+
+/* Detalle: el badge de estado va junto al de tipo. */
+.detail-body .status-badge {
+  margin: 0 0 14px 6px;
+  padding: 5px 11px;
+  font-size: 11px;
+  vertical-align: top;
+}
+.detail-expenses {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 500;
+}
+.detail-expenses[hidden] { display: none; }
+
+/* Aviso de "propiedad no encontrada" (#prop/<id> inexistente u oculto). */
+.prop-not-found {
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+}
+.prop-not-found[hidden] { display: none; }
+.prop-not-found-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 20px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.prop-not-found p { margin: 0; font-weight: 500; }
+.prop-not-found-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+.prop-not-found-link:hover { text-decoration: underline; }

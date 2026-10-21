@@ -68,7 +68,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=32">
+<link rel="stylesheet" href="css/styles.css?v=35738e8add">
 
 <!-- JSON-LD: RealEstateAgent / LocalBusiness (per-listing schema injected by app.js) -->
 <script type="application/ld+json">
@@ -159,6 +159,13 @@
 </header>
 
 <main>
+  <div class="prop-not-found" id="propNotFound" role="alert" hidden>
+    <div class="container prop-not-found-inner">
+      <p>Esa propiedad no está disponible o ya no existe.</p>
+      <a href="#catalog" class="prop-not-found-link">Ver el catálogo →</a>
+    </div>
+  </div>
+
   <section class="hero" id="inicio-hero">
     <div class="container hero-inner">
       <div class="hero-text">
@@ -238,6 +245,16 @@
             </summary>
 
             <div class="search-advanced-body">
+              <div class="search-field search-field-status">
+                <label for="filterStatus">Estado</label>
+                <select id="filterStatus">
+                  <option value="">Todas</option>
+                  <option value="disponible">Disponibles</option>
+                  <option value="reservada">Reservadas</option>
+                  <option value="cerrada">Vendidas / Arrendadas</option>
+                </select>
+              </div>
+
               <div class="search-row">
                 <div class="search-field">
                   <label for="filterBedrooms">Dorm.</label>
@@ -363,8 +380,10 @@
     </div>
     <div class="detail-body">
       <span class="badge" id="detailBadge"></span>
+      <span class="status-badge" id="detailStatus" hidden></span>
       <h2 id="detailTitle"></h2>
       <div class="detail-price" id="detailPrice"></div>
+      <p class="detail-expenses" id="detailExpenses" hidden></p>
       <p class="detail-description" id="detailDescription"></p>
       <p class="detail-meta" id="detailMeta"></p>
       <div class="detail-actions">
@@ -401,6 +420,7 @@
   </div>
 </footer>
 
-<script src="js/app.js?v=23"></script>
+<script src="js/rules.js?v=b87f964bcf"></script>
+<script src="js/app.js?v=8d280aafb4"></script>
 </body>
 </html>

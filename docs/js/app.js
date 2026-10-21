@@ -24,6 +24,17 @@
   const UF_API = 'https://mindicador.cl/api/uf';
   const UF_FETCH_TIMEOUT_MS = 4000;
 
+  // Reglas de visibilidad/estado (docs/js/rules.js, espejo de scripts/listing_rules.py).
+  // Si rules.js no cargó, loadListings falla y el catálogo queda vacío (falla cerrada).
+  const Rules = window.SciberrasRules;
+  // aria-label completo de cada badge de estado (el texto visible es solo la etiqueta corta).
+  const STATUS_ARIA = { reserved: 'Propiedad reservada', sold: 'Propiedad vendida', rented: 'Propiedad arrendada' };
+  const AVAILABILITY = {
+    reserved: 'https://schema.org/LimitedAvailability',
+    sold:     'https://schema.org/SoldOut',
+    rented:   'https://schema.org/SoldOut',
+  };
+
   const state = {
     listings:        [],
     route:           'inicio',
@@ -39,6 +50,7 @@
     poolOnly:        false,
     parkingOnly:     false,
     furnishedOnly:   false,
+    statusFilter:    '',
     galleryItems:    [],
     galleryIndex:    0,
     displayCurrency: 'CLP',
@@ -77,6 +89,8 @@
     poolCheck:       document.getElementById('filterPool'),
     parkingCheck:    document.getElementById('filterParking'),
     furnishedCheck:  document.getElementById('filterFurnished'),
+    statusSelect:    document.getElementById('filterStatus'),
+    propNotFound:    document.getElementById('propNotFound'),
     filterReset:     document.getElementById('filterReset'),
     searchAdvanced:  document.getElementById('searchAdvanced'),
     searchAdvancedBadge: document.getElementById('searchAdvancedBadge'),
@@ -84,6 +98,8 @@
     detailGallery:   null,
     detailStage:     document.getElementById('detailStage'),
     detailBadge:     document.getElementById('detailBadge'),
+    detailStatus:    document.getElementById('detailStatus'),
+    detailExpenses:  document.getElementById('detailExpenses'),
     detailTitle:     document.getElementById('detailTitle'),
     detailPrice:     document.getElementById('detailPrice'),
     detailDesc:      document.getElementById('detailDescription'),
@@ -112,9 +128,16 @@
   function listingVideos(l) {
     return Array.isArray(l.videos) ? l.videos : [];
   }
+  function videoPoster(l, idx) {
+    const meta = Array.isArray(l.video_meta) ? l.video_meta[idx] : null;
+    return (meta && typeof meta.poster === 'string' && meta.poster) ? meta.poster : '';
+  }
   function listingMedia(l) {
     const imgs = listingImages(l).map(src => ({ kind: 'image', src }));
-    const vids = listingVideos(l).map(src => ({ kind: 'video', src }));
+    const vids = listingVideos(l).map((src, i) => {
+      const poster = videoPoster(l, i);
+      return poster ? { kind: 'video', src, poster } : { kind: 'video', src };
+    });
     return imgs.concat(vids);
   }
   function listingCover(l) {
@@ -197,6 +220,8 @@
   function activeOffer(l) {
     const o = l && l.offer;
     if (!o || o.price == null) return null;
+    // Vendida/arrendada: la oferta ya no aplica (se conserva en el JSON, no se muestra).
+    if (Rules.isClosed(l)) return null;
     if (o.until) {
       const until = new Date(o.until);
       if (!Number.isNaN(+until) && +until < Date.now()) return null;
@@ -333,6 +358,28 @@
     return `<span class="operation-badge operation-badge--${op}">${label}</span>`;
   }
 
+  /** Badge RESERVADA / VENDIDA / ARRENDADA ('' para avisos sin estado visible). */
+  function statusBadgeHtml(l) {
+    const s = Rules.rawStatus(l);
+    const label = Rules.badgeLabel(s);
+    if (!label) return '';
+    return `<span class="status-badge status-badge--${s}" aria-label="${STATUS_ARIA[s]}">${label}</span>`;
+  }
+
+  function closedClass(l, base) {
+    return Rules.isClosed(l) ? ` ${base}--closed` : '';
+  }
+
+  /** "Gastos comunes: $85.000 /mes" o '' si el dato falta o no es válido. */
+  function commonExpensesText(l) {
+    const ce = l && l.common_expenses;
+    if (!ce || typeof ce !== 'object') return '';
+    const amount = Number(ce.amount);
+    if (!Number.isFinite(amount) || amount <= 0) return '';
+    if (ce.currency !== 'CLP' && ce.currency !== 'UF' && ce.currency !== 'USD') return '';
+    return `Gastos comunes: ${fmtAmount(amount, ce.currency)} /mes`;
+  }
+
   /* ── Filtering ──────────────────────────────────────────────── */
 
   /**
@@ -366,6 +413,7 @@
     if (state.poolOnly)             items = items.filter(l => !!l.pool);
     if (state.parkingOnly)          items = items.filter(l => l.parking != null && Number(l.parking) > 0);
     if (state.furnishedOnly)        items = items.filter(l => !!l.furnished);
+    if (state.statusFilter)         items = items.filter(l => Rules.matchesStatusFilter(l, state.statusFilter));
     if (state.query) {
       const q = state.query.toLowerCase();
       items = items.filter(l =>
@@ -375,7 +423,11 @@
         (l.id || '').toLowerCase().includes(q)
       );
     }
-    items.sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+    // Disponibles primero, luego reservadas, luego vendidas/arrendadas; dentro de cada
+    // grupo, la más nueva arriba. Sin ningún status el orden es el de siempre.
+    items.sort((a, b) =>
+      (Rules.availabilityGroup(a) - Rules.availabilityGroup(b)) ||
+      (b.created_at || '').localeCompare(a.created_at || ''));
     return items;
   }
 
@@ -395,6 +447,7 @@
     if (state.poolOnly)         p.set('piscina',  '1');
     if (state.parkingOnly)      p.set('parking',  '1');
     if (state.furnishedOnly)    p.set('amoblado', '1');
+    if (state.statusFilter)     p.set('estado',   state.statusFilter);
     return p.toString();
   }
 
@@ -422,6 +475,8 @@
     state.poolOnly        = p.get('piscina')  === '1';
     state.parkingOnly     = p.get('parking')  === '1';
     state.furnishedOnly   = p.get('amoblado') === '1';
+    const estado = p.get('estado');
+    state.statusFilter    = Rules.STATUS_FILTERS.indexOf(estado) !== -1 ? estado : '';
   }
 
   function syncFormFromState() {
@@ -437,6 +492,7 @@
     if (els.poolCheck)       els.poolCheck.checked      = state.poolOnly;
     if (els.parkingCheck)    els.parkingCheck.checked   = state.parkingOnly;
     if (els.furnishedCheck)  els.furnishedCheck.checked = state.furnishedOnly;
+    if (els.statusSelect)    els.statusSelect.value    = state.statusFilter;
     syncSearchAdvancedUi(true);
   }
 
@@ -456,6 +512,7 @@
       state.poolOnly,
       state.parkingOnly,
       state.furnishedOnly,
+      state.statusFilter !== '',
     ].filter(Boolean).length;
     if (els.searchAdvancedBadge) {
       els.searchAdvancedBadge.hidden = count === 0;
@@ -526,7 +583,8 @@
 
   function updateHeroMeta() {
     if (!els.heroCount) return;
-    els.heroCount.textContent = state.listings.length || '0';
+    // "publicaciones activas": solo las disponibles (activas + reservadas), no las cerradas.
+    els.heroCount.textContent = state.listings.filter(l => Rules.availabilityGroup(l) < 2).length || '0';
   }
 
   function updateFooterUf() {
@@ -548,7 +606,7 @@
 
   function renderFeatured() {
     const sorted = state.listings
-      .slice()
+      .filter(l => Rules.availabilityGroup(l) < 2) // destacadas: solo activas y reservadas
       .sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
     const items = sorted.slice(0, FEATURED_COUNT);
 
@@ -595,10 +653,10 @@
       ? `<span class="bento-photos" aria-label="${imgs.length} fotos">◫ ${imgs.length}</span>`
       : '';
     return `
-      <div class="bento-card ${modifier} fade-in" data-id="${escapeAttr(l.id)}">
+      <div class="bento-card ${modifier}${closedClass(l, 'bento-card')} fade-in" data-id="${escapeAttr(l.id)}">
         ${img}
         <div class="badge-bar badge-bar--bento">
-          ${badge}
+          ${badge}${statusBadgeHtml(l)}
           ${communeBadgeHtml(l)}
           ${operationBadgeHtml(l)}
         </div>
@@ -645,10 +703,10 @@
       : '';
     const orientCls = coverOrientation(l) === 'v' ? ' card-image--vertical' : '';
     return `
-      <div class="card fade-in" data-id="${escapeAttr(l.id)}">
+      <div class="card${closedClass(l, 'card')} fade-in" data-id="${escapeAttr(l.id)}">
         <div class="card-image${orientCls}">${img}
           <div class="badge-bar badge-bar--card">
-            ${badge}
+            ${badge}${statusBadgeHtml(l)}
             ${communeBadgeHtml(l)}
             ${operationBadgeHtml(l)}
           </div>
@@ -700,17 +758,20 @@
 
   /* ── Detail dialog with gallery ─────────────────────────────── */
 
+  /** Abre el detalle de un aviso público. Devuelve false si el id no existe o no es público. */
   function openDetail(id) {
     const l = state.listings.find(x => x.id === id);
-    if (!l) return;
+    if (!l) return false;
     currentListing = l;
     state.galleryItems = listingMedia(l);
     state.galleryIndex = 0;
     setGalleryItem();
     els.detailBadge.className = `badge badge-${l.type}`;
     els.detailBadge.textContent = TYPE_LABEL[l.type] || l.type;
+    renderDetailStatus(l);
     els.detailTitle.textContent = l.title || '';
     els.detailPrice.innerHTML = priceBlockHtml(l, 'detail') + communeBadgeHtml(l) + amenityHtml(l);
+    renderDetailExpenses(l);
     els.detailDesc.textContent  = l.description || '';
     els.detailMeta.textContent  = `Publicada el ${fmtDate(l.created_at)} · ID ${l.id}`;
     if (els.detailWhatsapp) els.detailWhatsapp.href = buildWhatsappLink(l);
@@ -719,6 +780,55 @@
     document.title = `${l.title || 'Propiedad'} · Sciberras Propiedades`;
     if (typeof els.detail.showModal === 'function') els.detail.showModal();
     else els.detail.setAttribute('open', 'open');
+    return true;
+  }
+
+  function renderDetailStatus(l) {
+    const el = els.detailStatus;
+    if (!el) return;
+    const s = Rules.rawStatus(l);
+    const label = Rules.badgeLabel(s);
+    if (label) {
+      el.className = `status-badge status-badge--${s}`;
+      el.textContent = label;
+      el.setAttribute('aria-label', STATUS_ARIA[s]);
+      el.hidden = false;
+    } else {
+      el.hidden = true;
+      el.className = 'status-badge';
+      el.textContent = '';
+      el.removeAttribute('aria-label');
+    }
+  }
+
+  function renderDetailExpenses(l) {
+    const el = els.detailExpenses;
+    if (!el) return;
+    const text = commonExpensesText(l);
+    el.textContent = text;
+    el.hidden = !text;
+  }
+
+  /** Aviso de "no encontrada" para #prop/<id> que no existe o no es público (no distingue cuál). */
+  function setPropNotFound(show) {
+    if (els.propNotFound) els.propNotFound.hidden = !show;
+  }
+
+  function closeDetail() {
+    pauseStageVideo();
+    if (els.detail.close) els.detail.close();
+    else els.detail.removeAttribute('open');
+    currentListing = null;
+    removeListingSchema();
+  }
+
+  function syncDetailFromHash() {
+    const propId = parsePropFromHash();
+    if (!propId) { setPropNotFound(false); return; }
+    const found = openDetail(propId);
+    // Un detalle abierto de otro aviso no debe quedar a la vista tras navegar a uno inexistente/oculto.
+    if (!found && els.detail.hasAttribute('open')) closeDetail();
+    setPropNotFound(!found);
   }
 
   function refreshDetailPrice() {
@@ -752,7 +862,7 @@
         '@type': 'Offer',
         'price': offerPrice,
         'priceCurrency': offerCurrency === 'UF' ? 'CLF' : (offerCurrency || 'CLP'),
-        'availability': 'https://schema.org/InStock',
+        'availability': AVAILABILITY[Rules.rawStatus(l)] || 'https://schema.org/InStock',
         ...(offer && offer.until ? { 'priceValidUntil': offer.until } : {}),
       },
     };
@@ -824,6 +934,7 @@
         v.controls = true;
         v.playsInline = true;
         v.preload = 'metadata';
+        if (it.poster) v.setAttribute('poster', it.poster);
         v.setAttribute('controlslist', 'nodownload');
         v.setAttribute('aria-label', `Video ${idx + 1} de ${items.length}`);
         stage.appendChild(v);
@@ -859,7 +970,9 @@
     if (multi) {
       thumbs.innerHTML = items.map((it, i) => {
         const cls = `gallery-thumb${i === idx ? ' is-active' : ''}${it.kind === 'video' ? ' is-video' : ''}`;
-        const inner = it.kind === 'video'
+        const inner = it.kind === 'video' && it.poster
+          ? `<video poster="${escapeAttr(it.poster)}" src="${escapeAttr(it.src)}" muted preload="none" playsinline></video><span class="thumb-play" aria-hidden="true">▶</span>`
+          : it.kind === 'video'
           ? `<video src="${escapeAttr(it.src)}#t=0.1" muted preload="metadata" playsinline></video><span class="thumb-play" aria-hidden="true">▶</span>`
           : `<img src="${escapeAttr(it.src)}" alt="" loading="lazy">`;
         const label = it.kind === 'video' ? `Video ${i + 1}` : `Imagen ${i + 1}`;
@@ -965,8 +1078,7 @@
     window.addEventListener('hashchange', () => {
       state.route = parseHash();
       render();
-      const propId = parsePropFromHash();
-      if (propId) openDetail(propId);
+      syncDetailFromHash();
     });
 
     function readFiltersFromForm() {
@@ -986,6 +1098,8 @@
       state.poolOnly        = !!els.poolCheck?.checked;
       state.parkingOnly     = !!els.parkingCheck?.checked;
       state.furnishedOnly   = !!els.furnishedCheck?.checked;
+      const estado = els.statusSelect?.value || '';
+      state.statusFilter    = Rules.STATUS_FILTERS.indexOf(estado) !== -1 ? estado : '';
       syncSearchAdvancedUi(false);
     }
 
@@ -1133,11 +1247,13 @@
     try {
       const res = await fetch(`data/listings.json?t=${Date.now()}`, { cache: 'no-store' });
       const json = await res.json();
-      // status:"inactive" listings quedan en el JSON (fotos/videos ya
-      // subidos) pero no deben aparecer en catálogo/destacadas/búsqueda
-      // ni ser accesibles por link directo #prop/<id>.
+      // Los avisos no públicos (inactive, estado desconocido, vendida/arrendada
+      // tras 30 días) quedan en el JSON (fotos/videos ya subidos) pero no deben
+      // aparecer en catálogo/destacadas/búsqueda ni ser accesibles por link
+      // directo #prop/<id>. Regla única: SciberrasRules.isPublic (SPEC §4.3).
+      const nowMs = Date.now();
       state.listings = Array.isArray(json.listings)
-        ? json.listings.filter(l => l.status !== 'inactive')
+        ? json.listings.filter(l => Rules.isPublic(l, nowMs))
         : [];
       // Cached UF rate as a fallback (publish.py refreshes this on each publish)
       if (typeof json.uf_clp_rate === 'number' && json.uf_clp_rate > 0) {
@@ -1177,8 +1293,7 @@
     syncCurrencyToggleUi();
     updateFooterUf();
     render();
-    const propId = parsePropFromHash();
-    if (propId) openDetail(propId);
+    syncDetailFromHash();
 
     // Then try to refresh the UF rate live and re-render if it changed.
     const live = await fetchUfRateLive();
