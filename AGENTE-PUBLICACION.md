@@ -7,7 +7,7 @@
 Antes de trabajar, leer [AGENTS.md del arnés](../../../arnes/AGENTS.md),
 resuelto desde la raíz de este repositorio en `Workspace/proyectos/web/`.
 Los comandos de este documento se ejecutan desde la raíz del repositorio.
-Las integraciones Telegram/ descritas requieren configuración propia;
+Las integraciones Telegram descritas requieren configuración propia;
 la recuperación local del repositorio no las activa.
 
 ## Rol

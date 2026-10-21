@@ -1,7 +1,7 @@
 # Sciberras Propiedades
 
 Sitio estático del catálogo inmobiliario de Sciberras Propiedades, alimentado
-desde Telegram via un agente /Claude.
+desde Telegram via un agente Claude.
 
 - **Sitio en vivo:** https://sciberraspropiedades.cl/
 - **Spec del agente:** [`AGENTE-PUBLICACION.md`](./AGENTE-PUBLICACION.md)
