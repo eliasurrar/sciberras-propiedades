@@ -1,8 +1,170 @@
 {
-  "updated_at": "2026-07-12T15:18:43-04:00",
+  "schema_version": 2,
+  "updated_at": "2026-10-22T18:10:40-03:00",
   "uf_clp_rate": 40844.79,
   "uf_rate_updated_at": "2026-07-12T04:00:00.000Z",
   "listings": [
+    {
+      "id": "departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e",
+      "title": "Departamento en arriendo en Quillota — 3D/1B Con balcón y estacionamiento",
+      "description": "Departamento en arriendo en la comuna de Quillota, pensado para quienes buscan comodidad y funcionalidad en su día a día. Al ingresar, el pasillo conecta de manera ordenada los distintos espacios de la vivienda, favoreciendo la privacidad entre las áreas sociales y las zonas de descanso. El living es el corazón del hogar, un espacio cómodo para recibir visitas, compartir en familia o simplemente descansar después de la jornada. La cocina permite preparar las comidas con practicidad y forma parte de la rutina diaria del hogar. Los dormitorios ofrecen espacio adecuado para el descanso, y el baño completa la distribución de manera práctica. El balcón suma un rincón para tomar aire y disfrutar de una pausa en casa, mientras que el lavadero resuelve las labores domésticas sin invadir los demás espacios. La propiedad cuenta además con estacionamiento, un beneficio valioso para quien se desplaza en vehículo. Una alternativa interesante para familias o personas que desean instalarse en Quillota con una distribución práctica y espacios bien aprovechados.",
+      "price": 450000.0,
+      "currency": "CLP",
+      "type": "departamento",
+      "operation": "arriendo",
+      "images": [
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-7be3448062.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-838b724373.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-ac9f654304.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-a20eeb816f.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-920235e792.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-3db6a2474d.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-e0f7ddd892.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-128f3a4043.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-2beb429942.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-090daeca48.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-17e07bf18b.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-7bc4d2ef6a.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-03b788d0ea.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-441dadc741.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-2ae760f4b8.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-e93f796e5d.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 767194
+        },
+        {
+          "w": 1800,
+          "h": 2400,
+          "orientation": "v",
+          "size_bytes": 693441
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 694025
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 487071
+        },
+        {
+          "w": 1800,
+          "h": 2400,
+          "orientation": "v",
+          "size_bytes": 691769
+        },
+        {
+          "w": 1800,
+          "h": 2400,
+          "orientation": "v",
+          "size_bytes": 982286
+        },
+        {
+          "w": 1800,
+          "h": 2400,
+          "orientation": "v",
+          "size_bytes": 978433
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 740387
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 862977
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 614069
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 1079892
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 1169191
+        },
+        {
+          "w": 2400,
+          "h": 1800,
+          "orientation": "h",
+          "size_bytes": 612336
+        },
+        {
+          "w": 1800,
+          "h": 2400,
+          "orientation": "v",
+          "size_bytes": 633738
+        },
+        {
+          "w": 1800,
+          "h": 2400,
+          "orientation": "v",
+          "size_bytes": 788072
+        },
+        {
+          "w": 1800,
+          "h": 2400,
+          "orientation": "v",
+          "size_bytes": 651450
+        }
+      ],
+      "created_at": "2026-10-22T18:10:40-03:00",
+      "videos": [
+        "videos/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-cb983b54d6.mp4",
+        "videos/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-d626044356.mp4"
+      ],
+      "video_meta": [
+        {
+          "size_bytes": 11865404,
+          "w": 714,
+          "h": 1280,
+          "orientation": "v",
+          "duration_s": 43.28,
+          "has_audio": false,
+          "poster": "videos/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-cb983b54d6.jpg"
+        },
+        {
+          "size_bytes": 15400276,
+          "w": 714,
+          "h": 1280,
+          "orientation": "v",
+          "duration_s": 68.25,
+          "has_audio": false,
+          "poster": "videos/departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e-d626044356.jpg"
+        }
+      ],
+      "bedrooms": 3,
+      "bathrooms": 1,
+      "area_built_m2": 58.81,
+      "parking": 1,
+      "common_expenses": {
+        "amount": 50000.0,
+        "currency": "CLP"
+      },
+      "commune": "Quillota",
+      "region": "valparaiso",
+      "updated_at": "2026-10-22T18:10:40-03:00"
+    },
     {
       "id": "departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748",
       "title": "Departamento en venta en Condominio Los Libertadores — 3D/2B con logia",
