@@ -336,12 +336,13 @@
   }
 
   function amenityHtml(l) {
+    // J13: todo valor del aviso que llega al HTML pasa por escapeHtml (defensa extra: ops_schema ya exige números antes de publicar).
     const items = [];
-    if (l.bedrooms != null)      items.push(`<span class="amenity">${ICONS.bed}<span>${l.bedrooms}</span></span>`);
-    if (l.bathrooms != null)     items.push(`<span class="amenity">${ICONS.bath}<span>${l.bathrooms}</span></span>`);
-    if (l.area_built_m2 != null) items.push(`<span class="amenity" title="Superficie construida">${ICONS.area}<span>${fmtArea(l.area_built_m2)} m²</span></span>`);
-    if (l.area_lot_m2 != null)   items.push(`<span class="amenity" title="Terreno">${ICONS.lot}<span>${fmtArea(l.area_lot_m2)} m²</span></span>`);
-    if (l.parking != null && l.parking > 0) items.push(`<span class="amenity" title="Estacionamientos">${ICONS.car}<span>${l.parking}</span></span>`);
+    if (l.bedrooms != null)      items.push(`<span class="amenity">${ICONS.bed}<span>${escapeHtml(l.bedrooms)}</span></span>`);
+    if (l.bathrooms != null)     items.push(`<span class="amenity">${ICONS.bath}<span>${escapeHtml(l.bathrooms)}</span></span>`);
+    if (l.area_built_m2 != null) items.push(`<span class="amenity" title="Superficie construida">${ICONS.area}<span>${escapeHtml(fmtArea(l.area_built_m2))} m²</span></span>`);
+    if (l.area_lot_m2 != null)   items.push(`<span class="amenity" title="Terreno">${ICONS.lot}<span>${escapeHtml(fmtArea(l.area_lot_m2))} m²</span></span>`);
+    if (l.parking != null && l.parking > 0) items.push(`<span class="amenity" title="Estacionamientos">${ICONS.car}<span>${escapeHtml(l.parking)}</span></span>`);
     if (l.pool)                  items.push(`<span class="amenity" title="Piscina">${ICONS.pool}</span>`);
     if (!items.length) return '';
     return `<div class="amenities">${items.join('')}</div>`;
@@ -355,7 +356,7 @@
   function operationBadgeHtml(l) {
     const op = (l.operation || 'venta').toLowerCase();
     const label = op === 'arriendo' ? 'ARRIENDO' : 'VENTA';
-    return `<span class="operation-badge operation-badge--${op}">${label}</span>`;
+    return `<span class="operation-badge operation-badge--${escapeAttr(op)}">${label}</span>`;
   }
 
   /** Badge RESERVADA / VENDIDA / ARRENDADA ('' para avisos sin estado visible). */
@@ -370,14 +371,45 @@
     return Rules.isClosed(l) ? ` ${base}--closed` : '';
   }
 
-  /** "Gastos comunes: $85.000 /mes" o '' si el dato falta o no es válido. */
-  function commonExpensesText(l) {
+  /** Monto de gastos comunes "$85.000 /mes" o '' si el dato falta o no es válido. */
+  function commonExpensesAmountText(l) {
     const ce = l && l.common_expenses;
     if (!ce || typeof ce !== 'object') return '';
     const amount = Number(ce.amount);
     if (!Number.isFinite(amount) || amount <= 0) return '';
     if (ce.currency !== 'CLP' && ce.currency !== 'UF' && ce.currency !== 'USD') return '';
-    return `Gastos comunes: ${fmtAmount(amount, ce.currency)} /mes`;
+    return `${fmtAmount(amount, ce.currency)} /mes`;
+  }
+
+  /**
+   * ¿Los gastos comunes van incluidos en el valor del arriendo? true | false | null (no se sabe: no se afirma nada).
+   * Solo cuenta en un arriendo y solo si el dato es un booleano.
+   */
+  function commonExpensesIncluded(l) {
+    if (!l || typeof l.common_expenses_included !== 'boolean') return null;
+    return (l.operation || 'venta') === 'arriendo' ? l.common_expenses_included : null;
+  }
+
+  /**
+   * Línea de gastos comunes de la ficha.
+   *   incluidos     → "Gastos comunes incluidos en el arriendo"
+   *   no incluidos  → "Gastos comunes no incluidos" (+ ": $85.000 /mes" si hay monto)
+   *   sin el dato   → "Gastos comunes: $85.000 /mes" (como siempre) o ''
+   */
+  function commonExpensesText(l) {
+    const amount = commonExpensesAmountText(l);
+    const included = commonExpensesIncluded(l);
+    if (included === true) return 'Gastos comunes incluidos en el arriendo';
+    if (included === false) return amount ? `Gastos comunes no incluidos: ${amount}` : 'Gastos comunes no incluidos';
+    return amount ? `Gastos comunes: ${amount}` : '';
+  }
+
+  /** Etiqueta corta de la tarjeta, pegada al precio ('' si el aviso no dice nada). */
+  function commonExpensesTagHtml(l) {
+    const included = commonExpensesIncluded(l);
+    if (included === null) return '';
+    const label = included ? 'Gastos comunes incluidos en el arriendo' : 'Gastos comunes no incluidos';
+    return `<span class="ce-note">${label}</span>`;
   }
 
   /* ── Filtering ──────────────────────────────────────────────── */
@@ -664,7 +696,7 @@
         <div class="bento-body">
           <span class="bento-title">${escapeHtml(l.title || 'Sin título')}</span>
           ${amenityHtml(l)}
-          ${priceBlockHtml(l, 'bento')}
+          ${priceBlockHtml(l, 'bento')}${commonExpensesTagHtml(l)}
         </div>
       </div>`;
   }
@@ -713,7 +745,7 @@
           ${videoBadge}${photoHint}
         </div>
         <div class="card-body">
-          ${priceBlockHtml(l, 'card')}
+          ${priceBlockHtml(l, 'card')}${commonExpensesTagHtml(l)}
           <span class="card-title">${escapeHtml(l.title || 'Sin título')}</span>
           ${amenityHtml(l)}
           <span class="card-desc">${escapeHtml(l.description || '')}</span>
