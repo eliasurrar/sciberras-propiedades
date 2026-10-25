@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-25T09:04:35-03:00",
+  "updated_at": "2026-10-25T09:05:01-03:00",
   "uf_clp_rate": 40844.79,
   "uf_rate_updated_at": "2026-07-12T04:00:00.000Z",
   "listings": [
@@ -163,7 +163,8 @@
       },
       "commune": "Quillota",
       "region": "valparaiso",
-      "updated_at": "2026-10-25T09:04:35-03:00"
+      "updated_at": "2026-10-25T09:05:01-03:00",
+      "common_expenses_included": true
     },
     {
       "id": "departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748",
