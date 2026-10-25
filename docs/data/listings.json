@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-25T09:05:01-03:00",
+  "updated_at": "2026-10-25T09:10:53-03:00",
   "uf_clp_rate": 40844.79,
   "uf_rate_updated_at": "2026-07-12T04:00:00.000Z",
   "listings": [
@@ -176,7 +176,6 @@
       "operation": "venta",
       "images": [
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-1.jpg",
-        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-2.jpg",
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-3.jpg",
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-4.jpg",
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-5.jpg",
@@ -190,6 +189,7 @@
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-13.jpg",
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-14.jpg",
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-15.jpg",
+        "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-2.jpg",
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-16.jpg",
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-17.jpg",
         "images/departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748-18.jpg"
@@ -201,11 +201,6 @@
           "orientation": "v"
         },
         {
-          "w": 2400,
-          "h": 1350,
-          "orientation": "h"
-        },
-        {
           "w": 1350,
           "h": 2400,
           "orientation": "v"
@@ -269,6 +264,11 @@
           "w": 1350,
           "h": 2400,
           "orientation": "v"
+        },
+        {
+          "w": 2400,
+          "h": 1350,
+          "orientation": "h"
         },
         {
           "w": 1350,
@@ -291,7 +291,8 @@
       "bathrooms": 2,
       "parking": 0,
       "commune": "Quillota",
-      "region": "valparaiso"
+      "region": "valparaiso",
+      "updated_at": "2026-10-25T09:10:53-03:00"
     },
     {
       "id": "casa-en-venta-en-quillota-sector-sendero-4d-2b-con-bodega-9cc95e",
