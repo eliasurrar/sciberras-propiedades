@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-25T10:22:47-03:00",
+  "updated_at": "2026-10-26T18:18:46-03:00",
   "uf_clp_rate": 41215.77,
   "uf_rate_updated_at": "2026-10-25T03:00:00.000Z",
   "listings": [
@@ -485,7 +485,10 @@
       "bathrooms": 2,
       "parking": 2,
       "commune": "Quillota",
-      "region": "valparaiso"
+      "region": "valparaiso",
+      "status": "sold",
+      "status_changed_at": "2026-10-26T18:18:46-03:00",
+      "updated_at": "2026-10-26T18:18:46-03:00"
     },
     {
       "id": "casa-en-venta-en-villa-las-americas-la-calera-4d-2b-regulari-d45e8c",
