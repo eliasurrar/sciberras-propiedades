@@ -1,5 +1,7 @@
 /* ─── Tokens ─────────────────────────────────────────────────────────── */
 :root {
+  --closed-stripe: #c81e1eb3;    /* franja roja de vendida/arrendada, 70% opaca (pedido de Elias) */
+  --closed-stripe-shadow: #00000099; /* sombra del texto de la franja: legible sobre fotos claras */
   /* Surfaces — warm editorial palette */
   --bg:           #faf8f3;       /* warm off-white */
   --bg-elev:      #ffffff;
@@ -2168,6 +2170,25 @@ input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; a
 /* Tarjetas vendidas/arrendadas: portada atenuada; siguen siendo enlaces. */
 .card--closed .card-image img {
   filter: grayscale(0.35) brightness(0.94);
+}
+
+/* Vendidas/arrendadas: franja roja a 35° (sube de izquierda a derecha), centrada en la
+   foto —mismo margen en ambos extremos— y con VENDIDA / ARRENDADA adentro. Grosor fijo
+   de 34px: ~15% del área en 4:3 (358×269), ~19% en 3:2 móvil, ~9% en 3:4 (tope: 25%).
+   .card-image recorta (overflow:hidden). Bajo los badges; no intercepta clics. */
+.card--closed .closed-band {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 300%; height: 34px;
+  transform: translate(-50%, -50%) rotate(-35deg);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--closed-stripe);
+  color: #fff;
+  text-shadow: 0 1px 2px var(--closed-stripe-shadow);
+  font-size: 14px; font-weight: 700; letter-spacing: 0.14em;
+  line-height: 1; white-space: nowrap;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Detalle: el badge de estado va junto al de tipo. */

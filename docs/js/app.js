@@ -363,8 +363,15 @@
   function statusBadgeHtml(l) {
     const s = Rules.rawStatus(l);
     const label = Rules.badgeLabel(s);
-    if (!label) return '';
+    if (!label || Rules.isClosed(l)) return '';  // vendida/arrendada: el estado va en la franja (closedBandHtml)
     return `<span class="status-badge status-badge--${s}" aria-label="${STATUS_ARIA[s]}">${label}</span>`;
+  }
+
+  /** Franja diagonal VENDIDA / ARRENDADA sobre la foto ('' si el aviso no está cerrado). */
+  function closedBandHtml(l) {
+    if (!Rules.isClosed(l)) return '';
+    const s = Rules.rawStatus(l);
+    return `<span class="closed-band closed-band--${s}" aria-label="${STATUS_ARIA[s]}">${Rules.badgeLabel(s)}</span>`;
   }
 
   function closedClass(l, base) {
@@ -736,7 +743,7 @@
     const orientCls = coverOrientation(l) === 'v' ? ' card-image--vertical' : '';
     return `
       <div class="card${closedClass(l, 'card')} fade-in" data-id="${escapeAttr(l.id)}">
-        <div class="card-image${orientCls}">${img}
+        <div class="card-image${orientCls}">${img}${closedBandHtml(l)}
           <div class="badge-bar badge-bar--card">
             ${badge}${statusBadgeHtml(l)}
             ${communeBadgeHtml(l)}
