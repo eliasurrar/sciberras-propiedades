@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-11-02T17:55:15-03:00",
-  "uf_clp_rate": 41215.77,
-  "uf_rate_updated_at": "2026-10-25T03:00:00.000Z",
+  "updated_at": "2026-11-06T22:30:00-03:00",
+  "uf_clp_rate": 41279.51,
+  "uf_rate_updated_at": "2026-11-06T03:00:00.000Z",
   "listings": [
     {
       "id": "departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e",
@@ -163,8 +163,14 @@
       },
       "commune": "Quillota",
       "region": "valparaiso",
-      "updated_at": "2026-10-25T09:05:01-03:00",
-      "common_expenses_included": true
+      "updated_at": "2026-11-06T22:30:00-03:00",
+      "common_expenses_included": true,
+      "offer": {
+        "price": 430000.0,
+        "currency": "CLP",
+        "started_at": "2026-11-06T22:30:00-03:00",
+        "until": "2026-11-21T23:59:59-03:00"
+      }
     },
     {
       "id": "departamento-en-venta-en-condominio-los-libertadores-3d-2b-c-779748",
