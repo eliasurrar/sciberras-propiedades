@@ -1,9 +1,97 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-11-10T10:18:12-03:00",
+  "updated_at": "2026-11-10T10:28:15-03:00",
   "uf_clp_rate": 41279.51,
   "uf_rate_updated_at": "2026-11-06T03:00:00.000Z",
   "listings": [
+    {
+      "id": "terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2",
+      "title": "Terreno en venta en La Calera — 8.976 m² Terreno arbolado con cancha",
+      "description": "Terreno en venta en la comuna de La Calera, con una superficie amplia que abre muchas posibilidades para quien busca espacio al aire libre y libertad para desarrollar sus propios proyectos. El acceso se realiza por un camino de ingreso que conduce hasta un portón, lo que entrega orden y resguardo desde la llegada.\n\nAl recorrer el predio se aprecian áreas con árboles que aportan sombra, frescura y un marcado carácter natural. Entre la vegetación aparecen espacios despejados donde se distingue una cancha con su arco, ideal para la recreación, los encuentros familiares y los fines de semana al aire libre.\n\nEs una propiedad con identidad propia, pensada para quienes valoran el contacto con la naturaleza y desean contar con un lugar versátil, abierto y con buen potencial de uso. Su entorno arbolado y sus espacios libres invitan a imaginar distintos destinos, desde un refugio de descanso hasta un espacio de esparcimiento para la familia y los amigos.\n\nUna visita permite apreciar en terreno todo lo que este lugar tiene para ofrecer.",
+      "price": 165000000.0,
+      "currency": "CLP",
+      "type": "terreno",
+      "operation": "venta",
+      "images": [
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-145b7ab2ad.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-ccaf3e1694.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-81842fb396.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-3eaed1b2b5.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-2f6b6e84a2.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-5db501b4a2.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-ef6683e77a.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-de29305f8d.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-d12bcaa12a.jpg",
+        "images/terreno-en-venta-en-la-calera-8-976-m2-terreno-arbolado-con-9507a2-50c504b505.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 1280,
+          "h": 720,
+          "orientation": "h",
+          "size_bytes": 230287
+        },
+        {
+          "w": 1280,
+          "h": 720,
+          "orientation": "h",
+          "size_bytes": 343715
+        },
+        {
+          "w": 720,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 248570
+        },
+        {
+          "w": 720,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 309379
+        },
+        {
+          "w": 1280,
+          "h": 720,
+          "orientation": "h",
+          "size_bytes": 334035
+        },
+        {
+          "w": 1280,
+          "h": 720,
+          "orientation": "h",
+          "size_bytes": 340684
+        },
+        {
+          "w": 1280,
+          "h": 720,
+          "orientation": "h",
+          "size_bytes": 385401
+        },
+        {
+          "w": 1280,
+          "h": 720,
+          "orientation": "h",
+          "size_bytes": 337493
+        },
+        {
+          "w": 1280,
+          "h": 720,
+          "orientation": "h",
+          "size_bytes": 253306
+        },
+        {
+          "w": 720,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 325192
+        }
+      ],
+      "created_at": "2026-11-10T10:28:15-03:00",
+      "area_lot_m2": 8976.0,
+      "commune": "La Calera",
+      "region": "valparaiso",
+      "updated_at": "2026-11-10T10:28:15-03:00"
+    },
     {
       "id": "casa-en-arriendo-en-quillota-4d-2b-patio-y-terraza-21238e",
       "title": "Casa en arriendo en Quillota — 4D/2B Patio y terraza",
