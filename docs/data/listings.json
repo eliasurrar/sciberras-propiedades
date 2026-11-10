@@ -1,9 +1,121 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-11-10T08:30:11-03:00",
+  "updated_at": "2026-11-10T09:58:34-03:00",
   "uf_clp_rate": 41279.51,
   "uf_rate_updated_at": "2026-11-06T03:00:00.000Z",
   "listings": [
+    {
+      "id": "departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd",
+      "title": "Departamento en arriendo en Quillota — 3D/1B Living comedor familiar",
+      "description": "Departamento en arriendo en la comuna de Quillota, pensado para quienes buscan una vivienda práctica y cómoda para el día a día. Al ingresar por la puerta de entrada, un pasillo conecta los distintos espacios de la casa, ordenando la distribución de manera funcional. El living comedor es el corazón del departamento: un espacio familiar donde compartir, recibir visitas o simplemente descansar después de la jornada. El comedor se integra de forma natural, facilitando las comidas diarias y las reuniones. La cocina está dispuesta para el trabajo cotidiano, con una disposición cómoda que permite preparar los alimentos con tranquilidad. Los dormitorios son espacios pensados para el descanso, y el baño completa la distribución con un diseño funcional. Es una opción interesante para familias, parejas o personas que desean vivir en Quillota con una distribución sencilla y bien resuelta. Una propiedad lista para conocer, que invita a imaginar la vida diaria en un entorno cálido y cómodo. Agenda una visita y descubre sus posibilidades.",
+      "price": 360000.0,
+      "currency": "CLP",
+      "type": "departamento",
+      "operation": "arriendo",
+      "images": [
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-b000ddb253.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-8a5294074f.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-563b307b25.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-fb45f70951.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-63dce2a16f.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-a306f53aad.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-45976072cf.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-e7b9c75778.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-cdeac723c8.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-245911114e.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-b49c10e216.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-f6d54c6b08.jpg",
+        "images/departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd-e166d39c44.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 38814
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 44255
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 37858
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 41120
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 44357
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 55309
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 36986
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 35093
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 50859
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 50745
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 33153
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 60562
+        },
+        {
+          "w": 571,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 65935
+        }
+      ],
+      "created_at": "2026-11-10T09:58:34-03:00",
+      "bedrooms": 3,
+      "bathrooms": 1,
+      "area_built_m2": 60.0,
+      "common_expenses_included": true,
+      "commune": "Quillota",
+      "region": "valparaiso",
+      "updated_at": "2026-11-10T09:58:34-03:00"
+    },
     {
       "id": "casa-en-venta-en-quillota-3d-1b-80507a",
       "title": "Casa en venta en Quillota — 3D/1B",
