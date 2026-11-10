@@ -1,9 +1,205 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-11-10T09:58:34-03:00",
+  "updated_at": "2026-11-10T10:12:00-03:00",
   "uf_clp_rate": 41279.51,
   "uf_rate_updated_at": "2026-11-06T03:00:00.000Z",
   "listings": [
+    {
+      "id": "casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17",
+      "title": "Casa en venta en Quillota — 4D/2B Amplio terreno con patio",
+      "description": "Casa en venta en la comuna de Quillota, pensada para quienes buscan comodidad y espacio para la vida familiar. La fachada da la bienvenida a una vivienda de distribución práctica, donde los ambientes se conectan de manera natural a través del pasillo.\n\nEn la zona social, el living y el comedor conforman un espacio cómodo para recibir a la familia y compartir en el día a día. La cocina se integra de forma funcional a la vivienda, facilitando la rutina diaria. Los dormitorios ofrecen un lugar de descanso tranquilo, y el escritorio permite contar con un rincón para estudiar o trabajar desde casa. Los baños complementan la distribución de la vivienda.\n\nHacia el exterior, el patio abre la posibilidad de disfrutar del aire libre, y el amplio terreno entrega gran libertad para imaginar proyectos y darle a la propiedad el uso que cada familia desee. Una oportunidad interesante para quienes buscan una casa con espacio en Quillota.",
+      "price": 135000000.0,
+      "currency": "CLP",
+      "type": "casa",
+      "operation": "venta",
+      "images": [
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-0c8bb113ca.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-4e7c3c425b.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-a5f798f844.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-70efa30ca5.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-61d58a5e89.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-063b15fada.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-798c88e399.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-52b6f3fba4.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-85942f9f2f.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-358d60f608.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-c9bb7826c1.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-b1cf991ffd.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-784f599c03.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-0df0ace8e1.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-e579ba8385.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-6d1a53e325.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-9928554443.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-d050453697.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-9a943ea9eb.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-8f13e3183d.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-883ada876e.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-500518da6e.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-6d2bdbe2f9.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-8991127b86.jpg",
+        "images/casa-en-venta-en-quillota-4d-2b-amplio-terreno-con-patio-47dd17-c2e19e7683.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 75271
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 126366
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 107121
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 91506
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 111107
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 75946
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 79021
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 93784
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 59667
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 68722
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 79391
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 65053
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 91352
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 64047
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 76211
+        },
+        {
+          "w": 1280,
+          "h": 589,
+          "orientation": "h",
+          "size_bytes": 83408
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 74955
+        },
+        {
+          "w": 1280,
+          "h": 589,
+          "orientation": "h",
+          "size_bytes": 78638
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 92620
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 88404
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 94864
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 72473
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 85847
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 59928
+        },
+        {
+          "w": 589,
+          "h": 1280,
+          "orientation": "v",
+          "size_bytes": 48910
+        }
+      ],
+      "created_at": "2026-11-10T10:12:00-03:00",
+      "bedrooms": 4,
+      "bathrooms": 2,
+      "area_built_m2": 120.0,
+      "area_lot_m2": 200000.0,
+      "commune": "Quillota",
+      "region": "valparaiso",
+      "updated_at": "2026-11-10T10:12:00-03:00"
+    },
     {
       "id": "departamento-en-arriendo-en-quillota-3d-1b-living-comedor-fa-e0d7dd",
       "title": "Departamento en arriendo en Quillota — 3D/1B Living comedor familiar",
