@@ -7,5 +7,5 @@ Procedimientos de publicación, esquema de datos, diseño y hosting: [AGENTE-PUB
 
 ## Development lifecycle
 
-Lifecycle files for this site (`SPEC.md`, `docs/specs/`, `tasks/`) live in the private repo `eliasurrar/sciberras-bot`, not here.
+Lifecycle files for this site live in the private repo `eliasurrar/sciberras-bot`, not here: `specs/baseline.md`, `specs/` and `tasks/` (there is no `SPEC.md` and no `docs/specs/`).
 Any merge or push to `main` in this repo publishes the live site and requires a gate. Do not add specs or internal details to this public repo.
