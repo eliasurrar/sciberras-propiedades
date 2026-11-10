@@ -1,9 +1,148 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-11-06T22:30:00-03:00",
+  "updated_at": "2026-11-10T08:30:11-03:00",
   "uf_clp_rate": 41279.51,
   "uf_rate_updated_at": "2026-11-06T03:00:00.000Z",
   "listings": [
+    {
+      "id": "casa-en-venta-en-quillota-3d-1b-80507a",
+      "title": "Casa en venta en Quillota — 3D/1B",
+      "description": "Gran oportunidad! Se vende hermosa y cómoda casa esquina ubicada en Villa Coopreval, Quillota. La propiedad cuenta con amplios espacios, living-comedor, tres dormitorios, un baño, amplia cocina con comedor de diario, pequeña bodega, patio y jardines. Además, dispone de estacionamiento y una acogedora casita de muñecas, ideal para los más pequeños de la familia.\n\nSe encuentra en un excelente sector habitacional, tranquilo y familiar, con muy buena conectividad, cercano a locomoción colectiva, supermercados, centros comerciales y avenida principal, lo que permite acceder fácilmente a distintos servicios y comercios.\n\nEs una excelente alternativa para quienes buscan un hogar cómodo, acogedor y con espacios para disfrutar en familia. Su ubicación y distribución hacen de esta propiedad una gran oportunidad para vivir en Quillota.\n\n¡No dejes pasar esta oportunidad! Contáctanos y agenda tu visita al WhatsApp 954901879. ¡Ven a conocer tu próximo hogar!",
+      "price": 145000000.0,
+      "currency": "CLP",
+      "type": "casa",
+      "operation": "venta",
+      "images": [
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-6ac7b9dc41.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-bee7a91bce.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-a3514932b3.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-274e58fa97.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-adfee2b288.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-339ead36f4.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-238c24c675.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-d37c066f66.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-b15386e575.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-4d13e29d1a.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-05862cf487.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-06927094ad.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-0fa34cbdd0.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-b1823e4b26.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-0943ace145.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-d87c67c805.jpg",
+        "images/casa-en-venta-en-quillota-3d-1b-80507a-e41207ac07.jpg"
+      ],
+      "image_meta": [
+        {
+          "w": 1170,
+          "h": 808,
+          "orientation": "h",
+          "size_bytes": 175671
+        },
+        {
+          "w": 1086,
+          "h": 821,
+          "orientation": "h",
+          "size_bytes": 116832
+        },
+        {
+          "w": 1170,
+          "h": 837,
+          "orientation": "h",
+          "size_bytes": 131212
+        },
+        {
+          "w": 1170,
+          "h": 814,
+          "orientation": "h",
+          "size_bytes": 167667
+        },
+        {
+          "w": 1170,
+          "h": 825,
+          "orientation": "h",
+          "size_bytes": 257852
+        },
+        {
+          "w": 1134,
+          "h": 837,
+          "orientation": "h",
+          "size_bytes": 162504
+        },
+        {
+          "w": 1170,
+          "h": 820,
+          "orientation": "h",
+          "size_bytes": 110773
+        },
+        {
+          "w": 1170,
+          "h": 843,
+          "orientation": "h",
+          "size_bytes": 126583
+        },
+        {
+          "w": 1170,
+          "h": 775,
+          "orientation": "h",
+          "size_bytes": 118574
+        },
+        {
+          "w": 1170,
+          "h": 833,
+          "orientation": "h",
+          "size_bytes": 123792
+        },
+        {
+          "w": 1110,
+          "h": 827,
+          "orientation": "h",
+          "size_bytes": 106500
+        },
+        {
+          "w": 1134,
+          "h": 831,
+          "orientation": "h",
+          "size_bytes": 111764
+        },
+        {
+          "w": 1170,
+          "h": 848,
+          "orientation": "h",
+          "size_bytes": 118472
+        },
+        {
+          "w": 1170,
+          "h": 845,
+          "orientation": "h",
+          "size_bytes": 103770
+        },
+        {
+          "w": 1170,
+          "h": 847,
+          "orientation": "h",
+          "size_bytes": 106905
+        },
+        {
+          "w": 1159,
+          "h": 825,
+          "orientation": "h",
+          "size_bytes": 85142
+        },
+        {
+          "w": 1170,
+          "h": 830,
+          "orientation": "h",
+          "size_bytes": 80299
+        }
+      ],
+      "created_at": "2026-11-10T08:30:11-03:00",
+      "bedrooms": 3,
+      "bathrooms": 1,
+      "area_built_m2": 120.0,
+      "commune": "Quillota",
+      "region": "valparaiso",
+      "updated_at": "2026-11-10T08:30:11-03:00"
+    },
     {
       "id": "departamento-en-arriendo-en-quillota-3d-1b-con-balcon-y-esta-27039e",
       "title": "Departamento en arriendo en Quillota — 3D/1B Con balcón y estacionamiento",
